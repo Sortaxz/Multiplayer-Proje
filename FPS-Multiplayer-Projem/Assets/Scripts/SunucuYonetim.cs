@@ -40,7 +40,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     public void ConnetingServer()
     {
         PhotonNetwork.ConnectUsingSettings();
-        PhotonNetwork.NickName = UIMenager.Instance.KullaniciAdi_InputField.text;
+        PhotonNetwork.LocalPlayer.NickName = UIMenager.Instance.KullaniciAdi_InputField.text;
     }
 
 }

@@ -66,9 +66,11 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.HorizontalLayoutGroup
     - UnityEngine.UI.Image
     - UnityEngine.UI.LayoutElement
+    - UnityEngine.UI.Mask
     - UnityEngine.UI.RectMask2D
     - UnityEngine.UI.ScrollRect
     - UnityEngine.UI.Scrollbar
+    - UnityEngine.UI.VerticalLayoutGroup
   serializedClasses:
     PhotonRealtime:
     - Photon.Realtime.AppSettings
@@ -118,11 +120,65 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.SpriteState
   methodsToPreserve:
   - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: PlayerIconButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: OyunuBaslatButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: PlayerPropButton_Method
+  - assembly: Assembly-CSharp
     fullTypeName: CheatController
     methodName: Send_Message
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
-    methodName: OyunaBaslaButton_Method
+    methodName: PlayerPropButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: PlayerPropButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: PlayerPropButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: PlayerPropButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: PlayerColorButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: PlayerPropSaveButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: PlayerPropButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: PlayerPropButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: BaglanButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: PlayerPropButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: PlayerPropButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: PlayerPropButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: PlayerPropButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: PlayerPropButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: PlayerPropButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: PlayerPropButton_Method
   sceneClasses:
     Assets/Scenes/SampleScene.unity:
     - Class: 1
@@ -196,6 +252,8 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 19016}
     - Class: 114
+      Script: {instanceID: 19066}
+    - Class: 114
       Script: {instanceID: 19178}
     - Class: 114
       Script: {instanceID: 19298}
@@ -231,6 +289,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 21380}
     - Class: 114
       Script: {instanceID: 21382}
+    - Class: 114
+      Script: {instanceID: 21802}
     - Class: 114
       Script: {instanceID: 21970}
     - Class: 114
@@ -806,7 +866,7 @@ ScriptsOnlyBuild:
     className: BoolInputField
   - hash:
       serializedVersion: 2
-      Hash: 4864c126276c06b46db8b6dda10d226c
+      Hash: 5334cfc67c7fa7cf246ee416e0b569d7
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: CheatController
@@ -1412,7 +1472,7 @@ ScriptsOnlyBuild:
     className: RoomListView
   - hash:
       serializedVersion: 2
-      Hash: 3ead13265860ff6814c28533a8ff5daf
+      Hash: 08b361ad89c1c04c1a6774f5eaea60b7
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: HandleControl
@@ -1448,7 +1508,7 @@ ScriptsOnlyBuild:
     className: UnityOnTriggerStay2DMessageListener
   - hash:
       serializedVersion: 2
-      Hash: 8d54088c41527e9bee1dbdb3fce38825
+      Hash: 6636cfd32ca7a3d003fa3d612e80c014
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: UIMenager

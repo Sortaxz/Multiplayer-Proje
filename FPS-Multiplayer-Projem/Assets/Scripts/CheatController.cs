@@ -12,7 +12,10 @@ public class CheatController : MonoBehaviourPunCallbacks
     [SerializeField] private HandleControl handleControl;
     private List<GameObject> playerMessageObjects = new List<GameObject>();
     public List<GameObject> PlayerMessageObjects { get { return playerMessageObjects; } }
-    public GameObject scrollRect;
+
+    [SerializeField] private GameObject handle;
+    public GameObject Handle { get { return handle;} set { handle = value; } }
+    
     [SerializeField] private GameObject playerMessage_Prefab;
     [SerializeField] private GameObject playerMessagePrefab_Content;
     [SerializeField] private TMP_InputField message_InputField;
@@ -23,7 +26,7 @@ public class CheatController : MonoBehaviourPunCallbacks
     private void Awake() 
     {
         PV = GetComponent<PhotonView>(); 
-        kullaniciAdiText.text += PhotonNetwork.NickName;   
+        kullaniciAdiText.text += PhotonNetwork.LocalPlayer.NickName;  
 
     }
 
@@ -35,16 +38,13 @@ public class CheatController : MonoBehaviourPunCallbacks
     [PunRPC]
     private void RPC_ShowMessage(string message, PhotonMessageInfo info)
     {
-        if(scrollRect == null)
-        {
-            scrollRect = GameObject.FindWithTag("scroll");
-        }
+        
         GameObject playerMessageObje = Instantiate(playerMessage_Prefab);
         playerMessageObje.transform.SetParent(playerMessagePrefab_Content.transform);
         playerMessageObje.transform.localScale = Vector3.one;
 
 
-        playerMessageObje.GetComponent<PlayerMessageController>().Intialize(info.Sender.NickName,message);
+        playerMessageObje.GetComponent<PlayerMessageController>().Intialize(info.Sender.NickName,message,info.Sender);
 
         playerMessageObjects.Add(playerMessageObje);
 
@@ -53,6 +53,8 @@ public class CheatController : MonoBehaviourPunCallbacks
             StartCoroutine(handleControl.HandleMove());
         }
         
+        
+        
     }  
 
     public void Send_Message()
@@ -60,8 +62,8 @@ public class CheatController : MonoBehaviourPunCallbacks
         string message = message_InputField.text;
         Show_Message(message);
         message_InputField.text = "";
-
-        
+        message_InputField.Select();
+        message_InputField.ActivateInputField();
     }
 
     
