@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class SunucuYonetim : MonoBehaviourPunCallbacks
 {
@@ -21,7 +23,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         print("Server'a bağlanildi");
-        PhotonNetwork.JoinLobby();
+        UIMenager.Instance.SetActiveUIObject(UIMenager.Instance.Menu_Panel.name);
     }
 
     public override void OnJoinedLobby()
@@ -40,7 +42,22 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     public void ConnetingServer()
     {
         PhotonNetwork.ConnectUsingSettings();
-        PhotonNetwork.LocalPlayer.NickName = UIMenager.Instance.KullaniciAdi_InputField.text;
+        
+        if(!PlayerPrefs.HasKey("playerName"))
+        {
+            string playerName = UIMenager.Instance.KullaniciAdi_InputField.text;
+            PlayerPrefs.SetString("playerName",playerName);
+            PhotonNetwork.LocalPlayer.NickName = playerName;
+        }
+        else
+        {
+            PhotonNetwork.LocalPlayer.NickName = PlayerPrefs.GetString("playerName");
+        }
+    }
+
+    public void ConnectedLobby()
+    {
+        PhotonNetwork.JoinLobby();
     }
 
 }

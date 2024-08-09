@@ -66,6 +66,21 @@ public class CheatController : MonoBehaviourPunCallbacks
         message_InputField.ActivateInputField();
     }
 
+    public void SendIconButton_Method()
+    {
+        if(message_InputField != null)
+        {
+            if(Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.KeypadEnter))
+            {
+                string message = message_InputField.text;
+                Show_Message(message);
+                message_InputField.text = "";
+                message_InputField.Select();
+                message_InputField.ActivateInputField();
+            }
+        }
+    }
+
     
 
 

@@ -129,14 +129,20 @@ ScriptsOnlyBuild:
     fullTypeName: UIMenager
     methodName: PlayerPropButton_Method
   - assembly: Assembly-CSharp
-    fullTypeName: CheatController
-    methodName: Send_Message
+    fullTypeName: SunucuYonetim
+    methodName: ConnectedLobby
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: YeniOyuncuButton_Method
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: PlayerPropButton_Method
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: PlayerPropButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: Method
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: PlayerPropButton_Method
@@ -154,7 +160,13 @@ ScriptsOnlyBuild:
     methodName: PlayerPropButton_Method
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
+    methodName: PlayerPropButton_Method2
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
     methodName: PlayerPropButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: KayitliOyuncuButton_Method
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: BaglanButton_Method
@@ -175,10 +187,22 @@ ScriptsOnlyBuild:
     methodName: PlayerPropButton_Method
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
+    methodName: GeriDon_Button
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
     methodName: PlayerPropButton_Method
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: PlayerPropButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: GeriDon_Button
+  - assembly: Assembly-CSharp
+    fullTypeName: CheatController
+    methodName: SendIconButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: CheatController
+    methodName: Send_Message
   sceneClasses:
     Assets/Scenes/SampleScene.unity:
     - Class: 1
@@ -1508,7 +1532,7 @@ ScriptsOnlyBuild:
     className: UnityOnTriggerStay2DMessageListener
   - hash:
       serializedVersion: 2
-      Hash: 6636cfd32ca7a3d003fa3d612e80c014
+      Hash: 2c69a9e92508732780e58ac8a2ac519b
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: UIMenager
