@@ -19,15 +19,28 @@ public class CheatController : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject playerMessage_Prefab;
     [SerializeField] private GameObject playerMessagePrefab_Content;
     [SerializeField] private TMP_InputField message_InputField;
-    [SerializeField] private TextMeshProUGUI cheatMessage_Text;
     [SerializeField] private TextMeshProUGUI kullaniciAdiText;
 
-
+    private bool chatActive =false;
     private void Awake() 
     {
         PV = GetComponent<PhotonView>(); 
-        kullaniciAdiText.text += PhotonNetwork.LocalPlayer.NickName;  
+        //kullaniciAdiText.text += PhotonNetwork.LocalPlayer.NickName;  
 
+    }
+
+    private void Update() 
+    {
+           
+    }
+    
+    public void SetChatActive()
+    {
+            message_InputField.text = "";
+            chatActive = !chatActive;
+            transform.GetChild(0).gameObject.SetActive(chatActive);
+            message_InputField.Select();
+            message_InputField.ActivateInputField();
     }
 
     public void Show_Message(string message)

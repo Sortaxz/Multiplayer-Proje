@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
+using Photon.Realtime;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -46,6 +47,17 @@ public class UIMenager : MonoBehaviour
 
     [SerializeField] private GameObject playerColor_Panel;
 
+    [Header("Random Oda ile ilgili İşlemler")]
+    [SerializeField] private GameObject randomOda_Panel;
+    public GameObject RandomOda_Panel { get { return randomOda_Panel;}}
+    [SerializeField] private GameObject randomOdaUst_Panel;
+    [SerializeField] private GameObject randomOdaAlt_Panel;
+
+    [Space]
+    [Space]
+
+    
+
     [SerializeField] private Image[] playerIcons;
     public Image[] PlayerIcons { get { return playerIcons;}}
 
@@ -65,18 +77,30 @@ public class UIMenager : MonoBehaviour
     [SerializeField] private Button kayitliOyuncu_Button;
     [SerializeField] private Button yeniOyuncu_Button;
 
+    [SerializeField] private Button oyunuBaslatButton;
+
+
     private ExitGames.Client.Photon.Hashtable playerProps;
 
     private bool playerBaslatButtonActive = false;
     private bool playerPropKaydetButtonClick = false;
+    public bool have = false;
     private int iconIndex;
     private int colorIndex;
-
 
 
     private void Awake() 
     {
         SetActiveUIObject(oyunaBaglanma_Panel.gameObject.name);
+        
+    }
+    private void Update() 
+    {
+        if(Input.GetKeyDown(KeyCode.Q))
+        {
+            cheat_Panel.SetActive(!cheat_Panel.activeSelf);
+            cheat_Panel.GetComponent<CheatController>().SetChatActive();
+        }
     }
 
     public void BaglanButton_Method()
@@ -114,7 +138,7 @@ public class UIMenager : MonoBehaviour
     }
    
 
-    public void OyunuBaslatButton_Method()
+    public void BaslatButton_Method()
     {
         SunucuYonetim.Instance.ConnetingServer();
 
@@ -135,7 +159,8 @@ public class UIMenager : MonoBehaviour
 
     public void KayitliOyuncuButton_Method()
     {
-        if(PlayerPrefs.HasKey("icon") && PlayerPrefs.HasKey("color"))
+
+        if(PlayerPrefs.HasKey("icon") && PlayerPrefs.HasKey("color") )
         {
             SunucuYonetim.Instance.ConnetingServer();
 
@@ -150,7 +175,6 @@ public class UIMenager : MonoBehaviour
             menuPlayerIcon_Image.sprite = playerIcons[(int)iconIndex].sprite;
             
             SetActiveUIObject(connecting_Panel.name);
-
 
         }
         else
@@ -168,6 +192,14 @@ public class UIMenager : MonoBehaviour
     public void GeriDon_Button()
     {
         SetActiveUIObject(oyunaBaglanma_Panel.name);
+    }
+
+    public void RandomOdaKuButton_Method()
+    {
+        SunucuYonetim.Instance.ConnectedLobby(randomOda_Panel.name);
+        
+        SetActiveUIObject(connecting_Panel.name);
+
     }
 
 
@@ -211,6 +243,7 @@ public class UIMenager : MonoBehaviour
         menu_Panel.gameObject.SetActive(panelName.Equals(menu_Panel.name));
         yeniOyuncu_Panel.SetActive(panelName.Equals(yeniOyuncu_Panel.name));
         kayitliOyuncu_Panel.SetActive(panelName.Equals(kayitliOyuncu_Panel.name) || panelName.Equals(oyunaBaglanma_Panel.name));
+        randomOda_Panel.SetActive(panelName.Equals(randomOda_Panel.name));
     }
 
     public void PlayerIconButton_Method()
@@ -268,5 +301,37 @@ public class UIMenager : MonoBehaviour
         
         
     }
-   
+    
+    public bool CheckPlayersReady()
+    {
+        if(!PhotonNetwork.IsMasterClient)
+        {
+            return false;
+            
+        }
+
+        foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
+        {
+            if(!player.CustomProperties.TryGetValue("isPlayerReady",out object isPlayerReady))
+            {
+                return false;
+            }
+            else
+            {
+                if(!(bool)isPlayerReady)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public void LocalPlayerPropertiesUpdated()
+    {
+        oyunuBaslatButton.gameObject.SetActive(CheckPlayersReady());
+    }
+
+
+
 }
