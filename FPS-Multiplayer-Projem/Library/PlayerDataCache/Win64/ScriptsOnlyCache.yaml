@@ -2,6 +2,7 @@ ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
     - CheatController
+    - FindingMatchControl
     - HandleControl
     - PlayerListControl
     - PlayerMessageController
@@ -38,12 +39,17 @@ ScriptsOnlyBuild:
     Unity.TextMeshPro.dll:
     - TMPro.TMP_FontAsset
     - TMPro.TMP_InputField
+    - TMPro.TMP_Settings
+    - TMPro.TMP_SpriteAsset
+    - TMPro.TMP_StyleSheet
     - TMPro.TextMeshProUGUI
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -128,6 +134,12 @@ ScriptsOnlyBuild:
     methodName: PlayerPropButton_Method
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
+    methodName: PlayerPropButton_Method2
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: MenuStartButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
     methodName: RandomOdaKuButton_Method
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
@@ -137,7 +149,13 @@ ScriptsOnlyBuild:
     methodName: PlayerPropButton_Method
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
+    methodName: PlayerPropButton_Method2
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
     methodName: PlayerPropButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: PlayerPropButton_Method2
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: Method
@@ -146,7 +164,13 @@ ScriptsOnlyBuild:
     methodName: PlayerPropButton_Method
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
+    methodName: PlayerPropButton_Method2
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
     methodName: PlayerPropButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: PlayerPropButton_Method2
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: PlayerColorButton_Method
@@ -161,7 +185,16 @@ ScriptsOnlyBuild:
     methodName: PlayerPropButton_Method2
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
+    methodName: PlayerPropButton_Method2
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: MenuProfilButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
     methodName: PlayerPropButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: PlayerPropButton_Method2
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: KayitliOyuncuButton_Method
@@ -173,16 +206,31 @@ ScriptsOnlyBuild:
     methodName: PlayerPropButton_Method
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method
+    methodName: PlayerPropButton_Method2
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: PlayerPropButton_Method
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method
+    methodName: PlayerPropButton_Method2
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: PlayerPropButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: PlayerPropButton_Method2
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: PlayerPropButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: PlayerPropButton_Method2
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: PlayerPropButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: PlayerPropButton_Method2
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: GeriDon_Button
@@ -191,7 +239,13 @@ ScriptsOnlyBuild:
     methodName: PlayerPropButton_Method
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
+    methodName: PlayerPropButton_Method2
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
     methodName: PlayerPropButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: PlayerPropButton_Method2
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: GeriDon_Button
@@ -316,19 +370,21 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 21386}
     - Class: 114
-      Script: {instanceID: 21806}
+      Script: {instanceID: 21392}
     - Class: 114
-      Script: {instanceID: 21974}
+      Script: {instanceID: 21808}
     - Class: 114
-      Script: {instanceID: 22490}
+      Script: {instanceID: 21976}
     - Class: 114
-      Script: {instanceID: 22840}
+      Script: {instanceID: 22492}
     - Class: 114
-      Script: {instanceID: 22964}
+      Script: {instanceID: 22842}
     - Class: 114
-      Script: {instanceID: 23128}
+      Script: {instanceID: 22966}
     - Class: 114
-      Script: {instanceID: 23264}
+      Script: {instanceID: 23130}
+    - Class: 114
+      Script: {instanceID: 23266}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -1544,7 +1600,7 @@ ScriptsOnlyBuild:
     className: UnityOnTriggerStay2DMessageListener
   - hash:
       serializedVersion: 2
-      Hash: 2a50498ed38374d4882bf07c72e2c639
+      Hash: c26f6cc839a8b2eaa2966d81660d7916
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: UIMenager
@@ -1566,6 +1622,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI
     namespaceName: UnityEngine.UI
     className: Scrollbar
+  - hash:
+      serializedVersion: 2
+      Hash: 775f4e259e957a9f1a2e4f8ecc5d5ec1
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: FindingMatchControl
   - hash:
       serializedVersion: 2
       Hash: 13f262cc0741566a7ab72682984bc3e1

@@ -39,20 +39,22 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     {
         print("Server'a bağlanildi");
         
-
+        StopCoroutine(uIMenager.ConnetingAnimation());
         uIMenager.SetActiveUIObject(uIMenager.Menu_Panel.name); 
     }
 
     public override void OnJoinedLobby()
     {
         print("Lobiye bağlanildi");
-        
         if(panelName == uIMenager.RandomOda_Panel.name)
         {
-            
-            PhotonNetwork.JoinRandomOrCreateRoom();
-        }
+            RoomOptions roomOptions = new RoomOptions()
+            {
+                MaxPlayers = 4
+            };
 
+            PhotonNetwork.JoinRandomOrCreateRoom(null,0,MatchmakingMode.FillRoom,null,null,null,roomOptions);
+        }
     }
 
     public override void OnJoinedRoom()
@@ -74,7 +76,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
                 playerList.Add(player.ActorNumber,playerListObje);
             }
 
-            uIMenager.LocalPlayerPropertiesUpdated();
+            
 
         }
     }
@@ -119,13 +121,17 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
             string playerName = uIMenager.KullaniciAdi_InputField.text;
             PlayerPrefs.SetString("playerName",playerName);
             PhotonNetwork.LocalPlayer.NickName = playerName;
+
+            
         }
         else
         {
             PhotonNetwork.LocalPlayer.NickName = PlayerPrefs.GetString("playerName");
         }
+        StartCoroutine(uIMenager.ConnetingAnimation());
     }
 
+   
     public void ConnectedLobby(string panelName)
     {
         this.panelName = panelName;

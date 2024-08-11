@@ -50,7 +50,7 @@ public class HandleControl : MonoBehaviour
 
                 if(cheatController.PlayerMessageObjects.Count > 4 && i < 4)
                 {
-                    handleScrollBar.value -= .1f;
+                    handleScrollBar.value -= .05f;
                     i++;
                 }
                 else if( i > 3)

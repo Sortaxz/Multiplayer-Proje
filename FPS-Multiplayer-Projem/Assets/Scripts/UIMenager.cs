@@ -37,6 +37,9 @@ public class UIMenager : MonoBehaviour
     [SerializeField] private GameObject menu_Panel;
     public GameObject Menu_Panel {get { return menu_Panel;}}
 
+    [SerializeField] private GameObject odaIslemleri_Panel;
+    public GameObject OdaIslemleri_Panel {get { return odaIslemleri_Panel;}}
+
     [SerializeField] private GameObject yeniOyuncu_Panel;
     public GameObject YeniOyuncu_Panel {get { return yeniOyuncu_Panel;}}
 
@@ -79,16 +82,43 @@ public class UIMenager : MonoBehaviour
 
     [SerializeField] private Button oyunuBaslatButton;
 
+    [Header("Pleyar Props Panel İşlenleri")]
+    [SerializeField] private Image[] playerIconImageProps;
+    [SerializeField] private Image[] playerColorImageProps;
+    [SerializeField] private Transform playeIconImageContent;
+    [SerializeField] private Transform playeColorImageContent;
+    [Space]
+    [Space]
 
+    
+    [Header("Conneting Panel İşlenleri")]
+    [SerializeField] private string[] oyunIpUclari; 
+    [SerializeField] private TextMeshProUGUI oyunIpUcu_Text;
+    [SerializeField] private TextMeshProUGUI connecting_Text;
+    
+    [Space]
+    [Space]
+
+
+    [Header("Maç Arama Panel İşlemler")]
+    [SerializeField] private GameObject FindingMatch_Panel;
+
+    [Space]
+    [Space]
+
+    
     private ExitGames.Client.Photon.Hashtable playerProps;
-
     private bool playerBaslatButtonActive = false;
     private bool playerPropKaydetButtonClick = false;
-    public bool have = false;
+
+    private bool menuPlayerProfil = false;
+
     private int iconIndex;
     private int colorIndex;
 
-
+    [SerializeField]private Image tiklanilanImage;
+    private int tiklanilanImageIndex = -1;
+    private Color color;
     private void Awake() 
     {
         SetActiveUIObject(oyunaBaglanma_Panel.gameObject.name);
@@ -101,6 +131,9 @@ public class UIMenager : MonoBehaviour
             cheat_Panel.SetActive(!cheat_Panel.activeSelf);
             cheat_Panel.GetComponent<CheatController>().SetChatActive();
         }
+
+        
+
     }
 
     public void BaglanButton_Method()
@@ -131,7 +164,8 @@ public class UIMenager : MonoBehaviour
                 menuPlayerIcon_Image.sprite = playerIcons[iconIndex].sprite;
                 
                 SetActiveUIObject(connecting_Panel.name);
-
+                
+                oyunIpUcu_Text.text = oyunIpUclari[Random.Range(0,oyunIpUclari.Length-1)];
             }
             
         }
@@ -154,6 +188,7 @@ public class UIMenager : MonoBehaviour
         menuPlayerIcon_Image.sprite = playerIcons[(int)iconIndex].sprite;
         
         SetActiveUIObject(connecting_Panel.name);
+        oyunIpUcu_Text.text = oyunIpUclari[Random.Range(0,oyunIpUclari.Length-1)];
     }
 
 
@@ -174,7 +209,10 @@ public class UIMenager : MonoBehaviour
 
             menuPlayerIcon_Image.sprite = playerIcons[(int)iconIndex].sprite;
             
-            SetActiveUIObject(connecting_Panel.name);
+           oyunIpUcu_Text.text = oyunIpUclari[Random.Range(0,oyunIpUclari.Length-1)];
+           SetActiveUIObject(connecting_Panel.name);
+
+
 
         }
         else
@@ -191,13 +229,42 @@ public class UIMenager : MonoBehaviour
 
     public void GeriDon_Button()
     {
-        SetActiveUIObject(oyunaBaglanma_Panel.name);
+        if(!menuPlayerProfil)
+        {
+            SetActiveUIObject(oyunaBaglanma_Panel.name);
+        }
+        else
+        {
+            SetActiveUIObject(menu_Panel.name);
+        }
     }
+
+    #region  Menu Panel İşlenleri
+    public void MenuStartButton_Method()
+    {
+        SetActiveUIObject(odaIslemleri_Panel.name);
+    }
+
+
+    public void MenuProfilButton_Method()
+    {
+        SetActiveUIObject(playerProps_Panel.name);
+        playerIcon_Panel.SetActive(false);
+        playerColor_Panel.SetActive(false);
+        playerPropKaydetButtonClick = false;
+        menuPlayerProfil = true;
+        playerPropBaslatButton.gameObject.SetActive(playerPropKaydetButtonClick);
+        playerPropKaydetButton.GetComponent<Image>().color = playerPropKaydetButtonClick ?  Color.green : Color.white;
+
+    }
+
+    #endregion
+
+
 
     public void RandomOdaKuButton_Method()
     {
         SunucuYonetim.Instance.ConnectedLobby(randomOda_Panel.name);
-        
         SetActiveUIObject(connecting_Panel.name);
 
     }
@@ -207,20 +274,65 @@ public class UIMenager : MonoBehaviour
     {
 
         playerPropKaydetButtonClick = !playerPropKaydetButtonClick;
-        if(playerPropKaydetButtonClick)
+        
+        playerPropKaydetButton.GetComponent<Image>().color = playerPropKaydetButtonClick ?  Color.green : Color.white;
+        
+        SetPlayerProps();
+        if(!menuPlayerProfil)
         {
-            playerPropKaydetButton.GetComponent<Image>().color = Color.green;
-            playerPropBaslatButton.gameObject.SetActive(playerBaslatButtonActive );
+            playerPropBaslatButton.gameObject.SetActive(playerPropKaydetButtonClick );
         }
         else
         {
-            playerPropKaydetButton.GetComponent<Image>().color = Color.white;
-            playerPropBaslatButton.gameObject.SetActive(playerPropKaydetButtonClick );
+            SetActiveUIObject(menu_Panel.name);
+            playerPropKaydetButtonClick = false;
+
+            playerPropKaydetButton.GetComponent<Image>().color = playerPropKaydetButtonClick ?  Color.green : Color.white;
+
+            menuPlayerIcon_Image.sprite = playerIcons[iconIndex].sprite;
+
+            SetPlayerProps();
+
+            PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("icon",out object icon_Index);
+            PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("color",out object color_Index);
+            
+            PlayerPrefs.SetInt("icon",(int)icon_Index);
+            PlayerPrefs.SetInt("color",(int)color_Index);
+
         }
-        SetPlayerProps();
+
 
 
     }
+
+    public void PlayerIconButton_Method()
+    {
+        playerIcon_Panel.SetActive(!playerIcon_Panel.activeSelf);
+        playerColor_Panel.SetActive(false);
+        if(playerBaslatButtonActive)
+        {
+            playerBaslatButtonActive = false;
+        }
+        else
+        {
+            playerBaslatButtonActive = true;
+        }
+    }
+
+    public void PlayerColorButton_Method()
+    {
+        playerIcon_Panel.SetActive(false);
+        playerColor_Panel.SetActive(!playerColor_Panel.activeSelf);
+        if(playerBaslatButtonActive)
+        {
+            playerBaslatButtonActive = false;
+        }
+        else
+        {
+            playerBaslatButtonActive = true;
+        }
+    }
+
 
     private void SetPlayerProps()
     {
@@ -244,47 +356,78 @@ public class UIMenager : MonoBehaviour
         yeniOyuncu_Panel.SetActive(panelName.Equals(yeniOyuncu_Panel.name));
         kayitliOyuncu_Panel.SetActive(panelName.Equals(kayitliOyuncu_Panel.name) || panelName.Equals(oyunaBaglanma_Panel.name));
         randomOda_Panel.SetActive(panelName.Equals(randomOda_Panel.name));
+        odaIslemleri_Panel.SetActive(panelName.Equals(odaIslemleri_Panel.name));
     }
 
-    public void PlayerIconButton_Method()
-    {
-        playerIcon_Panel.SetActive(!playerIcon_Panel.activeSelf);
-        playerColor_Panel.SetActive(false);
-    }
-
-    public void PlayerColorButton_Method()
-    {
-        playerIcon_Panel.SetActive(false);
-        playerColor_Panel.SetActive(!playerColor_Panel.activeSelf);
-    }
 
     public void PlayerPropButton_Method()
     {
         
+
         playerBaslatButtonActive =!playerBaslatButtonActive;
+        print(playerBaslatButtonActive);
 
         if(playerIcon_Panel.activeSelf)
         {
             iconIndex = EventSystem.current.currentSelectedGameObject.transform.GetSiblingIndex();
+            
         }
         else if(playerColor_Panel.activeSelf)
         {
             colorIndex = EventSystem.current.currentSelectedGameObject.transform.GetSiblingIndex();
+
         }
 
-        if(playerBaslatButtonActive)
+        if(playerIcon_Panel.activeSelf)
         {
-            EventSystem.current.currentSelectedGameObject.GetComponent<Image>().color = new Color(0.5283019f,0.5283019f,0.5283019f,1);
+            if(playerBaslatButtonActive)
+            {
+                for (int i = 0; i < playerIconImageProps.Length; i++)
+                {
+                    if(i!= iconIndex)
+                    {
+                        playerIconImageProps[i].GetComponent<Button>().interactable = false;
+                    }
+                }
+            }
+            else
+            {
+                print("playerIcon_Panel-else");
+                for (int i = 0; i < playerIconImageProps.Length; i++)
+                {
+                    playerIconImageProps[i].GetComponent<Button>().interactable = true;
+                }  
+            }
         }
-        else
+
+        if(playerColor_Panel.activeSelf)
         {
-            EventSystem.current.currentSelectedGameObject.GetComponent<Image>().color = Color.white;
+            if(playerBaslatButtonActive)
+            {
+                for (int i = 0; i < playerColorImageProps.Length; i++)
+                {
+                    if(i!= colorIndex)
+                    {
+                        playerColorImageProps[i].GetComponent<Button>().interactable = false;
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < playerColorImageProps.Length; i++)
+                {
+                    playerColorImageProps[i].GetComponent<Button>().interactable = true;
+                }  
+            }
         }
+
+        
     }
 
 
     public void PlayerPropButton_Method2()
     {
+        
         if(playerBaslatButtonActive)
         {
             playerBaslatButtonActive = true;
@@ -301,6 +444,8 @@ public class UIMenager : MonoBehaviour
         
         
     }
+
+    
     
     public bool CheckPlayersReady()
     {
@@ -332,6 +477,33 @@ public class UIMenager : MonoBehaviour
         oyunuBaslatButton.gameObject.SetActive(CheckPlayersReady());
     }
 
+    public IEnumerator ConnetingAnimation(int i = 0, bool start = false)
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(.1f);
+            if(i < 4 && !start)
+            {
+                connecting_Text.text += ".";
+                i++;
 
+                if(i == 3)
+                {
+                    i = 3;
+                    start = true;
+                }
+            }
+            else 
+            {
+                connecting_Text.text  = "Connecting";
+                i--;
 
+                if(i == 0)
+                {
+                    i = 0;
+                    start = false;
+                }
+            }
+        }
+    }
 }
