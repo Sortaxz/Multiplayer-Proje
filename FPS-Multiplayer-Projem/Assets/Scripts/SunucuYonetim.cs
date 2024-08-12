@@ -28,6 +28,8 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject playerListPrefab;
     [SerializeField] private GameObject playerListParent;
     private Dictionary<int,GameObject> playerList = new Dictionary<int, GameObject>();
+    private ExitGames.Client.Photon.Hashtable playerProps = new ExitGames.Client.Photon.Hashtable();
+
     private void Awake() 
     {
         uIMenager = UIMenager.Instance;
@@ -59,6 +61,8 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
+        
+
         print("Herhangi bir odaya giriş yapildi");
         if(panelName == uIMenager.RandomOda_Panel.name)
         {
@@ -68,17 +72,28 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
             {
                 GameObject playerListObje = PlayerListOlustur(player.ActorNumber,player.NickName,player);
                 
+                /*
                 if(PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("isPlayerReady",out object isPlayerReady))
                 {
                     playerListObje.GetComponent<PlayerListControl>().SetPlayerReady((bool)isPlayerReady);
                 }
+                */  
 
+                
+                
                 playerList.Add(player.ActorNumber,playerListObje);
+                
+                uIMenager.SetActiveUIObject(uIMenager.FindingMatch_Panel.name);
+
+                
             }
 
             
+            
 
         }
+        
+
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -86,6 +101,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         GameObject playerListObje =  PlayerListOlustur(newPlayer.ActorNumber,newPlayer.NickName,newPlayer);
 
         playerList.Add(newPlayer.ActorNumber,playerListObje);
+
         
     }
 
@@ -93,6 +109,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     {
         Destroy(playerList[otherPlayer.ActorNumber].gameObject);
         playerList.Remove(otherPlayer.ActorNumber);
+
     }
 
 
@@ -140,6 +157,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
+        /*
         if(playerList.TryGetValue(targetPlayer.ActorNumber,out GameObject entry))
         {
             if(changedProps.TryGetValue("isPlayerReady",out object isPlayerReady))
@@ -147,8 +165,13 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
                 entry.GetComponent<PlayerListControl>().SetPlayerReady((bool)isPlayerReady);
             }
         }
+        */
+        
 
-        uIMenager.LocalPlayerPropertiesUpdated();
+        //uIMenager.LocalPlayerPropertiesUpdated();
+
     }
-
+    
+    
+    
 }

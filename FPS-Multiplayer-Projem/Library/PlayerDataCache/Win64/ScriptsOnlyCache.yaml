@@ -6,6 +6,7 @@ ScriptsOnlyBuild:
     - HandleControl
     - PlayerListControl
     - PlayerMessageController
+    - SettingsController
     - SunucuYonetim
     - UIMenager
     PhotonUnityNetworking:
@@ -46,10 +47,8 @@ ScriptsOnlyBuild:
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -160,6 +159,12 @@ ScriptsOnlyBuild:
     fullTypeName: UIMenager
     methodName: Method
   - assembly: Assembly-CSharp
+    fullTypeName: FindingMatchControl
+    methodName: StartMatchFindingButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: FindingMatchControl
+    methodName: CancelMatchFindingButton_Method
+  - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: PlayerPropButton_Method
   - assembly: Assembly-CSharp
@@ -180,9 +185,6 @@ ScriptsOnlyBuild:
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: PlayerPropButton_Method
-  - assembly: Assembly-CSharp
-    fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method2
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: PlayerPropButton_Method2
@@ -346,45 +348,47 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 20126}
     - Class: 114
-      Script: {instanceID: 20246}
+      Script: {instanceID: 20248}
     - Class: 114
-      Script: {instanceID: 20262}
+      Script: {instanceID: 20264}
     - Class: 114
-      Script: {instanceID: 20318}
+      Script: {instanceID: 20320}
     - Class: 114
-      Script: {instanceID: 20664}
+      Script: {instanceID: 20666}
     - Class: 114
-      Script: {instanceID: 20706}
+      Script: {instanceID: 20708}
     - Class: 114
-      Script: {instanceID: 20898}
+      Script: {instanceID: 20900}
     - Class: 114
-      Script: {instanceID: 21050}
+      Script: {instanceID: 21052}
     - Class: 114
-      Script: {instanceID: 21136}
+      Script: {instanceID: 21138}
     - Class: 114
-      Script: {instanceID: 21360}
+      Script: {instanceID: 21362}
     - Class: 114
-      Script: {instanceID: 21376}
-    - Class: 114
-      Script: {instanceID: 21384}
+      Script: {instanceID: 21378}
     - Class: 114
       Script: {instanceID: 21386}
     - Class: 114
-      Script: {instanceID: 21392}
+      Script: {instanceID: 21388}
     - Class: 114
-      Script: {instanceID: 21808}
+      Script: {instanceID: 21394}
     - Class: 114
-      Script: {instanceID: 21976}
+      Script: {instanceID: 21498}
     - Class: 114
-      Script: {instanceID: 22492}
+      Script: {instanceID: 21812}
     - Class: 114
-      Script: {instanceID: 22842}
+      Script: {instanceID: 21980}
     - Class: 114
-      Script: {instanceID: 22966}
+      Script: {instanceID: 22496}
     - Class: 114
-      Script: {instanceID: 23130}
+      Script: {instanceID: 22846}
     - Class: 114
-      Script: {instanceID: 23266}
+      Script: {instanceID: 22970}
+    - Class: 114
+      Script: {instanceID: 23134}
+    - Class: 114
+      Script: {instanceID: 23270}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -1360,6 +1364,12 @@ ScriptsOnlyBuild:
     className: Line
   - hash:
       serializedVersion: 2
+      Hash: b3cf95bfefc0d5124272262186f88621
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: SavePlayerPrefs
+  - hash:
+      serializedVersion: 2
       Hash: 10c17b309bdca62b4d7fbaf113ed4ca0
     assemblyName: UnityEngine.UI
     namespaceName: UnityEngine.UI
@@ -1600,7 +1610,7 @@ ScriptsOnlyBuild:
     className: UnityOnTriggerStay2DMessageListener
   - hash:
       serializedVersion: 2
-      Hash: c26f6cc839a8b2eaa2966d81660d7916
+      Hash: 8037582f8f9688bd619ac0c1ba8471fa
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: UIMenager
@@ -1664,6 +1674,12 @@ ScriptsOnlyBuild:
     assemblyName: PhotonUnityNetworking.Demos
     namespaceName: Photon.Pun.Demo.Cockpit
     className: IsConnectedAndReadyProperty
+  - hash:
+      serializedVersion: 2
+      Hash: 58f55ac164676581db4e7d9a3e735cff
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: SettingsController
   - hash:
       serializedVersion: 2
       Hash: 8bbce9932f67ad8e7f4eefec87800f94

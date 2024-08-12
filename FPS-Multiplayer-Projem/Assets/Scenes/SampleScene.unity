@@ -562,7 +562,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1704306129}
         m_TargetAssemblyTypeName: UIMenager, Assembly-CSharp
         m_MethodName: PlayerPropButton_Method2
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -991,8 +991,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 960, y: -980}
-  m_SizeDelta: {x: 1920, y: 200}
+  m_AnchoredPosition: {x: 960, y: -983.3333}
+  m_SizeDelta: {x: 1920, y: 193.33333}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &108249177
 MonoBehaviour:
@@ -1001,7 +1001,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 108249175}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -1397,41 +1397,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!1 &206048398
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 206048399}
-  m_Layer: 5
-  m_Name: Sol_Panel
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &206048399
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 206048398}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1916496784}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 480, y: -269}
-  m_SizeDelta: {x: 960, y: 538}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &214518618
 GameObject:
   m_ObjectHideFlags: 0
@@ -1575,6 +1540,7 @@ GameObject:
   m_Component:
   - component: {fileID: 221399542}
   - component: {fileID: 221399541}
+  - component: {fileID: 221399543}
   m_Layer: 0
   m_Name: SunucuYonetim
   m_TagString: Untagged
@@ -1611,6 +1577,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &221399543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 221399540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 221399541}
+  sceneViewId: 3
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &268613120
 GameObject:
   m_ObjectHideFlags: 0
@@ -1866,6 +1855,7 @@ GameObject:
   m_Component:
   - component: {fileID: 272151730}
   - component: {fileID: 272151731}
+  - component: {fileID: 272151732}
   m_Layer: 5
   m_Name: FindingMatch_Panel
   m_TagString: Untagged
@@ -1911,42 +1901,28 @@ MonoBehaviour:
   findMatchYazisi_Text: {fileID: 731535165}
   startMatchFinding_Button: {fileID: 901547600}
   cancelMatchFinding_Button: {fileID: 1084952688}
---- !u!1 &297346965
-GameObject:
+--- !u!114 &272151732
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 297346966}
-  m_Layer: 5
-  m_Name: "Sa\u011F_Panel"
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &297346966
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 297346965}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1653981196}
-  m_Father: {fileID: 1916496784}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1440, y: -269}
-  m_SizeDelta: {x: 960, y: 538}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_GameObject: {fileID: 272151729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 2
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &304302722
 GameObject:
   m_ObjectHideFlags: 0
@@ -2684,7 +2660,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8632076, g: 1, b: 0.9805851, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3429,7 +3405,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 676680625}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -3955,7 +3931,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1704306129}
         m_TargetAssemblyTypeName: UIMenager, Assembly-CSharp
         m_MethodName: PlayerPropButton_Method2
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4215,7 +4191,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Findi Match
+  m_text: Find Match
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4390,7 +4366,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1704306129}
         m_TargetAssemblyTypeName: UIMenager, Assembly-CSharp
         m_MethodName: PlayerPropButton_Method2
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -5024,8 +5000,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 480, y: -320}
-  m_SizeDelta: {x: 960, y: 640}
+  m_AnchoredPosition: {x: 480, y: -321.66666}
+  m_SizeDelta: {x: 960, y: 643.3333}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &885545131
 GameObject:
@@ -5243,7 +5219,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 901547601}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 272151731}
+        m_TargetAssemblyTypeName: FindingMatchControl, Assembly-CSharp
+        m_MethodName: StartMatchFindingButton_Method
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &901547601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6256,7 +6244,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1084952689}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 272151731}
+        m_TargetAssemblyTypeName: FindingMatchControl, Assembly-CSharp
+        m_MethodName: CancelMatchFindingButton_Method
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1084952689
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6945,8 +6945,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 960, y: -120}
-  m_SizeDelta: {x: 1920, y: 240}
+  m_AnchoredPosition: {x: 960, y: -121.666664}
+  m_SizeDelta: {x: 1920, y: 243.33333}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1194101825
 MonoBehaviour:
@@ -7070,8 +7070,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 960, y: -560}
-  m_SizeDelta: {x: 1920, y: 640}
+  m_AnchoredPosition: {x: 960, y: -565}
+  m_SizeDelta: {x: 1920, y: 643.3333}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1199245412
 MonoBehaviour:
@@ -7255,7 +7255,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1704306129}
         m_TargetAssemblyTypeName: UIMenager, Assembly-CSharp
         m_MethodName: PlayerPropButton_Method2
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -7534,7 +7534,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1704306129}
         m_TargetAssemblyTypeName: UIMenager, Assembly-CSharp
         m_MethodName: PlayerPropButton_Method2
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -7609,13 +7609,14 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1653981196}
   m_Father: {fileID: 1847770815}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 960, y: -269}
-  m_SizeDelta: {x: 1920, y: 538}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1235727444
 MonoBehaviour:
@@ -8883,19 +8884,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1704306129}
         m_TargetAssemblyTypeName: UIMenager, Assembly-CSharp
         m_MethodName: PlayerPropButton_Method2
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1704306129}
-        m_TargetAssemblyTypeName: UIMenager, Assembly-CSharp
-        m_MethodName: PlayerPropButton_Method2
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -9795,7 +9784,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1704306129}
         m_TargetAssemblyTypeName: UIMenager, Assembly-CSharp
         m_MethodName: PlayerPropButton_Method2
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -10488,17 +10477,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1653981195}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1713800717}
-  m_Father: {fileID: 297346966}
+  m_Father: {fileID: 1235727443}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -208, y: 79}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 480, y: -540}
   m_SizeDelta: {x: 280, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1653981197
@@ -10671,7 +10660,6 @@ GameObject:
   - component: {fileID: 1704306126}
   - component: {fileID: 1704306125}
   - component: {fileID: 1704306129}
-  - component: {fileID: 1704306130}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -10786,7 +10774,7 @@ MonoBehaviour:
   playerColor_Panel: {fileID: 1857596132}
   randomOda_Panel: {fileID: 1847770814}
   randomOdaUst_Panel: {fileID: 1235727442}
-  randomOdaAlt_Panel: {fileID: 1916496783}
+  randomOdaAlt_Panel: {fileID: 0}
   playerIcons:
   - {fileID: 1377392872}
   - {fileID: 1933914139}
@@ -10827,8 +10815,6 @@ MonoBehaviour:
   - {fileID: 1219369857}
   - {fileID: 734089315}
   - {fileID: 1527171080}
-  playeIconImageContent: {fileID: 1329304526}
-  playeColorImageContent: {fileID: 689971084}
   oyunIpUclari:
   - "Oyun da bir odada 4 ki\u015Fi oluyor 4 ki\u015Fiden fazla oyuncu bulunam\u0131yor"
   - "Oyunumuz Fps Multiplayer tarz\u0131nda bir oyundur"
@@ -10839,30 +10825,8 @@ MonoBehaviour:
     ise \u015Farj\xF6r\xFCn\xFC alabilir"
   oyunIpUcu_Text: {fileID: 304302724}
   connecting_Text: {fileID: 174597505}
-  FindingMatch_Panel: {fileID: 272151729}
-  tiklanilanImage: {fileID: 0}
---- !u!114 &1704306130
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1704306124}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents: []
-  sceneViewId: 2
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
+  findingMatch_Panel: {fileID: 272151729}
+  deneme: {fileID: 0}
 --- !u!1 &1713800716
 GameObject:
   m_ObjectHideFlags: 0
@@ -11298,8 +11262,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1440, y: -320}
-  m_SizeDelta: {x: 960, y: 640}
+  m_AnchoredPosition: {x: 1440, y: -321.66666}
+  m_SizeDelta: {x: 960, y: 643.3333}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1744693762
 GameObject:
@@ -11437,7 +11401,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1704306129}
         m_TargetAssemblyTypeName: UIMenager, Assembly-CSharp
         m_MethodName: PlayerPropButton_Method2
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -11544,7 +11508,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1704306129}
         m_TargetAssemblyTypeName: UIMenager, Assembly-CSharp
         m_MethodName: PlayerPropButton_Method2
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -11608,7 +11572,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1770403251
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12043,7 +12007,6 @@ GameObject:
   - component: {fileID: 1847770815}
   - component: {fileID: 1847770817}
   - component: {fileID: 1847770816}
-  - component: {fileID: 1847770818}
   m_Layer: 5
   m_Name: RandomOda_Panel
   m_TagString: Untagged
@@ -12064,7 +12027,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1235727443}
-  - {fileID: 1916496784}
   m_Father: {fileID: 1166795108}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -12110,30 +12072,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1847770814}
   m_CullTransparentMesh: 1
---- !u!114 &1847770818
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1847770814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 0
-  m_StartCorner: 0
-  m_StartAxis: 0
-  m_CellSize: {x: 1920, y: 538}
-  m_Spacing: {x: 1, y: 2}
-  m_Constraint: 0
-  m_ConstraintCount: 2
 --- !u!1 &1849639283
 GameObject:
   m_ObjectHideFlags: 0
@@ -12270,7 +12208,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1704306129}
         m_TargetAssemblyTypeName: UIMenager, Assembly-CSharp
         m_MethodName: PlayerPropButton_Method2
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -12534,7 +12472,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1704306129}
         m_TargetAssemblyTypeName: UIMenager, Assembly-CSharp
         m_MethodName: PlayerPropButton_Method2
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -12717,7 +12655,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1704306129}
         m_TargetAssemblyTypeName: UIMenager, Assembly-CSharp
         m_MethodName: PlayerPropButton_Method2
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -13036,70 +12974,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1907423183}
   m_CullTransparentMesh: 1
---- !u!1 &1916496783
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1916496784}
-  - component: {fileID: 1916496785}
-  m_Layer: 5
-  m_Name: Alt_Panel
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1916496784
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1916496783}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 206048399}
-  - {fileID: 297346966}
-  m_Father: {fileID: 1847770815}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 960, y: -809}
-  m_SizeDelta: {x: 1920, y: 538}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1916496785
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1916496783}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 0
-  m_Spacing: 0
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 1
-  m_ChildControlHeight: 1
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
 --- !u!1 &1919966043
 GameObject:
   m_ObjectHideFlags: 0
@@ -13362,7 +13236,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1704306129}
         m_TargetAssemblyTypeName: UIMenager, Assembly-CSharp
         m_MethodName: PlayerPropButton_Method2
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -13628,7 +13502,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1704306129}
         m_TargetAssemblyTypeName: UIMenager, Assembly-CSharp
         m_MethodName: PlayerPropButton_Method2
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -15244,6 +15118,63 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1001 &4696477221868126358
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3131787676947845316, guid: d22ab505a753e6e4d9933e63fc6da4a1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3131787676947845316, guid: d22ab505a753e6e4d9933e63fc6da4a1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3131787676947845316, guid: d22ab505a753e6e4d9933e63fc6da4a1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3131787676947845316, guid: d22ab505a753e6e4d9933e63fc6da4a1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3131787676947845316, guid: d22ab505a753e6e4d9933e63fc6da4a1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3131787676947845316, guid: d22ab505a753e6e4d9933e63fc6da4a1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3131787676947845316, guid: d22ab505a753e6e4d9933e63fc6da4a1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3131787676947845316, guid: d22ab505a753e6e4d9933e63fc6da4a1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3131787676947845316, guid: d22ab505a753e6e4d9933e63fc6da4a1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3131787676947845316, guid: d22ab505a753e6e4d9933e63fc6da4a1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3767828554467410196, guid: d22ab505a753e6e4d9933e63fc6da4a1, type: 3}
+      propertyPath: m_Name
+      value: SettingsController
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d22ab505a753e6e4d9933e63fc6da4a1, type: 3}
 --- !u!114 &4754706768635252122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16310,3 +16241,4 @@ SceneRoots:
   - {fileID: 1704306128}
   - {fileID: 221399542}
   - {fileID: 1645174038}
+  - {fileID: 4696477221868126358}
