@@ -40,6 +40,9 @@ public class UIMenager : MonoBehaviour
     [SerializeField] private GameObject odaIslemleri_Panel;
     public GameObject OdaIslemleri_Panel {get { return odaIslemleri_Panel;}}
 
+    [SerializeField] private GameObject odaKurmaYüklemeEkran_Panel;
+    public GameObject OdaKurmaYüklemeEkran_Panel {get { return odaKurmaYüklemeEkran_Panel;}}
+
     [SerializeField] private GameObject yeniOyuncu_Panel;
     public GameObject YeniOyuncu_Panel {get { return yeniOyuncu_Panel;}}
 
@@ -101,10 +104,17 @@ public class UIMenager : MonoBehaviour
     [Header("Maç Arama Panel İşlemler")]
     [SerializeField] private GameObject findingMatch_Panel;
     public GameObject FindingMatch_Panel { get { return findingMatch_Panel;}}
-
+    [SerializeField] private GameObject karşilaşmaKabulReddet_Panel;
+    public GameObject KarşilaşmaKabulReddet_Panel { get { return karşilaşmaKabulReddet_Panel;}}
     [Space]
     [Space]
 
+    [Header("Karşilaşma Kabul veya Reddet Panel İşlemleri")]
+    [SerializeField] private  Button karşilaşmayiKabulEt_Button;
+    [SerializeField] private  Button karşilaşmayiReddet_Button;
+
+    [Space]
+    [Space]
     
     private ExitGames.Client.Photon.Hashtable playerProps;
     private bool playerIconBaslatButtonActive = false;
@@ -113,31 +123,47 @@ public class UIMenager : MonoBehaviour
 
     private bool menuPlayerProfil = false;
 
+    private bool isPlayerReady = false;
 
     private int iconIndex;
     private int colorIndex;
 
-    public TextMeshProUGUI deneme;
 
-    private PhotonView PV;
+    private PhotonView pv;
+    public PhotonView PV {get {return pv;}}
 
     private int i = 0;
     private bool value= false;
+    private bool findCheatController = false;
+
+    private CheatController cheatController;
+
+    private int playerReadyCount = 0;
+
     private void Awake() 
     {
         SetActiveUIObject(oyunaBaglanma_Panel.gameObject.name);
-        PV = GetComponent<PhotonView>();
+        pv = GetComponent<PhotonView>();
     }
     private void Update() 
+    {
+        
+        CheatActive();
+        
+
+    }
+    public void CheatActive()
     {
         if(Input.GetKeyDown(KeyCode.Q))
         {
             cheat_Panel.SetActive(!cheat_Panel.activeSelf);
-            cheat_Panel.GetComponent<CheatController>().SetChatActive();
+            if(!findCheatController)
+            {
+                cheatController = cheat_Panel.GetComponent<CheatController>();
+                findCheatController = true;
+            }
+            cheatController.SetChatActive();
         }
-
-        
-
     }
 
     public void BaglanButton_Method()
@@ -310,7 +336,7 @@ public class UIMenager : MonoBehaviour
         
         connecting_Text.enabled = false;
         InvokeRepeating("ConnectingEffect",0,2f);
-        SetActiveUIObject(connecting_Panel.name);
+        SetActiveUIObject(odaKurmaYüklemeEkran_Panel.name);
     }
 
 
@@ -382,15 +408,17 @@ public class UIMenager : MonoBehaviour
     public void SetActiveUIObject(string panelName)
     {
         connecting_Panel.SetActive(panelName.Equals(connecting_Panel.name));
-        cheat_Panel.SetActive(panelName.Equals(cheat_Panel.name));
+        odaKurmaYüklemeEkran_Panel.SetActive(panelName.Equals(odaKurmaYüklemeEkran_Panel.name));
+        cheat_Panel.SetActive(panelName.Equals(cheat_Panel.name) );
         oyunaBaglanma_Panel.gameObject.SetActive(panelName.Equals(oyunaBaglanma_Panel.name) || panelName.Equals(yeniOyuncu_Panel.name));
         playerProps_Panel.gameObject.SetActive(panelName.Equals(playerProps_Panel.name));
         menu_Panel.gameObject.SetActive(panelName.Equals(menu_Panel.name));
         yeniOyuncu_Panel.SetActive(panelName.Equals(yeniOyuncu_Panel.name));
         kayitliOyuncu_Panel.SetActive(panelName.Equals(kayitliOyuncu_Panel.name) || panelName.Equals(oyunaBaglanma_Panel.name));
-        randomOda_Panel.SetActive(panelName.Equals(randomOda_Panel.name) || panelName.Equals(FindingMatch_Panel.name));
+        randomOda_Panel.SetActive(panelName.Equals(randomOda_Panel.name) || panelName.Equals(FindingMatch_Panel.name)|| panelName.Equals(KarşilaşmaKabulReddet_Panel.name));
         odaIslemleri_Panel.SetActive(panelName.Equals(odaIslemleri_Panel.name));
-        findingMatch_Panel.SetActive(panelName.Equals(FindingMatch_Panel.name));
+        findingMatch_Panel.SetActive(panelName.Equals(FindingMatch_Panel.name) );
+        KarşilaşmaKabulReddet_Panel.SetActive(panelName.Equals(KarşilaşmaKabulReddet_Panel.name));
     }
 
 
@@ -456,6 +484,7 @@ public class UIMenager : MonoBehaviour
         }
 
         
+        playerPropKaydetButton.gameObject.SetActive(playerIconBaslatButtonActive && playerColorBaslatButtonActive);
     }
 
 
@@ -539,6 +568,63 @@ public class UIMenager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void KarşilaşmaKabulEtButton_Method()
+    {
+        isPlayerReady = true;
+        
+        playerProps = new ExitGames.Client.Photon.Hashtable()
+        {
+            {"isPlayerReady",isPlayerReady}
+        };
+
+        PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
+
+        karşilaşmaKabulReddet_Panel.SetActive(false);
+
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+        {
+            
+            
+            if(PhotonNetwork.CurrentRoom.Players[i+1].CustomProperties.TryGetValue("isPlayerReady",out object _isPlayerReady))
+            {
+                if((bool)_isPlayerReady)
+                {
+                    if(PhotonNetwork.IsMasterClient)
+                    {
+                        pv.RPC("IntroScene",RpcTarget.AllViaServer,1);
+
+                    }
+
+                   
+                }
+            }
+
+           
+        }
+
+    }
+    [PunRPC]
+    public void KarşilaşmaReddetButton_Method()
+    {
+        isPlayerReady = false;
+        playerProps = new ExitGames.Client.Photon.Hashtable()
+        {
+            {"isPlayerReady",isPlayerReady}
+        };
+
+        PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
+
+        karşilaşmaKabulReddet_Panel.SetActive(false);
+        PhotonNetwork.LeaveRoom();
+        
+    }
+
+    [PunRPC]
+    private void IntroScene(int sceneIndex)
+    {
+        PhotonNetwork.LoadLevel(1);
     }
 
 

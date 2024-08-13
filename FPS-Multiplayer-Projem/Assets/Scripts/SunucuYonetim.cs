@@ -37,6 +37,11 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
     private string panelName;
 
+    private void Update() {
+        PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("isPlayerReady",out object isPlayerReady);
+        print("isPlayerReady : "+isPlayerReady);
+    }
+
     public override void OnConnectedToMaster()
     {
         print("Server'a bağlanildi");
@@ -52,7 +57,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         {
             RoomOptions roomOptions = new RoomOptions()
             {
-                MaxPlayers = 4
+                MaxPlayers = 3
             };
 
             PhotonNetwork.JoinRandomOrCreateRoom(null,0,MatchmakingMode.FillRoom,null,null,null,roomOptions);
@@ -123,7 +128,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
         playerList.GetComponent<PlayerListControl>().Initialize(playerId,playerName,player);
         
-        uIMenager.LocalPlayerPropertiesUpdated();
+        //uIMenager.LocalPlayerPropertiesUpdated();
 
         return playerList;
     }
@@ -167,11 +172,21 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         }
         */
         
+        
 
         //uIMenager.LocalPlayerPropertiesUpdated();
 
     }
     
     
-    
+    public void KabulEtButton()
+    {
+        uIMenager.KarşilaşmaKabulEtButton_Method();
+    }
+
+    public void ReddetButton()
+    {
+        uIMenager.PV.RPC("KarşilaşmaReddetButton_Method",RpcTarget.AllViaServer,null);
+        //uIMenager.KarşilaşmaReddetButton_Method();
+    }
 }
