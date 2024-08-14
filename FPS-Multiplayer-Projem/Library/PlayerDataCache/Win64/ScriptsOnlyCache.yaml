@@ -6,6 +6,7 @@ ScriptsOnlyBuild:
     - HandleControl
     - PlayerListControl
     - PlayerMessageController
+    - SaveSystem
     - SettingsController
     - SunucuYonetim
     - UIMenager
@@ -38,8 +39,12 @@ ScriptsOnlyBuild:
     - TMPro.TMP_SpriteAsset
     - TMPro.TMP_StyleSheet
     Unity.TextMeshPro.dll:
+    - TMPro.TMP_Dropdown
     - TMPro.TMP_FontAsset
     - TMPro.TMP_InputField
+    - TMPro.TMP_Settings
+    - TMPro.TMP_SpriteAsset
+    - TMPro.TMP_StyleSheet
     - TMPro.TextMeshProUGUI
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
@@ -72,7 +77,9 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.RectMask2D
     - UnityEngine.UI.ScrollRect
     - UnityEngine.UI.Scrollbar
+    - UnityEngine.UI.Text
     - UnityEngine.UI.Toggle
+    - UnityEngine.UI.ToggleGroup
     - UnityEngine.UI.VerticalLayoutGroup
   serializedClasses:
     PhotonRealtime:
@@ -85,6 +92,9 @@ ScriptsOnlyBuild:
     - TMPro.FontAssetCreationSettings
     - TMPro.KerningTable
     - TMPro.TMP_Character
+    - TMPro.TMP_Dropdown/DropdownEvent
+    - TMPro.TMP_Dropdown/OptionData
+    - TMPro.TMP_Dropdown/OptionDataList
     - TMPro.TMP_FontFeatureTable
     - TMPro.TMP_FontWeightPair
     - TMPro.TMP_GlyphAdjustmentRecord
@@ -140,6 +150,12 @@ ScriptsOnlyBuild:
     methodName: MenuStartButton_Method
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
+    methodName: DereceliMode_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: GeriDon_Button
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
     methodName: RandomOdaKuButton_Method
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
@@ -162,6 +178,9 @@ ScriptsOnlyBuild:
   - assembly: Assembly-CSharp
     fullTypeName: FindingMatchControl
     methodName: StartMatchFindingButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: DerecesizMode_Method
   - assembly: Assembly-CSharp
     fullTypeName: FindingMatchControl
     methodName: CancelMatchFindingButton_Method
@@ -201,6 +220,12 @@ ScriptsOnlyBuild:
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: KayitliOyuncuButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: OdaKurmaButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: SettingsController
+    methodName: EkranBoyutButton_Method
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: BaglanButton_Method
@@ -245,13 +270,25 @@ ScriptsOnlyBuild:
     methodName: PlayerPropButton_Method2
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
+    methodName: SetttingsButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
     methodName: PlayerPropButton_Method
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: PlayerPropButton_Method2
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
+    methodName: DereceliMode_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
     methodName: GeriDon_Button
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: OdaKur
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: DerecesizMode_Method
   - assembly: Assembly-CSharp
     fullTypeName: CheatController
     methodName: SendIconButton_Method
@@ -350,35 +387,39 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 16886}
     - Class: 114
-      Script: {instanceID: 17300}
+      Script: {instanceID: 17302}
     - Class: 114
-      Script: {instanceID: 17542}
+      Script: {instanceID: 17544}
     - Class: 114
-      Script: {instanceID: 17756}
+      Script: {instanceID: 17758}
     - Class: 114
-      Script: {instanceID: 17968}
+      Script: {instanceID: 17764}
     - Class: 114
-      Script: {instanceID: 18186}
+      Script: {instanceID: 17970}
     - Class: 114
-      Script: {instanceID: 18662}
+      Script: {instanceID: 18188}
     - Class: 114
-      Script: {instanceID: 19016}
+      Script: {instanceID: 18268}
     - Class: 114
-      Script: {instanceID: 19020}
+      Script: {instanceID: 18664}
     - Class: 114
-      Script: {instanceID: 19070}
+      Script: {instanceID: 19018}
     - Class: 114
-      Script: {instanceID: 19182}
+      Script: {instanceID: 19022}
     - Class: 114
-      Script: {instanceID: 19302}
+      Script: {instanceID: 19072}
     - Class: 114
-      Script: {instanceID: 19318}
+      Script: {instanceID: 19184}
     - Class: 114
-      Script: {instanceID: 19578}
+      Script: {instanceID: 19304}
     - Class: 114
-      Script: {instanceID: 19978}
+      Script: {instanceID: 19320}
     - Class: 114
-      Script: {instanceID: 20126}
+      Script: {instanceID: 19580}
+    - Class: 114
+      Script: {instanceID: 19980}
+    - Class: 114
+      Script: {instanceID: 20128}
     - Class: 114
       Script: {instanceID: 20194}
     - Class: 114
@@ -422,7 +463,9 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 23134}
     - Class: 114
-      Script: {instanceID: 23270}
+      Script: {instanceID: 23262}
+    - Class: 114
+      Script: {instanceID: 23272}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -1398,12 +1441,6 @@ ScriptsOnlyBuild:
     className: Line
   - hash:
       serializedVersion: 2
-      Hash: b3cf95bfefc0d5124272262186f88621
-    assemblyName: Assembly-CSharp
-    namespaceName: 
-    className: SavePlayerPrefs
-  - hash:
-      serializedVersion: 2
       Hash: 10c17b309bdca62b4d7fbaf113ed4ca0
     assemblyName: UnityEngine.UI
     namespaceName: UnityEngine.UI
@@ -1644,7 +1681,7 @@ ScriptsOnlyBuild:
     className: UnityOnTriggerStay2DMessageListener
   - hash:
       serializedVersion: 2
-      Hash: c3f8aca9e0f73b23a56939d76a5dcf9d
+      Hash: 916f9c42eb55cdc34da4e03c6f453cc6
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: UIMenager
@@ -1710,7 +1747,7 @@ ScriptsOnlyBuild:
     className: IsConnectedAndReadyProperty
   - hash:
       serializedVersion: 2
-      Hash: 58f55ac164676581db4e7d9a3e735cff
+      Hash: 30da9efd7c753620a8f5590c8dd4f15c
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: SettingsController
@@ -2188,6 +2225,12 @@ ScriptsOnlyBuild:
     assemblyName: PhotonUnityNetworking.Utilities
     namespaceName: Photon.Pun.UtilityScripts
     className: PhotonTeamsManager
+  - hash:
+      serializedVersion: 2
+      Hash: d0c706b7e818022f98ef60c348f516b8
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: SaveSystem
   - hash:
       serializedVersion: 2
       Hash: 00eef92bf387da2c9009267123d9d674

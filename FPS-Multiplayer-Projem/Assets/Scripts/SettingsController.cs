@@ -5,22 +5,27 @@ using UnityEngine.UI;
 
 public class SettingsController : MonoBehaviour
 {
-    [SerializeField] private Image mainBackground;
+    private GameObject settings_Panel;
 
-    [Header("Oyun Bağlan Panel İşlemleri")]
-    [SerializeField] private Image oyuncuBaglanPanel_Image;
-    [SerializeField] private Image kayitliOyuncuButton_Image;
-    [SerializeField] private Image yeniOyuncuButton_Image;
-    [SerializeField] private Image baglanButton_Image;
-    [SerializeField] private Image geriDonButton_Image;
+    [Header("Ekran Boyutu Ayarlama İşlemleri")]
+    [SerializeField] private GameObject EkranBoyutAyarlama_Panel;
+    
 
-    void Start()
+
+    private void Awake() 
     {
-        
+        DontDestroyOnLoad(gameObject);
+        if(settings_Panel != null)
+        {
+            settings_Panel = GameObject.FindWithTag("Settings_Panel");
+        }    
+                    
     }
 
-    void Update()
+
+    public void EkranBoyutButton_Method()
     {
-        
+        EkranBoyutAyarlama_Panel.SetActive(!EkranBoyutAyarlama_Panel.activeSelf);    
     }
+
 }

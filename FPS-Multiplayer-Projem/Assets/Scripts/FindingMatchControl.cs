@@ -23,18 +23,19 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
 
     [SerializeField] private TextMeshProUGUI matchProps_Text;
     [SerializeField] private TextMeshProUGUI findMatchTime_Text;
-    public TextMeshProUGUI FindMatchTime_Text { get { return matchProps_Text; } set { matchProps_Text = value; } }
+    public TextMeshProUGUI FindMatchTime_Text { get { return findMatchTime_Text; } set { findMatchTime_Text = value; } }
     [SerializeField] private TextMeshProUGUI findMatchYazisi_Text;
     [SerializeField] private Button startMatchFinding_Button;
     [SerializeField] private Button cancelMatchFinding_Button;
     private ExitGames.Client.Photon.Hashtable playerProps;
     private bool IsPlayerReady = false;
-    private bool gameStarted = false; // Oyun başlatıldığında true olur
+    private bool gameStarted = false; 
     private float deger = 0;
     PhotonView PV;
     
     private void Awake() 
     {
+        IsPlayerReady = true;
         PV = GetComponent<PhotonView>();
     }
 
@@ -42,27 +43,21 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (!PhotonNetwork.IsMasterClient)
         {
-            startMatchFinding_Button.gameObject.SetActive(false); // Oyun kurucu değilse başlatma butonu gizli
-            cancelMatchFinding_Button.gameObject.SetActive(false); // Oyun başlamadan durdurma butonu gizli
+            startMatchFinding_Button.gameObject.SetActive(false); 
+            cancelMatchFinding_Button.gameObject.SetActive(false); 
         }
     }
 
-    void Update()
-    {
-        PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("IsPlayerReady", out object isPlayerReady);
-        print("IsPlayerReady : " + isPlayerReady);
-    }
     
     public void StartMatchFindingButton_Method()
     {
-        IsPlayerReady = false;
         playerProps = new ExitGames.Client.Photon.Hashtable()
         {
             { "IsPlayerReady", IsPlayerReady }
         };
 
         PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
-        PV.RPC("RPC_StartFindMatch", RpcTarget.MasterClient, null); // Tüm oyunculara güncelleme gönder
+        PV.RPC("RPC_StartFindMatch", RpcTarget.MasterClient, null); 
         gameStarted = true;
         UpdateButtons();
     }
@@ -71,13 +66,21 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (gameStarted)
         {
-            // Oyunu durdurma işlemi
-            PV.RPC("RPC_CancelFindMatch", RpcTarget.AllBuffered, null); // Tüm oyunculara iptal güncellemesi gönder
+            PV.RPC("RPC_CancelFindMatch", RpcTarget.AllBuffered, null); 
         }
     }
 
     public void Initialize(float waitTimeValue)
     {
+        if(PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("gameMode",out object gameMode))
+        {
+            matchProps_Text.text = ((int)gameMode == 1? GameMode.Dereceli : GameMode.Derecesiz).ToString();
+        }
+        if(PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("randomGameMode",out object randomGameMode))
+        {
+            matchProps_Text.text = ((int)randomGameMode == 1? GameMode.Dereceli : GameMode.Derecesiz).ToString();
+        }
+
         int minutes = Mathf.FloorToInt(waitTimeValue / 60);
         int seconds = Mathf.FloorToInt(waitTimeValue % 60);
         findMatchTime_Text.text = string.Format("{0:00}:{1:00}", minutes, seconds);

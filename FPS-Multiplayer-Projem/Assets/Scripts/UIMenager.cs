@@ -21,7 +21,7 @@ public class UIMenager : MonoBehaviour
             return instance;
         }
     }
-
+    #region  Paneller
     [SerializeField] private GameObject connecting_Panel;
     public GameObject ConnectingPanel { get { return connecting_Panel;}}
 
@@ -37,8 +37,18 @@ public class UIMenager : MonoBehaviour
     [SerializeField] private GameObject menu_Panel;
     public GameObject Menu_Panel {get { return menu_Panel;}}
 
+    [SerializeField] private GameObject settings_Panel;
+    public GameObject Settings_Panel {get { return settings_Panel;}}
+
+    [SerializeField] private GameObject odaKurma_Panel;
+    public GameObject OdaKurma_Panel {get { return odaKurma_Panel;}}
+
     [SerializeField] private GameObject odaIslemleri_Panel;
     public GameObject OdaIslemleri_Panel {get { return odaIslemleri_Panel;}}
+    
+    [SerializeField] private GameObject randomOdaModSecim_Panel;
+    public GameObject RandomOdaModSecim_Panel {get { return randomOdaModSecim_Panel;}}
+
 
     [SerializeField] private GameObject odaKurmaYüklemeEkran_Panel;
     public GameObject OdaKurmaYüklemeEkran_Panel {get { return odaKurmaYüklemeEkran_Panel;}}
@@ -52,6 +62,8 @@ public class UIMenager : MonoBehaviour
     [SerializeField] private GameObject playerIcon_Panel;
 
     [SerializeField] private GameObject playerColor_Panel;
+
+    #endregion
 
     [Header("Random Oda ile ilgili İşlemler")]
     [SerializeField] private GameObject randomOda_Panel;
@@ -115,35 +127,47 @@ public class UIMenager : MonoBehaviour
 
     [Space]
     [Space]
+
+    [Header("Oda Kurma İşlemleri")]
+    [SerializeField] private TMP_InputField odaAdi_InputField;
     
+    [Space]
+    [Space]
+    
+    private PhotonView pv;
+    public PhotonView PV {get {return pv;}}
+    private CheatController cheatController;
+    private SaveSystem saveSystem;
     private ExitGames.Client.Photon.Hashtable playerProps;
+
+    private GameMode gameMode;
+    public GameMode GameMode {get {return gameMode;}}
+
     private bool playerIconBaslatButtonActive = false;
     private bool playerColorBaslatButtonActive = false;
     private bool playerPropKaydetButtonClick = false;
 
     private bool menuPlayerProfil = false;
-
     private bool isPlayerReady = false;
+
+    private string roomName;
+    public string RoomName {get {return roomName;}}
 
     private int iconIndex;
     private int colorIndex;
 
 
-    private PhotonView pv;
-    public PhotonView PV {get {return pv;}}
 
     private int i = 0;
     private bool value= false;
     private bool findCheatController = false;
 
-    private CheatController cheatController;
-
-    private int playerReadyCount = 0;
 
     private void Awake() 
     {
         SetActiveUIObject(oyunaBaglanma_Panel.gameObject.name);
         pv = GetComponent<PhotonView>();
+        saveSystem  = SaveSystem.Instance;
     }
     private void Update() 
     {
@@ -176,7 +200,8 @@ public class UIMenager : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.KeypadEnter))
         {
-            if(!PlayerPrefs.HasKey("icon"))
+            
+            if(!saveSystem.PlayerPrefsDataQuery("icon"))
             {
                 SetActiveUIObject(playerProps_Panel.name);
             }
@@ -186,9 +211,8 @@ public class UIMenager : MonoBehaviour
                 
                 menuKullaniciAdi_Text.text += PhotonNetwork.LocalPlayer.NickName;
 
-                iconIndex = PlayerPrefs.GetInt("icon");
-                colorIndex = PlayerPrefs.GetInt("color");
-
+                iconIndex = (int)saveSystem.PlayerPrefsDataLoad("icon","int");
+                colorIndex = (int)saveSystem.PlayerPrefsDataLoad("color","int");
                 SetPlayerProps();
 
                 menuPlayerIcon_Image.sprite = playerIcons[iconIndex].sprite;
@@ -197,8 +221,7 @@ public class UIMenager : MonoBehaviour
                 SetActiveUIObject(connecting_Panel.name);
                 
                 InvokeRepeating("ConnectingEffect",0,2f);
-            }
-            
+            }  
         }
     }
    
@@ -227,16 +250,16 @@ public class UIMenager : MonoBehaviour
 
     public void KayitliOyuncuButton_Method()
     {
-
-        if(PlayerPrefs.HasKey("icon") && PlayerPrefs.HasKey("color") )
+        
+        if(saveSystem.PlayerPrefsDataQuery("icon") && saveSystem.PlayerPrefsDataQuery("color") )
         {
             SunucuYonetim.Instance.ConnetingServer();
 
 
             menuKullaniciAdi_Text.text += PhotonNetwork.LocalPlayer.NickName;
 
-            iconIndex = PlayerPrefs.GetInt("icon");
-            colorIndex = PlayerPrefs.GetInt("color");
+            iconIndex = (int)saveSystem.PlayerPrefsDataLoad("icon","int");
+            colorIndex = (int)saveSystem.PlayerPrefsDataLoad("color","int");
 
             SetPlayerProps();
 
@@ -288,13 +311,12 @@ public class UIMenager : MonoBehaviour
         }
     }
 
-
-
     public void YeniOyuncuButton_Method()
     {
         PlayerPrefs.DeleteAll();
         SetActiveUIObject(yeniOyuncu_Panel.name);
     }
+
 
     public void GeriDon_Button()
     {
@@ -327,18 +349,19 @@ public class UIMenager : MonoBehaviour
 
     }
 
-    #endregion
-
 
     public void RandomOdaKuButton_Method()
     {
-        SunucuYonetim.Instance.ConnectedLobby(randomOda_Panel.name);
-        
-        connecting_Text.enabled = false;
-        InvokeRepeating("ConnectingEffect",0,2f);
-        SetActiveUIObject(odaKurmaYüklemeEkran_Panel.name);
+        SetActiveUIObject(randomOdaModSecim_Panel.name);
+
     }
 
+    public void SetttingsButton_Method()
+    {
+        SetActiveUIObject(settings_Panel.name);
+    }
+
+    #endregion
 
     public void PlayerPropSaveButton_Method()
     {
@@ -369,9 +392,9 @@ public class UIMenager : MonoBehaviour
             PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("icon",out object icon_Index);
             PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("color",out object color_Index);
             
-            PlayerPrefs.SetInt("icon",(int)icon_Index);
-            PlayerPrefs.SetInt("color",(int)color_Index);
-
+           
+            saveSystem.PlayerPrefsDataSave("icon",icon_Index);
+            saveSystem.PlayerPrefsDataSave("color",color_Index);
         }
 
 
@@ -419,6 +442,9 @@ public class UIMenager : MonoBehaviour
         odaIslemleri_Panel.SetActive(panelName.Equals(odaIslemleri_Panel.name));
         findingMatch_Panel.SetActive(panelName.Equals(FindingMatch_Panel.name) );
         KarşilaşmaKabulReddet_Panel.SetActive(panelName.Equals(KarşilaşmaKabulReddet_Panel.name));
+        odaKurma_Panel.SetActive(panelName.Equals(odaKurma_Panel.name));
+        settings_Panel.SetActive(panelName.Equals(settings_Panel.name));
+        randomOdaModSecim_Panel.SetActive(panelName.Equals(randomOdaModSecim_Panel.name));
     }
 
 
@@ -583,29 +609,11 @@ public class UIMenager : MonoBehaviour
 
         karşilaşmaKabulReddet_Panel.SetActive(false);
 
-        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
-        {
-            
-            
-            if(PhotonNetwork.CurrentRoom.Players[i+1].CustomProperties.TryGetValue("isPlayerReady",out object _isPlayerReady))
-            {
-                if((bool)_isPlayerReady)
-                {
-                    if(PhotonNetwork.IsMasterClient)
-                    {
-                        pv.RPC("IntroScene",RpcTarget.AllViaServer,1);
-
-                    }
-
-                   
-                }
-            }
-
-           
-        }
-
+        
     }
-    [PunRPC]
+
+
+
     public void KarşilaşmaReddetButton_Method()
     {
         isPlayerReady = false;
@@ -621,11 +629,60 @@ public class UIMenager : MonoBehaviour
         
     }
 
-    [PunRPC]
-    private void IntroScene(int sceneIndex)
+    
+    #region  Oda Kurma İşlemleri Methodlari
+
+    public void DereceliMode_Method()
     {
-        PhotonNetwork.LoadLevel(1);
+        if(!randomOdaModSecim_Panel.activeSelf)
+        {
+            gameMode = GameMode.Dereceli;
+        }
+        else
+        {
+            gameMode = GameMode.Dereceli;
+            SunucuYonetim.Instance.ConnectedLobby(randomOdaModSecim_Panel.name,gameMode);
+        
+            connecting_Text.enabled = false;
+            InvokeRepeating("ConnectingEffect",0,2f);
+            SetActiveUIObject(odaKurmaYüklemeEkran_Panel.name);
+
+        }
     }
+
+    public void DerecesizMode_Method()
+    {
+        if(!randomOdaModSecim_Panel.activeSelf)
+        {
+            gameMode = GameMode.Derecesiz;
+        }
+        else
+        {
+            gameMode = GameMode.Derecesiz;
+            SunucuYonetim.Instance.ConnectedLobby(randomOdaModSecim_Panel.name,gameMode);
+        
+            connecting_Text.enabled = false;
+            InvokeRepeating("ConnectingEffect",0,2f);
+            SetActiveUIObject(odaKurmaYüklemeEkran_Panel.name);
+
+        }
+        
+    }
+
+    public void OdaKurmaButton_Method()
+    {
+        SetActiveUIObject(odaKurma_Panel.name);
+    }
+
+    public void OdaKur()
+    {
+        roomName = odaAdi_InputField.text;
+        SunucuYonetim.Instance.ConnectedLobby(odaKurma_Panel.name,gameMode);
+        InvokeRepeating("ConnectingEffect",0,2f);
+        SetActiveUIObject(odaKurmaYüklemeEkran_Panel.name);
+    }
+
+    #endregion
 
 
 }
