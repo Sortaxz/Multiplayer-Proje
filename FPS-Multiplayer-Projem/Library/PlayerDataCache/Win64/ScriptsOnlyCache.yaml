@@ -42,17 +42,12 @@ ScriptsOnlyBuild:
     - TMPro.TMP_Dropdown
     - TMPro.TMP_FontAsset
     - TMPro.TMP_InputField
-    - TMPro.TMP_Settings
-    - TMPro.TMP_SpriteAsset
-    - TMPro.TMP_StyleSheet
     - TMPro.TextMeshProUGUI
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -133,6 +128,18 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.SpriteState
     - UnityEngine.UI.Toggle/ToggleEvent
   methodsToPreserve:
+  - assembly: Assembly-CSharp
+    fullTypeName: SettingsController
+    methodName: SettingsKaydetButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: SettingsController
+    methodName: SettingGeriDonButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: SettingsController
+    methodName: EkranBoyutuToogleButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: SettingsController
+    methodName: EkranBoyutButton_Method
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: PlayerIconButton_Method
@@ -223,9 +230,6 @@ ScriptsOnlyBuild:
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: OdaKurmaButton_Method
-  - assembly: Assembly-CSharp
-    fullTypeName: SettingsController
-    methodName: EkranBoyutButton_Method
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: BaglanButton_Method
@@ -387,85 +391,85 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 16886}
     - Class: 114
-      Script: {instanceID: 17302}
+      Script: {instanceID: 17304}
     - Class: 114
-      Script: {instanceID: 17544}
+      Script: {instanceID: 17546}
     - Class: 114
-      Script: {instanceID: 17758}
+      Script: {instanceID: 17760}
     - Class: 114
-      Script: {instanceID: 17764}
+      Script: {instanceID: 17766}
     - Class: 114
-      Script: {instanceID: 17970}
+      Script: {instanceID: 17972}
     - Class: 114
-      Script: {instanceID: 18188}
+      Script: {instanceID: 18190}
     - Class: 114
-      Script: {instanceID: 18268}
+      Script: {instanceID: 18270}
     - Class: 114
-      Script: {instanceID: 18664}
+      Script: {instanceID: 18666}
     - Class: 114
-      Script: {instanceID: 19018}
+      Script: {instanceID: 19020}
     - Class: 114
-      Script: {instanceID: 19022}
+      Script: {instanceID: 19024}
     - Class: 114
-      Script: {instanceID: 19072}
+      Script: {instanceID: 19074}
     - Class: 114
-      Script: {instanceID: 19184}
+      Script: {instanceID: 19186}
     - Class: 114
-      Script: {instanceID: 19304}
+      Script: {instanceID: 19306}
     - Class: 114
-      Script: {instanceID: 19320}
+      Script: {instanceID: 19322}
     - Class: 114
-      Script: {instanceID: 19580}
+      Script: {instanceID: 19582}
     - Class: 114
-      Script: {instanceID: 19980}
+      Script: {instanceID: 19982}
     - Class: 114
-      Script: {instanceID: 20128}
+      Script: {instanceID: 20130}
     - Class: 114
-      Script: {instanceID: 20194}
+      Script: {instanceID: 20196}
     - Class: 114
-      Script: {instanceID: 20248}
+      Script: {instanceID: 20250}
     - Class: 114
-      Script: {instanceID: 20264}
+      Script: {instanceID: 20266}
     - Class: 114
-      Script: {instanceID: 20320}
+      Script: {instanceID: 20322}
     - Class: 114
-      Script: {instanceID: 20666}
+      Script: {instanceID: 20668}
     - Class: 114
-      Script: {instanceID: 20708}
+      Script: {instanceID: 20710}
     - Class: 114
-      Script: {instanceID: 20900}
+      Script: {instanceID: 20902}
     - Class: 114
-      Script: {instanceID: 21052}
+      Script: {instanceID: 21054}
     - Class: 114
-      Script: {instanceID: 21138}
+      Script: {instanceID: 21140}
     - Class: 114
-      Script: {instanceID: 21362}
+      Script: {instanceID: 21364}
     - Class: 114
-      Script: {instanceID: 21378}
-    - Class: 114
-      Script: {instanceID: 21386}
+      Script: {instanceID: 21380}
     - Class: 114
       Script: {instanceID: 21388}
     - Class: 114
-      Script: {instanceID: 21394}
+      Script: {instanceID: 21390}
     - Class: 114
-      Script: {instanceID: 21498}
+      Script: {instanceID: 21396}
     - Class: 114
-      Script: {instanceID: 21812}
+      Script: {instanceID: 21500}
     - Class: 114
-      Script: {instanceID: 21980}
+      Script: {instanceID: 21814}
     - Class: 114
-      Script: {instanceID: 22496}
+      Script: {instanceID: 21982}
     - Class: 114
-      Script: {instanceID: 22846}
+      Script: {instanceID: 22498}
     - Class: 114
-      Script: {instanceID: 22970}
+      Script: {instanceID: 22848}
     - Class: 114
-      Script: {instanceID: 23134}
+      Script: {instanceID: 22972}
     - Class: 114
-      Script: {instanceID: 23262}
+      Script: {instanceID: 23136}
     - Class: 114
-      Script: {instanceID: 23272}
+      Script: {instanceID: 23264}
+    - Class: 114
+      Script: {instanceID: 23274}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -665,6 +669,12 @@ ScriptsOnlyBuild:
     assemblyName: PhotonUnityNetworking.Demos
     namespaceName: Photon.Pun.Demo.Cockpit
     className: RoomListCell
+  - hash:
+      serializedVersion: 2
+      Hash: e47d77dff9f7fd0f54480d10a98b411f
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: GameManager
   - hash:
       serializedVersion: 2
       Hash: b12640dfdb5966813e9dd838893e6c4a
@@ -1747,7 +1757,7 @@ ScriptsOnlyBuild:
     className: IsConnectedAndReadyProperty
   - hash:
       serializedVersion: 2
-      Hash: 30da9efd7c753620a8f5590c8dd4f15c
+      Hash: 78aca032a3888acf9b8fde3f501c101c
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: SettingsController
