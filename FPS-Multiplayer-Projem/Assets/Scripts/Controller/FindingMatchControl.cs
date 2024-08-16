@@ -50,13 +50,9 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
         
 
         Initialize(deger);
+
     }
 
-    public void ElemanlariBaslat()
-    {
-        startMatchFinding_Button.gameObject.SetActive(false); 
-        cancelMatchFinding_Button.gameObject.SetActive(false); 
-    } 
     
     public void StartMatchFindingButton_Method()
     {
@@ -114,9 +110,12 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void RPC_StartFindMatch()
     {
-        gameStarted = true;
-        UpdateButtons();
-        StartCoroutine(deneme());
+        if(gameObject.activeSelf)
+        {
+            gameStarted = true;
+            UpdateButtons();
+            StartCoroutine(deneme());
+        }
     }
 
     [PunRPC]
@@ -131,7 +130,7 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
 
     public IEnumerator deneme()
     {
-        while (gameStarted)
+        while (gameStarted && gameObject.activeSelf)
         {
             yield return null;
 
@@ -144,7 +143,7 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
             {
                 deger = 0;
                 Initialize(deger);
-                gameStarted = true;
+                gameStarted = false;
                 PV.RPC("FinedMatch",RpcTarget.AllViaServer);
             }
         }
@@ -170,6 +169,19 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     public void FinedMatch()
     {
+        
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            startMatchFinding_Button.gameObject.SetActive(false); 
+            cancelMatchFinding_Button.gameObject.SetActive(false); 
+        }
+        else
+        {
+            startMatchFinding_Button.gameObject.SetActive(true); 
+            cancelMatchFinding_Button.gameObject.SetActive(false); 
+        }
+        
+
         UIMenager.Instance.SetActiveUIObject(UIMenager.Instance.KarşilaşmaKabulReddet_Panel.name);
     }
 }

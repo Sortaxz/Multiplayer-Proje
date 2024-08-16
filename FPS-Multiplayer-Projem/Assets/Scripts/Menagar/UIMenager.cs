@@ -173,16 +173,7 @@ public class UIMenager : MonoBehaviour
     {
         
         CheatActive();
-        
-        if(saveSystem.PlayerPrefsDataQuery("screenSize"))
-        {
-            string değer = (string)saveSystem.PlayerPrefsDataLoad("screenSize","string");
-            print(değer);
-        }
-
     }
-
-
 
     public void CheatActive()
     {
@@ -200,7 +191,13 @@ public class UIMenager : MonoBehaviour
 
     public void BaglanButton_Method()
     {
-        SetActiveUIObject(playerProps_Panel.name);
+        string playerName = kullaniciAdi_InputField.text;
+
+        SunucuYonetim.Instance.ConnetingServer(playerName);
+
+        saveSystem.PlayerPrefsDataSave("playerName",playerName);
+            
+        SetActiveUIObject(connecting_Panel.name);
     }
 
 
@@ -208,10 +205,18 @@ public class UIMenager : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.KeypadEnter))
         {
+            string playerName = kullaniciAdi_InputField.text;
+
+            SunucuYonetim.Instance.ConnetingServer(playerName);
             
+            saveSystem.PlayerPrefsDataSave("playerName",playerName);
+            
+            SetActiveUIObject(connecting_Panel.name);
+
+            /*
+            SetActiveUIObject(playerProps_Panel.name);
             if(!saveSystem.PlayerPrefsDataQuery("icon"))
             {
-                SetActiveUIObject(playerProps_Panel.name);
             }
             else
             {
@@ -228,15 +233,15 @@ public class UIMenager : MonoBehaviour
                 
                 SetActiveUIObject(connecting_Panel.name);
                 
-                InvokeRepeating("ConnectingEffect",0,2f);
-            }  
+            } 
+            */ 
         }
     }
    
 
     public void BaslatButton_Method()
     {
-        SunucuYonetim.Instance.ConnetingServer();
+        //SunucuYonetim.Instance.ConnetingServer();
 
 
         menuKullaniciAdi_Text.text += PhotonNetwork.LocalPlayer.NickName;
@@ -250,18 +255,20 @@ public class UIMenager : MonoBehaviour
         menuPlayerIcon_Image.sprite = playerIcons[(int)iconIndex].sprite;
         
 
-        SetActiveUIObject(connecting_Panel.name);
+        //SetActiveUIObject(connecting_Panel.name);
+        SetActiveUIObject(menu_Panel.name);
 
-        InvokeRepeating("ConnectingEffect",0,2f);
     }
 
 
     public void KayitliOyuncuButton_Method()
     {
         
-        if(saveSystem.PlayerPrefsDataQuery("icon") && saveSystem.PlayerPrefsDataQuery("color") )
+        if(saveSystem.PlayerPrefsDataQuery("icon") && saveSystem.PlayerPrefsDataQuery("color") && saveSystem.PlayerPrefsDataQuery("playerName"))
         {
-            SunucuYonetim.Instance.ConnetingServer();
+            string playerName = (string)saveSystem.PlayerPrefsDataLoad("playerName","string");
+
+            SunucuYonetim.Instance.ConnetingServer(playerName);
 
 
             menuKullaniciAdi_Text.text += PhotonNetwork.LocalPlayer.NickName;
@@ -276,7 +283,6 @@ public class UIMenager : MonoBehaviour
 
             SetActiveUIObject(connecting_Panel.name);
 
-            InvokeRepeating("ConnectingEffect",0,2f); 
             
 
         }
@@ -286,36 +292,40 @@ public class UIMenager : MonoBehaviour
         }
     }
 
-    private void ConnectingEffect()
+    private IEnumerator PlayerTipTextAnimation()
     {
-        if(connecting_Panel.activeSelf)
+        while(true)
         {
-            oyunIpUcu_Text.text = oyunIpUclari[i];
-            if(i < oyunIpUclari.Length && !value)
+            if(odaKurmaYüklemeEkran_Panel.activeSelf)
             {
-                i++;
-
-                if(i == oyunIpUclari.Length-1)
+                oyunIpUcu_Text.text = oyunIpUclari[i];
+                if(i < oyunIpUclari.Length && !value)
                 {
-                    value = true;
-                    i = oyunIpUclari.Length-1;
+                    i++;
+                    if(i == oyunIpUclari.Length-1)
+                    {
+                        value = true;
+                        i = oyunIpUclari.Length-1;
+                    }
+                }
+                else
+                {
+                    i--;
+
+                    if(i == 0)
+                    {
+                        value = false;
+                        i = 0;
+                    }
                 }
             }
             else
             {
-                i--;
-
-                if(i == 0)
-                {
-                    value = false;
-                    i = 0;
-                }
+                StopCoroutine(PlayerTipTextAnimation());
             }
+            yield return new WaitForSeconds(.3f);
         }
-        else
-        {
-            CancelInvoke("ConnectingEffect");
-        }
+
     }
 
     public void YeniOyuncuButton_Method()
@@ -644,16 +654,16 @@ public class UIMenager : MonoBehaviour
         if(!randomOdaModSecim_Panel.activeSelf)
         {
             gameMode = GameMode.Dereceli;
+            
         }
         else
         {
             gameMode = GameMode.Dereceli;
-            SunucuYonetim.Instance.ConnectedLobby(randomOdaModSecim_Panel.name,gameMode);
-        
-            connecting_Text.enabled = false;
-            InvokeRepeating("ConnectingEffect",0,2f);
-            SetActiveUIObject(odaKurmaYüklemeEkran_Panel.name);
 
+            SunucuYonetim.Instance.CreateRandomRoom(gameMode);
+
+            SetActiveUIObject(odaKurmaYüklemeEkran_Panel.name);
+            StartCoroutine(PlayerTipTextAnimation());
         }
     }
 
@@ -666,12 +676,11 @@ public class UIMenager : MonoBehaviour
         else
         {
             gameMode = GameMode.Derecesiz;
-            SunucuYonetim.Instance.ConnectedLobby(randomOdaModSecim_Panel.name,gameMode);
-        
-            connecting_Text.enabled = false;
-            InvokeRepeating("ConnectingEffect",0,2f);
+
+            SunucuYonetim.Instance.CreateRandomRoom(gameMode);
+
             SetActiveUIObject(odaKurmaYüklemeEkran_Panel.name);
-            FindingMatchControl.Instance.ElemanlariBaslat();
+            StartCoroutine(PlayerTipTextAnimation());
         }
         
     }
@@ -684,9 +693,12 @@ public class UIMenager : MonoBehaviour
     public void OdaKur()
     {
         roomName = odaAdi_InputField.text;
-        SunucuYonetim.Instance.ConnectedLobby(odaKurma_Panel.name,gameMode);
-        InvokeRepeating("ConnectingEffect",0,2f);
+
+
+        SunucuYonetim.Instance.CreateRoom(gameMode);
+        
         SetActiveUIObject(odaKurmaYüklemeEkran_Panel.name);
+        StartCoroutine(PlayerTipTextAnimation());
     }
 
     #endregion

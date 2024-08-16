@@ -38,7 +38,7 @@ public class SettingsController : MonoBehaviour
             
             if(selectScreenSizeName == "FullScreen Window")
             {
-                Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
+                Screen.SetResolution(1920,1080,FullScreenMode.FullScreenWindow);
             }
             else
             {
@@ -46,8 +46,6 @@ public class SettingsController : MonoBehaviour
                 screenHeight = (int)saveSystem.PlayerPrefsDataLoad("screenHeight","int"); 
                 Screen.SetResolution(screenWith,screenHeight,FullScreenMode.Windowed);
             }
-
-
         }           
     }
 
@@ -61,6 +59,7 @@ public class SettingsController : MonoBehaviour
     public void EkranBoyutuToogleButton_Method()
     {
         selectScreenSizeName = dropdownLabel.text; 
+        print(selectScreenSizeName);
         
         if(dropdownLabel.text != "FullScreen Window")
         {
@@ -79,18 +78,20 @@ public class SettingsController : MonoBehaviour
 
         saveSystem.PlayerPrefsDataSave("screenSize",selectScreenSizeName);
 
-        int screenWith = int.Parse(screenWith_InputField.text);
-        int screenHeight = int.Parse(screenHeight_InputField.text);
-
-        saveSystem.PlayerPrefsDataSave("screenWith",screenWith);
-        saveSystem.PlayerPrefsDataSave("screenHeight",screenWith);
 
         if(selectScreenSizeName != "FullScreen Window")
         {
+            int screenWith = int.Parse(screenWith_InputField.text);
+            int screenHeight = int.Parse(screenHeight_InputField.text);
+
+            saveSystem.PlayerPrefsDataSave("screenWith",screenWith);
+            saveSystem.PlayerPrefsDataSave("screenHeight",screenWith);
+            print("Windowed");
             Screen.SetResolution(screenWith,screenHeight,FullScreenMode.Windowed);
         }
         else
         {
+            print("FullScreen Window");
             Screen.SetResolution(1920,1080,FullScreenMode.FullScreenWindow);
         }
         ScreenSizeTuning_Panel.SetActive(false);
