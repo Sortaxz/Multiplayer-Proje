@@ -28,16 +28,14 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject playerListParent;
     private Dictionary<int,GameObject> playerList = new Dictionary<int, GameObject>();
     private ExitGames.Client.Photon.Hashtable playerProps = new ExitGames.Client.Photon.Hashtable();
-
     private PhotonView PV;
     private SaveSystem saveSystem;
 
-    private GameMode randomGameMode;
     private GameMode gameMode;
 
     private string roomName;
     private int playerReadyCount = 0;
-    private int lefRoomPlayerNumber = -1;
+
     private void Awake() 
     {
         uIMenager = UIMenager.Instance;
@@ -45,9 +43,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         saveSystem = SaveSystem.Instance;
     }
 
-    private string panelName;
 
-    
 
     public override void OnConnectedToMaster()
     {
@@ -56,22 +52,25 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         
         if(saveSystem.PlayerPrefsDataQuery("icon") && saveSystem.PlayerPrefsDataQuery("color") && saveSystem.PlayerPrefsDataQuery("playerName"))
         {
-            uIMenager.SetActiveUIObject(uIMenager.Menu_Panel.name); 
+            string menuPanelName = uIMenager.Menu_Panel.name;
+            uIMenager.SetActiveUIObject(menuPanelName); 
         }
         else
         {
-            uIMenager.SetActiveUIObject(uIMenager.PlayerProps_Panel.name); 
+            string playerPropsPanelName = uIMenager.PlayerProps_Panel.name;
+            uIMenager.SetActiveUIObject(playerPropsPanelName); 
         }
 
         PhotonNetwork.JoinLobby();
 
+        
     }
 
     public override void OnJoinedLobby()
     {
-        print("lobbiye bağlanildi");
         
     }
+
 
     public void CreateRoom(GameMode mod)
     {
@@ -113,16 +112,20 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        uIMenager.SetActiveUIObject(uIMenager.RandomOda_Panel.name);
-            
+        
+        string randomOdaPanelName = uIMenager.RandomOda_Panel.name;
+        uIMenager.SetActiveUIObject(randomOdaPanelName);
+                
         foreach (Player player in PhotonNetwork.PlayerList)
         {
             GameObject playerListObje = PlayerListOlustur(player.ActorNumber,player.NickName,player);
-    
+        
             playerList.Add(player.ActorNumber,playerListObje);
                 
-            uIMenager.SetActiveUIObject(uIMenager.FindingMatch_Panel.name); // düzeltilecek
-            
+            string findingMatchPanelName = uIMenager.FindingMatch_Panel.name;
+                
+            uIMenager.SetActiveUIObject(findingMatchPanelName); // düzeltilecek
+                
             FindingMatchControl.Instance.StartMatchFindingButton_Method();
         }
 
@@ -163,7 +166,6 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     {
         Destroy(playerList[otherPlayer.ActorNumber].gameObject);
         //playerList.Remove(otherPlayer.ActorNumber);
-        lefRoomPlayerNumber = otherPlayer.ActorNumber;
     }
 
 
@@ -187,7 +189,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.ConnectUsingSettings();
         string name = playerName;
-
+        
 
         PhotonNetwork.LocalPlayer.NickName = playerName;
        
@@ -250,5 +252,5 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         PhotonNetwork.LoadLevel(1);
     }
 
-    
+   
 }

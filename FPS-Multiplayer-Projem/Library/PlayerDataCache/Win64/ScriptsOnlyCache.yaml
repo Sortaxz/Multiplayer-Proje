@@ -1,8 +1,11 @@
 ScriptsOnlyBuild:
   usedScripts:
+    Assembly-CSharp:
+    - FriendListControl
     Assembly-CSharp.dll:
     - CheatController
     - FindingMatchControl
+    - FriendListControl
     - HandleControl
     - PlayerListControl
     - PlayerMessageController
@@ -38,6 +41,7 @@ ScriptsOnlyBuild:
     - TMPro.TMP_Settings
     - TMPro.TMP_SpriteAsset
     - TMPro.TMP_StyleSheet
+    - TMPro.TextMeshProUGUI
     Unity.TextMeshPro.dll:
     - TMPro.TMP_Dropdown
     - TMPro.TMP_FontAsset
@@ -56,6 +60,7 @@ ScriptsOnlyBuild:
     - UnityEditor.TestTools.TestRunner.TestListCacheData
     - UnityEditor.TestTools.TestRunner.TestRun.TestJobDataHolder
     UnityEngine.UI:
+    - UnityEngine.UI.Button
     - UnityEngine.UI.Image
     - UnityEngine.UI.Shadow
     - UnityEngine.UI.Slider
@@ -285,6 +290,9 @@ ScriptsOnlyBuild:
     methodName: PlayerPropButton_Method2
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
+    methodName: ArkadaslarButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
     methodName: DereceliMode_Method
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
@@ -397,81 +405,83 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 17546}
     - Class: 114
-      Script: {instanceID: 17760}
+      Script: {instanceID: 17696}
     - Class: 114
-      Script: {instanceID: 17766}
+      Script: {instanceID: 17762}
     - Class: 114
-      Script: {instanceID: 17972}
+      Script: {instanceID: 17768}
     - Class: 114
-      Script: {instanceID: 18190}
+      Script: {instanceID: 17974}
     - Class: 114
-      Script: {instanceID: 18270}
+      Script: {instanceID: 18192}
     - Class: 114
-      Script: {instanceID: 18666}
+      Script: {instanceID: 18272}
     - Class: 114
-      Script: {instanceID: 19020}
+      Script: {instanceID: 18668}
     - Class: 114
-      Script: {instanceID: 19024}
+      Script: {instanceID: 19022}
     - Class: 114
-      Script: {instanceID: 19074}
+      Script: {instanceID: 19026}
     - Class: 114
-      Script: {instanceID: 19186}
+      Script: {instanceID: 19076}
     - Class: 114
-      Script: {instanceID: 19306}
+      Script: {instanceID: 19188}
     - Class: 114
-      Script: {instanceID: 19322}
+      Script: {instanceID: 19308}
     - Class: 114
-      Script: {instanceID: 19582}
+      Script: {instanceID: 19324}
     - Class: 114
-      Script: {instanceID: 19982}
+      Script: {instanceID: 19584}
     - Class: 114
-      Script: {instanceID: 20130}
+      Script: {instanceID: 19984}
     - Class: 114
-      Script: {instanceID: 20196}
+      Script: {instanceID: 20132}
     - Class: 114
-      Script: {instanceID: 20250}
+      Script: {instanceID: 20198}
     - Class: 114
-      Script: {instanceID: 20266}
+      Script: {instanceID: 20252}
     - Class: 114
-      Script: {instanceID: 20322}
+      Script: {instanceID: 20268}
     - Class: 114
-      Script: {instanceID: 20668}
+      Script: {instanceID: 20324}
     - Class: 114
-      Script: {instanceID: 20710}
+      Script: {instanceID: 20670}
     - Class: 114
-      Script: {instanceID: 20902}
+      Script: {instanceID: 20712}
     - Class: 114
-      Script: {instanceID: 21054}
+      Script: {instanceID: 20904}
     - Class: 114
-      Script: {instanceID: 21140}
+      Script: {instanceID: 21056}
     - Class: 114
-      Script: {instanceID: 21364}
+      Script: {instanceID: 21142}
     - Class: 114
-      Script: {instanceID: 21380}
+      Script: {instanceID: 21366}
     - Class: 114
-      Script: {instanceID: 21388}
+      Script: {instanceID: 21382}
     - Class: 114
       Script: {instanceID: 21390}
     - Class: 114
-      Script: {instanceID: 21396}
+      Script: {instanceID: 21392}
     - Class: 114
-      Script: {instanceID: 21500}
+      Script: {instanceID: 21398}
     - Class: 114
-      Script: {instanceID: 21814}
+      Script: {instanceID: 21502}
     - Class: 114
-      Script: {instanceID: 21982}
+      Script: {instanceID: 21816}
     - Class: 114
-      Script: {instanceID: 22498}
+      Script: {instanceID: 21984}
     - Class: 114
-      Script: {instanceID: 22848}
+      Script: {instanceID: 22500}
     - Class: 114
-      Script: {instanceID: 22972}
+      Script: {instanceID: 22850}
     - Class: 114
-      Script: {instanceID: 23136}
+      Script: {instanceID: 22974}
     - Class: 114
-      Script: {instanceID: 23264}
+      Script: {instanceID: 23138}
     - Class: 114
-      Script: {instanceID: 23274}
+      Script: {instanceID: 23266}
+    - Class: 114
+      Script: {instanceID: 23276}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -779,6 +789,12 @@ ScriptsOnlyBuild:
     assemblyName: PhotonUnityNetworking.Demos
     namespaceName: Photon.Pun.Demo.Cockpit
     className: CurrentRoomPropertiesListedInLobbyProperty
+  - hash:
+      serializedVersion: 2
+      Hash: aa5f4b8176c1b82d87ef8e049a01c746
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: FriendListControl
   - hash:
       serializedVersion: 2
       Hash: 4c6ecaf42be91e35c184f87f3b1d2366
@@ -1693,7 +1709,7 @@ ScriptsOnlyBuild:
     className: UnityOnTriggerStay2DMessageListener
   - hash:
       serializedVersion: 2
-      Hash: 916f9c42eb55cdc34da4e03c6f453cc6
+      Hash: c40fd4a89eea30045c7feed53de3c9b0
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: UIMenager

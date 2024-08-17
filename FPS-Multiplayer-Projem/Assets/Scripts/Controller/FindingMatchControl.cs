@@ -169,7 +169,6 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     public void FinedMatch()
     {
-        
         if (!PhotonNetwork.IsMasterClient)
         {
             startMatchFinding_Button.gameObject.SetActive(false); 
@@ -181,7 +180,7 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
             cancelMatchFinding_Button.gameObject.SetActive(false); 
         }
         
-
-        UIMenager.Instance.SetActiveUIObject(UIMenager.Instance.KarşilaşmaKabulReddet_Panel.name);
+        string karşilaşmaKabulReddetPanelName = UIMenager.Instance.KarşilaşmaKabulReddet_Panel.name;
+        UIMenager.Instance.SetActiveUIObject(karşilaşmaKabulReddetPanelName);
     }
 }

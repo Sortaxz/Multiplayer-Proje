@@ -40,6 +40,10 @@ public class UIMenager : MonoBehaviour
     [SerializeField] private GameObject settings_Panel;
     public GameObject Settings_Panel {get { return settings_Panel;}}
 
+    [SerializeField] private GameObject arakadasİslem_Panel;
+    public GameObject Arakadasİslem_Panel {get { return arakadasİslem_Panel;}}
+
+
     [SerializeField] private GameObject odaKurma_Panel;
     public GameObject OdaKurma_Panel {get { return odaKurma_Panel;}}
 
@@ -74,7 +78,16 @@ public class UIMenager : MonoBehaviour
     [Space]
     [Space]
 
+    [Header("Arkadas Panel ile ilgili işlemler")]
+
+    [SerializeField] private GameObject friendListContent;
+    public GameObject FriendListContent { get { return friendListContent;}}
+
+    [SerializeField] private GameObject friendListPrefab;
+    public GameObject  FriendListPrefab { get { return friendListPrefab;}}
     
+    [Space]
+    [Space]
 
     [SerializeField] private Image[] playerIcons;
     public Image[] PlayerIcons { get { return playerIcons;}}
@@ -133,6 +146,9 @@ public class UIMenager : MonoBehaviour
     
     [Space]
     [Space]
+    
+
+    [SerializeField] private TextMeshProUGUI text;
     
     private PhotonView pv;
     public PhotonView PV {get {return pv;}}
@@ -213,35 +229,13 @@ public class UIMenager : MonoBehaviour
             
             SetActiveUIObject(connecting_Panel.name);
 
-            /*
-            SetActiveUIObject(playerProps_Panel.name);
-            if(!saveSystem.PlayerPrefsDataQuery("icon"))
-            {
-            }
-            else
-            {
-                SunucuYonetim.Instance.ConnetingServer();
-                
-                menuKullaniciAdi_Text.text += PhotonNetwork.LocalPlayer.NickName;
-
-                iconIndex = (int)saveSystem.PlayerPrefsDataLoad("icon","int");
-                colorIndex = (int)saveSystem.PlayerPrefsDataLoad("color","int");
-                SetPlayerProps();
-
-                menuPlayerIcon_Image.sprite = playerIcons[iconIndex].sprite;
-                
-                
-                SetActiveUIObject(connecting_Panel.name);
-                
-            } 
-            */ 
+            
         }
     }
    
 
     public void BaslatButton_Method()
     {
-        //SunucuYonetim.Instance.ConnetingServer();
 
 
         menuKullaniciAdi_Text.text += PhotonNetwork.LocalPlayer.NickName;
@@ -255,7 +249,6 @@ public class UIMenager : MonoBehaviour
         menuPlayerIcon_Image.sprite = playerIcons[(int)iconIndex].sprite;
         
 
-        //SetActiveUIObject(connecting_Panel.name);
         SetActiveUIObject(menu_Panel.name);
 
     }
@@ -463,6 +456,7 @@ public class UIMenager : MonoBehaviour
         odaKurma_Panel.SetActive(panelName.Equals(odaKurma_Panel.name));
         settings_Panel.SetActive(panelName.Equals(settings_Panel.name));
         randomOdaModSecim_Panel.SetActive(panelName.Equals(randomOdaModSecim_Panel.name));
+        arakadasİslem_Panel.SetActive(panelName.Equals(arakadasİslem_Panel.name));
     }
 
 
@@ -703,5 +697,17 @@ public class UIMenager : MonoBehaviour
 
     #endregion
 
+    #region  Arkadaş Panel İle İlgili Methodlar 
+
+    public void ArkadaslarButton_Method()
+    {
+        SetActiveUIObject(arakadasİslem_Panel.name);
+
+        
+    }
+
+   
+
+    #endregion
 
 }
