@@ -148,7 +148,7 @@ public class UIMenager : MonoBehaviour
     [Space]
     
 
-    [SerializeField] private TextMeshProUGUI text;
+    public TextMeshProUGUI text;
     
     private PhotonView pv;
     public PhotonView PV {get {return pv;}}
@@ -334,10 +334,16 @@ public class UIMenager : MonoBehaviour
         {
             SetActiveUIObject(oyunaBaglanma_Panel.name);
         }
-        else
+        else 
         {
+            if(PhotonNetwork.InRoom)
+            {
+                PhotonNetwork.LeaveRoom();
+            }
             SetActiveUIObject(menu_Panel.name);
         }
+       
+
     }
 
     #region  Menu Panel İşlenleri
@@ -652,6 +658,8 @@ public class UIMenager : MonoBehaviour
         }
         else
         {
+            SunucuYonetim.Instance.NormalRoom = true;
+
             gameMode = GameMode.Dereceli;
 
             SunucuYonetim.Instance.CreateRandomRoom(gameMode);
@@ -669,6 +677,7 @@ public class UIMenager : MonoBehaviour
         }
         else
         {
+            SunucuYonetim.Instance.NormalRoom = true;
             gameMode = GameMode.Derecesiz;
 
             SunucuYonetim.Instance.CreateRandomRoom(gameMode);
@@ -686,6 +695,8 @@ public class UIMenager : MonoBehaviour
 
     public void OdaKur()
     {
+        SunucuYonetim.Instance.NormalRoom = true;
+
         roomName = odaAdi_InputField.text;
 
 
@@ -702,8 +713,9 @@ public class UIMenager : MonoBehaviour
     public void ArkadaslarButton_Method()
     {
         SetActiveUIObject(arakadasİslem_Panel.name);
+        menuPlayerProfil = true;
 
-        
+        //SunucuYonetim.Instance.GetFriendRoom();
     }
 
    

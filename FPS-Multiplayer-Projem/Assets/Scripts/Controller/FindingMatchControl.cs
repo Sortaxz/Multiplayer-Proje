@@ -48,7 +48,7 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
             cancelMatchFinding_Button.gameObject.SetActive(false); 
         }
         
-
+        findMatchTime_Text.gameObject.SetActive(true);
         Initialize(deger);
 
     }
@@ -56,6 +56,8 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
     
     public void StartMatchFindingButton_Method()
     {
+        findMatchTime_Text.gameObject.SetActive(true);
+        
         PV.RPC("RPC_StartFindMatch", RpcTarget.MasterClient, null); 
         gameStarted = true;
         UpdateButtons();
@@ -65,6 +67,7 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (gameStarted)
         {
+            findMatchTime_Text.gameObject.SetActive(false);
             PV.RPC("RPC_CancelFindMatch", RpcTarget.AllBuffered, null); 
         }
     }
@@ -105,6 +108,8 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
             startMatchFinding_Button.gameObject.SetActive(PhotonNetwork.IsMasterClient);
             cancelMatchFinding_Button.gameObject.SetActive(false);
         }
+
+        
     }
 
     [PunRPC]
@@ -144,7 +149,7 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
                 deger = 0;
                 Initialize(deger);
                 gameStarted = false;
-                PV.RPC("FinedMatch",RpcTarget.AllViaServer);
+                PV.RPC("FinedMatch",RpcTarget.AllViaServer,true);
             }
         }
     }
@@ -167,7 +172,7 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
 
 
     [PunRPC]
-    public void FinedMatch()
+    public void FinedMatch(bool open)
     {
         if (!PhotonNetwork.IsMasterClient)
         {
@@ -182,5 +187,6 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
         
         string karşilaşmaKabulReddetPanelName = UIMenager.Instance.KarşilaşmaKabulReddet_Panel.name;
         UIMenager.Instance.SetActiveUIObject(karşilaşmaKabulReddetPanelName);
+        
     }
 }
