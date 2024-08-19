@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Realtime;
+using TMPro;
 using UnityEngine;
 
 public class SaveSystem : MonoBehaviour
@@ -16,12 +18,12 @@ public class SaveSystem : MonoBehaviour
             return instance;
         }
     }
+    int friendCount = 1;
 
     private void Awake() 
     {
         DontDestroyOnLoad(gameObject);    
     }
-
 
     public void PlayerPrefsDataSave(string saveVariableName,object value)
     {
@@ -37,6 +39,7 @@ public class SaveSystem : MonoBehaviour
         {
             PlayerPrefs.SetString(saveVariableName,valueIsString);
         }
+
         
     }
 
@@ -69,4 +72,20 @@ public class SaveSystem : MonoBehaviour
         return PlayerPrefs.HasKey(firstDataQueryName);
     }
     
+
+    public void SetFriendPlayer(Player friendPlayer)
+    {
+        SunucuYonetim.Instance.FriendPlayer.Add(friendPlayer);
+        PlayerPrefsDataSave(friendPlayer.ActorNumber.ToString(),friendPlayer.NickName);
+        
+    }
+    public void GetFriendPlayer()
+    {
+        //return (string)PlayerPrefsDataLoad(friendPlayer.ActorNumber.ToString(),"string");
+        foreach (Player friendPlayer in SunucuYonetim.Instance.FriendPlayer)
+        {
+            string player = (string)PlayerPrefsDataLoad(friendPlayer.ActorNumber.ToString(),"string");
+            UIMenager.Instance.friendPlayerNickName_Text.text = (string)PlayerPrefsDataLoad(friendPlayer.ActorNumber.ToString(),"string");
+        }
+    }
 }

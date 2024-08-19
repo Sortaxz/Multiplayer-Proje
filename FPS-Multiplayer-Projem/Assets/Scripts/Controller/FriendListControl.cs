@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
@@ -11,13 +12,14 @@ public class FriendListControl : MonoBehaviour
     [SerializeField] private TextMeshProUGUI friendName_Text;
     [SerializeField] private Button addFriend_Button;
 
-    
+    private Player friendPlayer;
     void Start()
     {
-        addFriend_Button.onClick.AddListener(()=>
+        addFriend_Button.onClick.AddListener(delegate
         {
-            print("Arkadas Eklendi");
+            SaveSystem.Instance.SetFriendPlayer(friendPlayer);
         });
+        
     }
 
     void Update()
@@ -25,9 +27,14 @@ public class FriendListControl : MonoBehaviour
         
     }
 
-    public void Initialize(string friendName,Player player)
+    public void Initialize(Player player)
     {
-        friendName_Text.text = friendName;
+        friendPlayer = player;
+        friendName_Text.text = player.NickName;
+        player.CustomProperties.TryGetValue("icon",out object iconIndex);
+
+        friendIcon_Image.sprite = UIMenager.Instance.PlayerIcons[(int)iconIndex].sprite;
 
     }
+    
 }

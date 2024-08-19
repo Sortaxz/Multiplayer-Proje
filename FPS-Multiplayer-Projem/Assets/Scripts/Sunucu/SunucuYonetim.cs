@@ -31,6 +31,19 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     private PhotonView PV;
     private SaveSystem saveSystem;
 
+    [Space]
+    [Space]
+
+    [Header("Frien List Obje ile ilgili işlemler")]
+    [SerializeField] private GameObject friendListPrefab;
+    [SerializeField] private GameObject friendListContent;
+    private Dictionary<int,GameObject> friendList = new Dictionary<int, GameObject>();
+    private List<Player> friendPlayer = new List<Player>();
+    public List<Player> FriendPlayer { get { return friendPlayer; } }
+
+    [Space]
+    [Space]
+    public Button button;
     private GameMode gameMode;
 
     private string roomName;
@@ -57,11 +70,13 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         {
             string menuPanelName = uIMenager.Menu_Panel.name;
             uIMenager.SetActiveUIObject(menuPanelName); 
+            uIMenager.odaKurdu = true;
         }
         else
         {
             string playerPropsPanelName = uIMenager.PlayerProps_Panel.name;
             uIMenager.SetActiveUIObject(playerPropsPanelName); 
+
         }
 
         PhotonNetwork.JoinLobby();
@@ -71,7 +86,6 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
     public override void OnJoinedLobby()
     {
-
     }
 
     public void CreateRoom(GameMode mod)
@@ -118,6 +132,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
+        /*
         if(playerList == null)
         {
             playerList = new Dictionary<int, GameObject>();
@@ -134,15 +149,23 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
                 
             string findingMatchPanelName = uIMenager.FindingMatch_Panel.name;
                 
-            uIMenager.SetActiveUIObject(findingMatchPanelName); // düzeltilecek
+            uIMenager.SetActiveUIObject(findingMatchPanelName); 
                 
             FindingMatchControl.Instance.StartMatchFindingButton_Method();
         }
 
+        */
 
-        /*
         if(normalRoom)
         {
+            if(playerList == null)
+            {
+                playerList = new Dictionary<int, GameObject>();
+            }
+
+            string randomOdaPanelName = uIMenager.RandomOda_Panel.name;
+            uIMenager.SetActiveUIObject(randomOdaPanelName);
+
             foreach (Player player in PhotonNetwork.PlayerList)
             {
                 GameObject playerListObje = PlayerListOlustur(player.ActorNumber,player.NickName,player);
@@ -158,23 +181,39 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         }
         else
         {
+            if(friendList == null)
+            {
+                friendList = new Dictionary<int, GameObject>();
+            }
+
+
             string friendPanelName = uIMenager.Arakadasİslem_Panel.name; 
             uIMenager.SetActiveUIObject(friendPanelName);
 
-
-            foreach (Player player in PhotonNetwork.PlayerList)
+           
+            foreach (Player friendPlayer in PhotonNetwork.PlayerList)
             {
-                uIMenager.text.text += player.NickName;
-            }
+                if(PhotonNetwork.NickName != friendPlayer.NickName)
+                {
+                    GameObject friendListObject = FriendListOlustur();
 
+                    friendListObject.GetComponent<FriendListControl>().Initialize(friendPlayer);
+
+
+                    friendList.Add(friendPlayer.ActorNumber,friendListObject);
+                }   
+            }
         }
-        */
+    }
+
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        print("OnJoinRoomFailed");
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        
-
+        print("OnJoinRandomFailed");
         string randomRoomName = "Oda-" + Random.Range(1,100);
 
         string[] roomPropStrings = new string[]{"gameMode"};
@@ -195,53 +234,78 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         string randomOdaPanelName = uIMenager.RandomOda_Panel.name;
         uIMenager.SetActiveUIObject(randomOdaPanelName);
 
+       
+        
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        GameObject playerListObje =  PlayerListOlustur(newPlayer.ActorNumber,newPlayer.NickName,newPlayer);
+        if(normalRoom)
+        {
+            GameObject playerListObje =  PlayerListOlustur(newPlayer.ActorNumber,newPlayer.NickName,newPlayer);
 
-        playerList.Add(newPlayer.ActorNumber,playerListObje);
+            playerList.Add(newPlayer.ActorNumber,playerListObje);
+        }
+        else
+        {   
+            if(PhotonNetwork.NickName != newPlayer.NickName)
+            {
+                GameObject friendListObject =  FriendListOlustur();
+
+                friendListObject.GetComponent<FriendListControl>().Initialize(newPlayer);
+            
+                friendList.Add(newPlayer.ActorNumber,friendListObject);
+            }
+
+            
+        }
         
         
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        Destroy(playerList[otherPlayer.ActorNumber].gameObject);
-        playerList.Remove(otherPlayer.ActorNumber);
+        print("OnPlayerLeftRoom");
+        if(normalRoom)
+        {
+            print("OnPlayerLeftRoom : " + normalRoom);
+            Destroy(playerList[otherPlayer.ActorNumber].gameObject);
+            playerList.Remove(otherPlayer.ActorNumber);
 
-        PV.RPC("Method2",RpcTarget.AllViaServer,null);
+            PV.RPC("Method2",RpcTarget.AllViaServer,null);
+        }
+        else if(!normalRoom)
+        {
+            print("OnPlayerLeftRoom : " + normalRoom);
+            Destroy(friendList[otherPlayer.ActorNumber].gameObject);
+            friendList.Remove(otherPlayer.ActorNumber);
+        }
+        
+        
     }
 
-
-    private GameObject PlayerListOlustur(int playerId,string playerName,Player player)
+    public override void OnLeftRoom()
     {
-        
-        GameObject playerList = Instantiate(playerListPrefab);
-        playerList.transform.SetParent(playerListParent.transform);
-        playerList.transform.localScale = Vector3.one;
+        if(normalRoom)
+        {
+            foreach (GameObject entry in playerList.Values)
+            {
+                Destroy(entry);
+            }
+            playerList.Clear();
+            playerList = null;
+        }
+        else
+        {
+            foreach (GameObject entry in friendList.Values)
+            {
+                Destroy(entry);
+            }
+            friendList.Clear();
+            friendList = null;
+        }
 
-
-        playerList.GetComponent<PlayerListControl>().Initialize(playerId,playerName,player);
-        
-
-        return playerList;
     }
-
-    
-
-    public void ConnetingServer(string playerName)
-    {
-        PhotonNetwork.ConnectUsingSettings();
-        string name = playerName;
-        
-
-        PhotonNetwork.LocalPlayer.NickName = playerName;
-       
-        StartCoroutine(uIMenager.ConnetingAnimation());
-    }
-   
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
@@ -277,6 +341,48 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         }
         
     }
+
+
+    private GameObject PlayerListOlustur(int playerId,string playerName,Player player)
+    {
+        
+        GameObject playerList = Instantiate(playerListPrefab);
+        playerList.transform.SetParent(playerListParent.transform);
+        playerList.transform.localScale = Vector3.one;
+
+
+        playerList.GetComponent<PlayerListControl>().Initialize(playerId,playerName,player);
+        
+
+        return playerList;
+    }
+
+    private GameObject FriendListOlustur()
+    {
+
+        GameObject friendListObject = Instantiate(friendListPrefab);
+        friendListObject.transform.SetParent(friendListContent.transform);
+        friendListObject.transform.localScale = Vector3.one;
+
+
+        
+
+        return friendListObject;
+    }  
+
+    public void ConnetingServer(string playerName)
+    {
+        PhotonNetwork.ConnectUsingSettings();
+        string name = playerName;
+        
+
+        PhotonNetwork.LocalPlayer.NickName = playerName;
+       
+        StartCoroutine(uIMenager.ConnetingAnimation());
+    }
+   
+
+    
     
     
     public void KabulEtButton()
@@ -297,15 +403,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         PhotonNetwork.LeaveRoom();
     }
 
-    public override void OnLeftRoom()
-    {
-        foreach (GameObject entry in playerList.Values)
-        {
-            Destroy(entry);
-        }
-        playerList.Clear();
-        playerList = null;
-    }
+    
 
     [PunRPC]
     private void IntroScene(int sceneIndex)
@@ -322,5 +420,15 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         PhotonNetwork.LeaveRoom();
 
     }    
+
+
+
+    public void EnterFriendRoom()
+    {
+        normalRoom = false;
+        PhotonNetwork.JoinRandomOrCreateRoom();
+    }
+
+
 
 }

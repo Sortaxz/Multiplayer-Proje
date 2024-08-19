@@ -148,7 +148,7 @@ public class UIMenager : MonoBehaviour
     [Space]
     
 
-    public TextMeshProUGUI text;
+    public TextMeshProUGUI friendPlayerNickName_Text;
     
     private PhotonView pv;
     public PhotonView PV {get {return pv;}}
@@ -178,6 +178,7 @@ public class UIMenager : MonoBehaviour
     private bool value= false;
     private bool findCheatController = false;
 
+    public bool odaKurdu = false;
 
     private void Awake() 
     {
@@ -189,6 +190,15 @@ public class UIMenager : MonoBehaviour
     {
         
         CheatActive();
+
+        if(Input.GetKeyDown(KeyCode.F))
+        {
+            friendPlayerNickName_Text.gameObject.SetActive(!friendPlayerNickName_Text.gameObject.activeSelf);
+            saveSystem.GetFriendPlayer();
+        }
+
+        
+        
     }
 
     public void CheatActive()
@@ -339,7 +349,9 @@ public class UIMenager : MonoBehaviour
             if(PhotonNetwork.InRoom)
             {
                 PhotonNetwork.LeaveRoom();
+                SunucuYonetim.Instance.NormalRoom = false;
             }
+            
             SetActiveUIObject(menu_Panel.name);
         }
        
@@ -370,8 +382,15 @@ public class UIMenager : MonoBehaviour
     public void RandomOdaKuButton_Method()
     {
         SetActiveUIObject(randomOdaModSecim_Panel.name);
+        
+    }
+
+    public void OdaKurmaButton_Method()
+    {
+        SetActiveUIObject(odaKurma_Panel.name);
 
     }
+
 
     public void SetttingsButton_Method()
     {
@@ -651,6 +670,7 @@ public class UIMenager : MonoBehaviour
 
     public void DereceliMode_Method()
     {
+
         if(!randomOdaModSecim_Panel.activeSelf)
         {
             gameMode = GameMode.Dereceli;
@@ -659,13 +679,14 @@ public class UIMenager : MonoBehaviour
         else
         {
             SunucuYonetim.Instance.NormalRoom = true;
+            odaKurdu = true;
 
             gameMode = GameMode.Dereceli;
-
             SunucuYonetim.Instance.CreateRandomRoom(gameMode);
 
             SetActiveUIObject(odaKurmaYüklemeEkran_Panel.name);
             StartCoroutine(PlayerTipTextAnimation());
+            
         }
     }
 
@@ -678,27 +699,26 @@ public class UIMenager : MonoBehaviour
         else
         {
             SunucuYonetim.Instance.NormalRoom = true;
+            odaKurdu = true;
+            
             gameMode = GameMode.Derecesiz;
 
             SunucuYonetim.Instance.CreateRandomRoom(gameMode);
 
             SetActiveUIObject(odaKurmaYüklemeEkran_Panel.name);
             StartCoroutine(PlayerTipTextAnimation());
+           
         }
         
     }
 
-    public void OdaKurmaButton_Method()
-    {
-        SetActiveUIObject(odaKurma_Panel.name);
-    }
-
+    
     public void OdaKur()
     {
         SunucuYonetim.Instance.NormalRoom = true;
+        odaKurdu = true;
 
         roomName = odaAdi_InputField.text;
-
 
         SunucuYonetim.Instance.CreateRoom(gameMode);
         
@@ -714,8 +734,7 @@ public class UIMenager : MonoBehaviour
     {
         SetActiveUIObject(arakadasİslem_Panel.name);
         menuPlayerProfil = true;
-
-        //SunucuYonetim.Instance.GetFriendRoom();
+        SunucuYonetim.Instance.EnterFriendRoom();
     }
 
    
