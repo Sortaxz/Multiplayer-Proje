@@ -51,6 +51,9 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
     private bool normalRoom = false;
     public bool NormalRoom { get { return normalRoom; }  set { normalRoom = value; } }
+    private bool friendRoom = false;
+
+    public bool isConnected = false;
 
     private void Awake() 
     {
@@ -65,7 +68,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     {
         print("server'a bağlandi");
         StopCoroutine(uIMenager.ConnetingAnimation());
-        
+
         if(saveSystem.PlayerPrefsDataQuery("icon") && saveSystem.PlayerPrefsDataQuery("color") && saveSystem.PlayerPrefsDataQuery("playerName"))
         {
             string menuPanelName = uIMenager.Menu_Panel.name;
@@ -78,7 +81,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
             uIMenager.SetActiveUIObject(playerPropsPanelName); 
 
         }
-
+        
         PhotonNetwork.JoinLobby();
 
         
@@ -86,6 +89,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
     public override void OnJoinedLobby()
     {
+
     }
 
     public void CreateRoom(GameMode mod)
@@ -106,7 +110,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
         RoomOptions roomOptions = new RoomOptions()
         {
-            MaxPlayers = 2,
+            MaxPlayers = 3,
             CustomRoomProperties = roomProps,
             CustomRoomPropertiesForLobby = roomPropsString
         };
@@ -126,7 +130,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
             {"gameMode",gameMode}
         };
 
-        PhotonNetwork.JoinRandomRoom(roomProps, 2);
+        PhotonNetwork.JoinRandomRoom(roomProps, 3);
     }
 
 
@@ -179,7 +183,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
                 FindingMatchControl.Instance.StartMatchFindingButton_Method();
             }
         }
-        else
+        if(friendRoom)
         {
             if(friendList == null)
             {
@@ -201,8 +205,11 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
 
                     friendList.Add(friendPlayer.ActorNumber,friendListObject);
-                }   
+                }
+                
             }
+
+            StartCoroutine(OlanArkadaslarYokEt());
         }
     }
 
@@ -214,26 +221,29 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
         print("OnJoinRandomFailed");
-        string randomRoomName = "Oda-" + Random.Range(1,100);
-
-        string[] roomPropStrings = new string[]{"gameMode"};
-
-        ExitGames.Client.Photon.Hashtable roomProps = new ExitGames.Client.Photon.Hashtable()
+        if(normalRoom)
         {
-            {"gameMode",gameMode}
-        };
-        RoomOptions roomOptions = new RoomOptions()
-        {
-            MaxPlayers = 2,
-            CustomRoomProperties = roomProps,
-            CustomRoomPropertiesForLobby = roomPropStrings
-        };
+            string randomRoomName = "Oda-" + Random.Range(1,100);
 
-        PhotonNetwork.JoinOrCreateRoom(randomRoomName,roomOptions,TypedLobby.Default,null);
+            string[] roomPropStrings = new string[]{"gameMode"};
 
-        string randomOdaPanelName = uIMenager.RandomOda_Panel.name;
-        uIMenager.SetActiveUIObject(randomOdaPanelName);
+            ExitGames.Client.Photon.Hashtable roomProps = new ExitGames.Client.Photon.Hashtable()
+            {
+                {"gameMode",gameMode}
+            };
+            RoomOptions roomOptions = new RoomOptions()
+            {
+                MaxPlayers = 3,
+                CustomRoomProperties = roomProps,
+                CustomRoomPropertiesForLobby = roomPropStrings
+            };
 
+            PhotonNetwork.JoinOrCreateRoom(randomRoomName,roomOptions,TypedLobby.Default,null);
+
+            string randomOdaPanelName = uIMenager.RandomOda_Panel.name;
+            uIMenager.SetActiveUIObject(randomOdaPanelName);
+
+        }
        
         
     }
@@ -246,9 +256,10 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
             playerList.Add(newPlayer.ActorNumber,playerListObje);
         }
-        else
+        if(friendRoom)
         {   
-            if(PhotonNetwork.NickName != newPlayer.NickName)
+
+            if(PhotonNetwork.NickName != newPlayer.NickName )
             {
                 GameObject friendListObject =  FriendListOlustur();
 
@@ -257,7 +268,9 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
                 friendList.Add(newPlayer.ActorNumber,friendListObject);
             }
 
-            
+            StartCoroutine(OlanArkadaslarYokEt());
+
+
         }
         
         
@@ -274,12 +287,15 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
             PV.RPC("Method2",RpcTarget.AllViaServer,null);
         }
-        else if(!normalRoom)
+
+        /*
+        else
         {
             print("OnPlayerLeftRoom : " + normalRoom);
             Destroy(friendList[otherPlayer.ActorNumber].gameObject);
             friendList.Remove(otherPlayer.ActorNumber);
         }
+        */
         
         
     }
@@ -425,10 +441,32 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
     public void EnterFriendRoom()
     {
-        normalRoom = false;
-        PhotonNetwork.JoinRandomOrCreateRoom();
+        if(!PhotonNetwork.InRoom)
+        {
+            friendRoom = true;
+            PhotonNetwork.JoinRandomOrCreateRoom();
+        }
     }
 
+    public IEnumerator OlanArkadaslarYokEt()
+    {
+        while(true)
+        {
+            yield return null;
 
+            foreach (Player friend in PhotonNetwork.PlayerList)
+            {
+                string friendName = saveSystem.GetFriendPlayer(friend);
 
+                if(friend.NickName == friendName)
+                {
+                    if (friendList.ContainsKey(friend.ActorNumber))
+                    {
+                        Destroy(friendList[friend.ActorNumber].gameObject);
+                        friendList.Remove(friend.ActorNumber);
+                    }
+                }
+            }
+        }
+    }
 }

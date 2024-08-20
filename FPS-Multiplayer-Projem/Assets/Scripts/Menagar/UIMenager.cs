@@ -188,13 +188,23 @@ public class UIMenager : MonoBehaviour
     }
     private void Update() 
     {
-        
+        if(PhotonNetwork.InRoom)
+        {
+            print(PhotonNetwork.CurrentRoom.Name);
+        }
+
         CheatActive();
 
         if(Input.GetKeyDown(KeyCode.F))
         {
             friendPlayerNickName_Text.gameObject.SetActive(!friendPlayerNickName_Text.gameObject.activeSelf);
-            saveSystem.GetFriendPlayer();
+            if(PhotonNetwork.InRoom)
+            {
+                for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+                {
+                    friendPlayerNickName_Text.text = saveSystem.GetFriendPlayer(PhotonNetwork.PlayerList[i]);
+                }
+            }
         }
 
         
@@ -346,13 +356,16 @@ public class UIMenager : MonoBehaviour
         }
         else 
         {
+            /*
             if(PhotonNetwork.InRoom)
             {
                 PhotonNetwork.LeaveRoom();
                 SunucuYonetim.Instance.NormalRoom = false;
             }
+            */
             
             SetActiveUIObject(menu_Panel.name);
+        
         }
        
 
@@ -363,6 +376,9 @@ public class UIMenager : MonoBehaviour
     {
         SetActiveUIObject(odaIslemleri_Panel.name);
         menuPlayerProfil = true;
+        
+
+        
     }
 
 
@@ -569,40 +585,6 @@ public class UIMenager : MonoBehaviour
         }
     }
 
-    
-    
-    public bool CheckPlayersReady()
-    {
-        if(!PhotonNetwork.IsMasterClient)
-        {
-            return false;
-            
-        }
-
-        foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
-        {
-            if(!player.CustomProperties.TryGetValue("isPlayerReady",out object isPlayerReady))
-            {
-                return false;
-            }
-            else
-            {
-                if(!(bool)isPlayerReady)
-                {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    public void LocalPlayerPropertiesUpdated()
-    {
-        oyunuBaslatButton.gameObject.SetActive(CheckPlayersReady());
-    }
-
-    
-
     public IEnumerator ConnetingAnimation(int i = 0, bool start = false)
     {
         while(true)
@@ -678,6 +660,7 @@ public class UIMenager : MonoBehaviour
         }
         else
         {
+
             SunucuYonetim.Instance.NormalRoom = true;
             odaKurdu = true;
 
@@ -698,6 +681,7 @@ public class UIMenager : MonoBehaviour
         }
         else
         {
+
             SunucuYonetim.Instance.NormalRoom = true;
             odaKurdu = true;
             
@@ -715,6 +699,7 @@ public class UIMenager : MonoBehaviour
     
     public void OdaKur()
     {
+
         SunucuYonetim.Instance.NormalRoom = true;
         odaKurdu = true;
 

@@ -79,7 +79,7 @@ public class SaveSystem : MonoBehaviour
         PlayerPrefsDataSave(friendPlayer.ActorNumber.ToString(),friendPlayer.NickName);
         
     }
-    public void GetFriendPlayer()
+    public void GetFriendsPlayer()
     {
         //return (string)PlayerPrefsDataLoad(friendPlayer.ActorNumber.ToString(),"string");
         foreach (Player friendPlayer in SunucuYonetim.Instance.FriendPlayer)
@@ -87,5 +87,11 @@ public class SaveSystem : MonoBehaviour
             string player = (string)PlayerPrefsDataLoad(friendPlayer.ActorNumber.ToString(),"string");
             UIMenager.Instance.friendPlayerNickName_Text.text = (string)PlayerPrefsDataLoad(friendPlayer.ActorNumber.ToString(),"string");
         }
+    }
+
+    public string GetFriendPlayer(Player friendPlayer)
+    {
+        return (string)PlayerPrefsDataLoad(friendPlayer.ActorNumber.ToString(),"string");
+        
     }
 }

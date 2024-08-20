@@ -13,6 +13,7 @@ public class FriendListControl : MonoBehaviour
     [SerializeField] private Button addFriend_Button;
 
     private Player friendPlayer;
+    public string friendName;
     void Start()
     {
         addFriend_Button.onClick.AddListener(delegate
@@ -29,6 +30,7 @@ public class FriendListControl : MonoBehaviour
 
     public void Initialize(Player player)
     {
+        friendName = player.NickName;
         friendPlayer = player;
         friendName_Text.text = player.NickName;
         player.CustomProperties.TryGetValue("icon",out object iconIndex);
