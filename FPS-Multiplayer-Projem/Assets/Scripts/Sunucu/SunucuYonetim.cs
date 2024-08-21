@@ -136,30 +136,6 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        /*
-        if(playerList == null)
-        {
-            playerList = new Dictionary<int, GameObject>();
-        }
-
-        string randomOdaPanelName = uIMenager.RandomOda_Panel.name;
-        uIMenager.SetActiveUIObject(randomOdaPanelName);
-                
-        foreach (Player player in PhotonNetwork.PlayerList)
-        {
-            GameObject playerListObje = PlayerListOlustur(player.ActorNumber,player.NickName,player);
-        
-            playerList.Add(player.ActorNumber,playerListObje);
-                
-            string findingMatchPanelName = uIMenager.FindingMatch_Panel.name;
-                
-            uIMenager.SetActiveUIObject(findingMatchPanelName); 
-                
-            FindingMatchControl.Instance.StartMatchFindingButton_Method();
-        }
-
-        */
-
         if(normalRoom)
         {
             if(playerList == null)
