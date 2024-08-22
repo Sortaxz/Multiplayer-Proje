@@ -168,7 +168,7 @@ public class UIMenager : MonoBehaviour
 
     private string roomName;
     public string RoomName {get {return roomName;}}
-
+    string playerName;
     private int iconIndex;
     private int colorIndex;
 
@@ -186,6 +186,8 @@ public class UIMenager : MonoBehaviour
         pv = GetComponent<PhotonView>();
         saveSystem  = SaveSystem.Instance;
     }
+
+
     private void Update() 
     {
         if(PhotonNetwork.InRoom)
@@ -195,18 +197,13 @@ public class UIMenager : MonoBehaviour
 
         CheatActive();
 
-        if(Input.GetKeyDown(KeyCode.F))
+        if(PhotonNetwork.InRoom)
         {
-            friendPlayerNickName_Text.gameObject.SetActive(!friendPlayerNickName_Text.gameObject.activeSelf);
-            if(PhotonNetwork.InRoom)
+            foreach (Player friend in SunucuYonetim.Instance.FriendPlayer)
             {
-                for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-                {
-                    friendPlayerNickName_Text.text = saveSystem.GetFriendPlayer(PhotonNetwork.PlayerList[i]);
-                }
+                print(friend.NickName);
             }
         }
-
         
         
     }
@@ -227,13 +224,14 @@ public class UIMenager : MonoBehaviour
 
     public void BaglanButton_Method()
     {
-        string playerName = kullaniciAdi_InputField.text;
+        playerName = kullaniciAdi_InputField.text;
 
-        SunucuYonetim.Instance.ConnetingServer(playerName);
+        //SunucuYonetim.Instance.isConnected = true;
+        //SunucuYonetim.Instance.ConnetingServer(playerName);
 
         saveSystem.PlayerPrefsDataSave("playerName",playerName);
-            
-        SetActiveUIObject(connecting_Panel.name);
+        SetActiveUIObject(playerProps_Panel.name);
+        //SetActiveUIObject(connecting_Panel.name);
     }
 
 
@@ -241,15 +239,16 @@ public class UIMenager : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.KeypadEnter))
         {
-            string playerName = kullaniciAdi_InputField.text;
+            playerName = kullaniciAdi_InputField.text;
 
-            SunucuYonetim.Instance.ConnetingServer(playerName);
+            //SunucuYonetim.Instance.isConnected = true;
+            //SunucuYonetim.Instance.ConnetingServer(playerName);
             
             saveSystem.PlayerPrefsDataSave("playerName",playerName);
             
-            SetActiveUIObject(connecting_Panel.name);
+            SetActiveUIObject(playerProps_Panel.name);
 
-            
+            //SetActiveUIObject(connecting_Panel.name);
         }
     }
    
@@ -257,6 +256,9 @@ public class UIMenager : MonoBehaviour
     public void BaslatButton_Method()
     {
 
+        SunucuYonetim.Instance.isConnected = true;
+        SunucuYonetim.Instance.ConnetingServer(playerName);
+        SetActiveUIObject(connecting_Panel.name);
 
         menuKullaniciAdi_Text.text += PhotonNetwork.LocalPlayer.NickName;
 
@@ -269,7 +271,6 @@ public class UIMenager : MonoBehaviour
         menuPlayerIcon_Image.sprite = playerIcons[(int)iconIndex].sprite;
         
 
-        SetActiveUIObject(menu_Panel.name);
 
     }
 
@@ -281,6 +282,7 @@ public class UIMenager : MonoBehaviour
         {
             string playerName = (string)saveSystem.PlayerPrefsDataLoad("playerName","string");
 
+            SunucuYonetim.Instance.isConnected = true;
             SunucuYonetim.Instance.ConnetingServer(playerName);
 
 
@@ -363,7 +365,7 @@ public class UIMenager : MonoBehaviour
                 SunucuYonetim.Instance.NormalRoom = false;
             }
             */
-            
+            SunucuYonetim.Instance.FriendRoom = false;
             SetActiveUIObject(menu_Panel.name);
         
         }
@@ -653,39 +655,62 @@ public class UIMenager : MonoBehaviour
     public void DereceliMode_Method()
     {
 
-        if(!randomOdaModSecim_Panel.activeSelf)
+        if(PhotonNetwork.IsConnectedAndReady)
         {
-            gameMode = GameMode.Dereceli;
-            
+            SunucuYonetim.Instance.ExitFriendRoom();
+            if(!randomOdaModSecim_Panel.activeSelf)
+            {
+                gameMode = GameMode.Dereceli;
+
+                string mod = gameMode.ToString(); 
+                saveSystem.PlayerPrefsDataSave("gameMode",mod);
+                
+                SunucuYonetim.Instance.OdaKurdu = true;
+                
+            }
+            else
+            {
+                SunucuYonetim.Instance.RandomOdaKurdu = true;
+                SunucuYonetim.Instance.NormalRoom = true;
+
+
+                gameMode = GameMode.Dereceli;
+
+                string mod = gameMode.ToString(); 
+                saveSystem.PlayerPrefsDataSave("gameMode",mod);
+
+                SunucuYonetim.Instance.CreateRandomRoom(gameMode);
+
+                SetActiveUIObject(odaKurmaYüklemeEkran_Panel.name);
+                StartCoroutine(PlayerTipTextAnimation());
+                
+            }
         }
-        else
-        {
 
-            SunucuYonetim.Instance.NormalRoom = true;
-            odaKurdu = true;
-
-            gameMode = GameMode.Dereceli;
-            SunucuYonetim.Instance.CreateRandomRoom(gameMode);
-
-            SetActiveUIObject(odaKurmaYüklemeEkran_Panel.name);
-            StartCoroutine(PlayerTipTextAnimation());
-            
-        }
     }
 
     public void DerecesizMode_Method()
     {
+        SunucuYonetim.Instance.ExitFriendRoom();
         if(!randomOdaModSecim_Panel.activeSelf)
         {
             gameMode = GameMode.Derecesiz;
+
+            string mod = gameMode.ToString(); 
+            saveSystem.PlayerPrefsDataSave("gameMode",mod);
+
+            SunucuYonetim.Instance.OdaKurdu = true;
+
         }
         else
         {
-
+            SunucuYonetim.Instance.RandomOdaKurdu = true;
             SunucuYonetim.Instance.NormalRoom = true;
-            odaKurdu = true;
             
             gameMode = GameMode.Derecesiz;
+    
+            string mod = gameMode.ToString(); 
+            saveSystem.PlayerPrefsDataSave("gameMode",mod);
 
             SunucuYonetim.Instance.CreateRandomRoom(gameMode);
 
@@ -699,6 +724,7 @@ public class UIMenager : MonoBehaviour
     
     public void OdaKur()
     {
+        SunucuYonetim.Instance.ExitFriendRoom();
 
         SunucuYonetim.Instance.NormalRoom = true;
         odaKurdu = true;
@@ -719,10 +745,10 @@ public class UIMenager : MonoBehaviour
     {
         SetActiveUIObject(arakadasİslem_Panel.name);
         menuPlayerProfil = true;
-        SunucuYonetim.Instance.EnterFriendRoom();
+        
     }
 
-   
+    
 
     #endregion
 

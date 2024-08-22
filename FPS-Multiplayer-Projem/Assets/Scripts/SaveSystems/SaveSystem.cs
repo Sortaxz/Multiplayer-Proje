@@ -79,19 +79,26 @@ public class SaveSystem : MonoBehaviour
         PlayerPrefsDataSave(friendPlayer.ActorNumber.ToString(),friendPlayer.NickName);
         
     }
-    public void GetFriendsPlayer()
-    {
-        //return (string)PlayerPrefsDataLoad(friendPlayer.ActorNumber.ToString(),"string");
-        foreach (Player friendPlayer in SunucuYonetim.Instance.FriendPlayer)
-        {
-            string player = (string)PlayerPrefsDataLoad(friendPlayer.ActorNumber.ToString(),"string");
-            UIMenager.Instance.friendPlayerNickName_Text.text = (string)PlayerPrefsDataLoad(friendPlayer.ActorNumber.ToString(),"string");
-        }
-    }
 
     public string GetFriendPlayer(Player friendPlayer)
     {
         return (string)PlayerPrefsDataLoad(friendPlayer.ActorNumber.ToString(),"string");
         
+    }
+
+    public GameMode GetRoomMod()
+    {
+        GameMode gameMode = GameMode.None;
+        switch(PlayerPrefsDataLoad("gameMode","string"))
+        {
+            case "Dereceli":
+                gameMode = GameMode.Dereceli;
+            break;
+            case "Derecesiz":
+                gameMode = GameMode.Derecesiz;
+            break;
+        }
+
+        return gameMode;
     }
 }

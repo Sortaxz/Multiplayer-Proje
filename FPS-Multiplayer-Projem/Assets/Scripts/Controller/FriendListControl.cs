@@ -8,18 +8,31 @@ using UnityEngine.UI;
 
 public class FriendListControl : MonoBehaviour
 {
+    [Header("FriendList objesi ile ilgili işlemler")]
     [SerializeField] private Image friendIcon_Image;
     [SerializeField] private TextMeshProUGUI friendName_Text;
     [SerializeField] private Button addFriend_Button;
 
     private Player friendPlayer;
     public string friendName;
+
+    [Header("Friend objesi ile ilgili işlemler")]
+    [SerializeField] private Image _friendIcon_Image;
+    [SerializeField] private TextMeshProUGUI _friendName_Text;
+    [SerializeField] private TextMeshProUGUI _friendState_Text;
+    
     void Start()
     {
-        addFriend_Button.onClick.AddListener(delegate
+        if(addFriend_Button != null)
         {
-            SaveSystem.Instance.SetFriendPlayer(friendPlayer);
-        });
+            addFriend_Button.onClick.AddListener(delegate
+            {
+                SaveSystem.Instance.SetFriendPlayer(friendPlayer);
+                SunucuYonetim.Instance.CreatFriendObject(friendPlayer,"online");
+                
+                Destroy(gameObject);
+            });
+        }
         
     }
 
@@ -28,7 +41,7 @@ public class FriendListControl : MonoBehaviour
         
     }
 
-    public void Initialize(Player player)
+    public void FriendListInitialize(Player player)
     {
         friendName = player.NickName;
         friendPlayer = player;
@@ -38,5 +51,15 @@ public class FriendListControl : MonoBehaviour
         friendIcon_Image.sprite = UIMenager.Instance.PlayerIcons[(int)iconIndex].sprite;
 
     }
+
     
+    public void FriendObjectInitialize(Player friend,string friendState)
+    {
+        friend.CustomProperties.TryGetValue("icon",out object iconIndex);
+        _friendIcon_Image.sprite = UIMenager.Instance.PlayerIcons[(int)iconIndex].sprite;
+        _friendName_Text.text = friend.NickName;
+        _friendState_Text.text = friendState;
+
+
+    }
 }
