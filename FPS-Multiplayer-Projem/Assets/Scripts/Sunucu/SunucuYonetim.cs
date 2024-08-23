@@ -149,19 +149,16 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
             };
 
             PhotonNetwork.JoinOrCreateRoom(roomName,roomOptions,TypedLobby.Default,null);
-            //string menuPanelName = uIMenager.Menu_Panel.name;
-            //uIMenager.SetActiveUIObject(menuPanelName); 
         }
         else if(odaKurdu)
         {
             print("odaKurdu : "+odaKurdu);
-            uIMenager.SetActiveUIObject(uIMenager.OdaKurma_Panel.name);
-            /*
+            //uIMenager.SetActiveUIObject(uIMenager.OdaKurma_Panel.name);
             if(!PhotonNetwork.InRoom)
             {
-                CreateRoom(saveSystem.GetRoomMod());
+                string roomName = uIMenager.OdaAdi_InputField.text;
+                CreateRoom(saveSystem.GetRoomMod(),roomName);
             }
-            */
         }
 
         else if(randomOdaKurdu)
@@ -172,36 +169,37 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
             }
         }
         
+        
     }
 
-    public void CreateRoom(GameMode mod)
+    public void CreateRoom(GameMode mod,string odaAdi)
     {
-        normalRoom = true;
-        gameMode = mod;
-        if (uIMenager.RoomName != null)
+        if(PhotonNetwork.IsConnectedAndReady)
         {
-            roomName = uIMenager.RoomName;
-        }
-        
+            normalRoom = true;
+            gameMode = mod;
+            roomName = odaAdi;
+            
 
-        string[] roomPropsString = new string[] { "gameMode" };
+            string[] roomPropsString = new string[] { "gameMode" };
 
-        ExitGames.Client.Photon.Hashtable roomProps = new ExitGames.Client.Photon.Hashtable()
+            ExitGames.Client.Photon.Hashtable roomProps = new ExitGames.Client.Photon.Hashtable()
+                {
+                    {"gameMode",gameMode}
+                };
+
+            RoomOptions roomOptions = new RoomOptions()
             {
-                {"gameMode",gameMode}
+                MaxPlayers = 2,
+                CustomRoomProperties = roomProps,
+                CustomRoomPropertiesForLobby = roomPropsString
             };
+            PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, TypedLobby.Default, null);
 
-        RoomOptions roomOptions = new RoomOptions()
-        {
-            MaxPlayers = 2,
-            CustomRoomProperties = roomProps,
-            CustomRoomPropertiesForLobby = roomPropsString
-        };
-        PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, TypedLobby.Default, null);
-
-        
-        string randomOdaPanelName = uIMenager.RandomOda_Panel.name;
-        uIMenager.SetActiveUIObject(randomOdaPanelName);
+            
+            string randomOdaPanelName = uIMenager.RandomOda_Panel.name;
+            uIMenager.SetActiveUIObject(randomOdaPanelName);
+        }
         
     }
 
@@ -223,6 +221,8 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
+        
+
         if(normalRoom)
         {
             print("normalRoom : " + normalRoom);
@@ -249,6 +249,8 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         }
         if(friendRoom)
         {
+           
+
             print("friendRoom : " + friendRoom);
             if (friendList == null)
             {
@@ -263,33 +265,12 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
             
 
-
             CreateFrinendsList();
 
         }
+        
     }
-
-    public void CreateFrinendsList()
-    {
-        if(PhotonNetwork.InRoom)
-        {
-            foreach (Player _friendPlayer in PhotonNetwork.PlayerList)
-            {
-                if (PhotonNetwork.NickName != _friendPlayer.NickName && _friendPlayer.NickName != saveSystem.GetFriendPlayer(_friendPlayer))
-                {
-                    GameObject friendListObject = FriendListOlustur();
-
-                    friendListObject.GetComponent<FriendListControl>().FriendListInitialize(_friendPlayer);
-
-
-                    friendList.Add(_friendPlayer.ActorNumber, friendListObject);
-                }
-
-                CreatFriendObject(_friendPlayer, "online");
-            }
-        }
-    }
-
+    
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
         print("OnJoinRandomFailed");
@@ -314,7 +295,6 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
             string randomOdaPanelName = uIMenager.RandomOda_Panel.name;
             uIMenager.SetActiveUIObject(randomOdaPanelName);
-
         }
        
         
@@ -341,7 +321,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
             
                 friendList.Add(newPlayer.ActorNumber,friendListObject);
             }
-            CreatFriendObject(newPlayer,"online");
+            CreatFriendObject(newPlayer,"online",true);
 
         }
         
@@ -368,8 +348,6 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
                 friendList.Remove(otherPlayer.ActorNumber);
 
             }
-
-           
         }
         
         isConnected =true;
@@ -439,9 +417,49 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         
     }
 
-    public void CreatFriendObject(Player _friend,string friendState)
+
+    public void CreateFrinendsList()
     {
-        if(!friendPlayer.Contains(_friend))
+        if(PhotonNetwork.InRoom)
+        {
+            foreach (Player _friendPlayer in PhotonNetwork.PlayerList)
+            {
+                if (PhotonNetwork.NickName != _friendPlayer.NickName && _friendPlayer.NickName != saveSystem.GetFriendPlayer(_friendPlayer))
+                {
+                    GameObject friendListObject = FriendListOlustur();
+
+                    friendListObject.GetComponent<FriendListControl>().FriendListInitialize(_friendPlayer);
+
+
+                    friendList.Add(_friendPlayer.ActorNumber, friendListObject);
+                }
+
+                CreatFriendObject(_friendPlayer, "online",true);
+            }
+        }
+    }
+
+    public void CreatFriendObject(Player _friend,string friendState,bool value)
+    {
+        if(value)
+        {
+            if(!friendPlayer.Contains(_friend))
+            {
+                if (_friend.NickName == saveSystem.GetFriendPlayer(_friend))
+                {
+                    friendPlayer.Add(_friend);
+
+                    GameObject friendObject = Instantiate(friendPrefab);
+                    friendObject.GetComponent<FriendListControl>().FriendObjectInitialize(_friend,friendState);
+
+                    friendObject.transform.SetParent(friendContent.transform);
+                    friendObject.transform.localScale = Vector3.one;
+
+                    friend.Add(_friend.ActorNumber, friendObject);
+                }
+            }
+        }
+        else
         {
             if (_friend.NickName == saveSystem.GetFriendPlayer(_friend))
             {

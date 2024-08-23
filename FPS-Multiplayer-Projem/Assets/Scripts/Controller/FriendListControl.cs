@@ -21,6 +21,9 @@ public class FriendListControl : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _friendName_Text;
     [SerializeField] private TextMeshProUGUI _friendState_Text;
     
+
+    private int friendCount = 0;
+
     void Start()
     {
         if(addFriend_Button != null)
@@ -28,8 +31,9 @@ public class FriendListControl : MonoBehaviour
             addFriend_Button.onClick.AddListener(delegate
             {
                 SaveSystem.Instance.SetFriendPlayer(friendPlayer);
-                SunucuYonetim.Instance.CreatFriendObject(friendPlayer,"online");
-                
+                SunucuYonetim.Instance.CreatFriendObject(friendPlayer,"online",false);
+
+
                 Destroy(gameObject);
             });
         }
