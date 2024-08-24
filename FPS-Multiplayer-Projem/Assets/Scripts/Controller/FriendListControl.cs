@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
@@ -22,8 +23,6 @@ public class FriendListControl : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _friendState_Text;
     
 
-    private int friendCount = 0;
-
     void Start()
     {
         if(addFriend_Button != null)
@@ -33,6 +32,13 @@ public class FriendListControl : MonoBehaviour
                 SaveSystem.Instance.SetFriendPlayer(friendPlayer);
                 SunucuYonetim.Instance.CreatFriendObject(friendPlayer,"online",false);
 
+                friendPlayer.CustomProperties.TryGetValue("icon",out object friendIconIndex);
+
+                string friendInfo = $"{friendPlayer.UserId},{friendPlayer.ActorNumber},{friendIconIndex},{friendPlayer.NickName}";
+
+                SunucuYonetim.Instance.Friends.Add(friendInfo);
+
+                BinarySaveSystem.FriendDataSave(SunucuYonetim.Instance);
 
                 Destroy(gameObject);
             });
@@ -40,10 +46,6 @@ public class FriendListControl : MonoBehaviour
         
     }
 
-    void Update()
-    {
-        
-    }
 
     public void FriendListInitialize(Player player)
     {
@@ -56,7 +58,18 @@ public class FriendListControl : MonoBehaviour
 
     }
 
-    
+
+    public void FriendObjectInitialize(int friendIconIndex,string friendNickName,string friendState,string friendUserId = "",int friendActorNumber = 0)
+    {
+        _friendIcon_Image.sprite = UIMenager.Instance.PlayerIcons[friendIconIndex].sprite;
+        _friendName_Text.text = friendNickName;
+        _friendState_Text.text = friendState;
+
+
+    }
+
+
+    /*
     public void FriendObjectInitialize(Player friend,string friendState)
     {
         friend.CustomProperties.TryGetValue("icon",out object iconIndex);
@@ -66,4 +79,5 @@ public class FriendListControl : MonoBehaviour
 
 
     }
+    */
 }

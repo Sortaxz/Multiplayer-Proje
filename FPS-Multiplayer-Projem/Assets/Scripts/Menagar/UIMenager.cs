@@ -191,12 +191,13 @@ public class UIMenager : MonoBehaviour
 
     private void Update() 
     {
+        CheatActive();
+        
         if(PhotonNetwork.InRoom)
         {
             print(PhotonNetwork.CurrentRoom.Name);
         }
 
-        CheatActive();
 
         if(PhotonNetwork.InRoom)
         {
@@ -226,15 +227,17 @@ public class UIMenager : MonoBehaviour
     public void BaglanButton_Method()
     {
         playerName = kullaniciAdi_InputField.text;
+        
+        kullaniciAdi_InputField.text = "";
+
         if(playerName != (string)saveSystem.PlayerPrefsDataLoad("playerName","string"))
         {
+            PlayerPrefs.DeleteAll();
             saveSystem.PlayerPrefsDataSave("playerName",playerName);
             SetActiveUIObject(playerProps_Panel.name);
         }
         else
         {
-            PlayerPrefs.DeleteAll();
-            print("Böyle bir kayitli oyuncu var");
             SetActiveUIObject(oyunaBaglanma_Panel.name);
 
         }
@@ -252,6 +255,7 @@ public class UIMenager : MonoBehaviour
         {
             playerName = kullaniciAdi_InputField.text;
 
+            kullaniciAdi_InputField.text = "";
             
             if(playerName != (string)saveSystem.PlayerPrefsDataLoad("playerName","string"))
             {
@@ -297,9 +301,10 @@ public class UIMenager : MonoBehaviour
 
     public void KayitliOyuncuButton_Method()
     {
-        
         if(saveSystem.PlayerPrefsDataQuery("icon") && saveSystem.PlayerPrefsDataQuery("color") && saveSystem.PlayerPrefsDataQuery("playerName"))
         {
+            SunucuYonetim.Instance.GetFriend();
+            
             string playerName = (string)saveSystem.PlayerPrefsDataLoad("playerName","string");
 
             SunucuYonetim.Instance.isConnected = true;
@@ -374,6 +379,7 @@ public class UIMenager : MonoBehaviour
     {
         if(!menuPlayerProfil)
         {
+            kullaniciAdi_InputField.text = "";
             SetActiveUIObject(oyunaBaglanma_Panel.name);
         }
         else 

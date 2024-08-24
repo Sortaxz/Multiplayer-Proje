@@ -44,11 +44,12 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     [Space]
     [Space]
 
-    [Header("Friend List Obje ile ilgili işlemler")]
+    [Header("Friend Objesi ile ilgili işlemler")]
     [SerializeField] private GameObject friendPrefab;
     [SerializeField] private GameObject friendContent;
     private Dictionary<int,GameObject> friend = new Dictionary<int, GameObject>();
-
+    private List<string> friends = new List<string>();
+    public List<string> Friends { get {return friends;}} 
     [Space]
     [Space]
 
@@ -68,14 +69,22 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     public bool OdaKurdu { get { return odaKurdu;} set { odaKurdu = value;}}
     private bool randomOdaKurdu = false;
     public bool RandomOdaKurdu { get { return randomOdaKurdu;} set { randomOdaKurdu = value;}}
-    private void Awake() 
+    private void Awake()
     {
         uIMenager = UIMenager.Instance;
         PV = GetComponent<PhotonView>();
         saveSystem = SaveSystem.Instance;
     }
 
+    public void GetFriend()
+    {
+        FriendData friendData = BinarySaveSystem.FriendDataLoad(this);
 
+        if (friendData.Friends != null)
+        {
+            friends = friendData.Friends;
+        }
+    }
 
     public override void OnConnectedToMaster()
     {
@@ -221,8 +230,6 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        
-
         if(normalRoom)
         {
             print("normalRoom : " + normalRoom);
@@ -249,7 +256,25 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         }
         if(friendRoom)
         {
-           
+            foreach (string _friend in friends)
+            {
+                string[] friendInfo = _friend.Split(',');
+                //print(friendInfo[3] + PhotonNetwork.LocalPlayer.NickName + (friendInfo[3] == PhotonNetwork.LocalPlayer.NickName));
+                if(friendInfo[3] != PhotonNetwork.LocalPlayer.NickName && !friend.ContainsKey(int.Parse(friendInfo[2])))
+                {
+                    print(friendInfo[3]);
+                    int friendActorNumber = int.Parse(friendInfo[1]); 
+                    
+                    GameObject friendObject = Instantiate(friendPrefab);
+                    friendObject.GetComponent<FriendListControl>().FriendObjectInitialize(int.Parse(friendInfo[2]),friendInfo[3],"Online");
+
+                    friendObject.transform.SetParent(friendContent.transform);
+                    friendObject.transform.localScale = Vector3.one;
+
+
+                    friend.Add(friendActorNumber,friendObject);
+                }
+            }
 
             print("friendRoom : " + friendRoom);
             if (friendList == null)
@@ -422,6 +447,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     {
         if(PhotonNetwork.InRoom)
         {
+            
             foreach (Player _friendPlayer in PhotonNetwork.PlayerList)
             {
                 if (PhotonNetwork.NickName != _friendPlayer.NickName && _friendPlayer.NickName != saveSystem.GetFriendPlayer(_friendPlayer))
@@ -450,12 +476,15 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
                     friendPlayer.Add(_friend);
 
                     GameObject friendObject = Instantiate(friendPrefab);
-                    friendObject.GetComponent<FriendListControl>().FriendObjectInitialize(_friend,friendState);
+
+                    _friend.CustomProperties.TryGetValue("icon",out object friendIconIndex);
+                    friendObject.GetComponent<FriendListControl>().FriendObjectInitialize((int)friendIconIndex,_friend.NickName,friendState);
 
                     friendObject.transform.SetParent(friendContent.transform);
                     friendObject.transform.localScale = Vector3.one;
 
                     friend.Add(_friend.ActorNumber, friendObject);
+
                 }
             }
         }
@@ -466,7 +495,9 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
                 friendPlayer.Add(_friend);
 
                 GameObject friendObject = Instantiate(friendPrefab);
-                friendObject.GetComponent<FriendListControl>().FriendObjectInitialize(_friend,friendState);
+                
+                _friend.CustomProperties.TryGetValue("icon",out object friendIconIndex);
+                friendObject.GetComponent<FriendListControl>().FriendObjectInitialize((int)friendIconIndex,_friend.NickName,friendState);
 
                 friendObject.transform.SetParent(friendContent.transform);
                 friendObject.transform.localScale = Vector3.one;
