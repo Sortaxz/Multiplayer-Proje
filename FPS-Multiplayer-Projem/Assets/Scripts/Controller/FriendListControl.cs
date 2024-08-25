@@ -68,16 +68,15 @@ public class FriendListControl : MonoBehaviour
 
     }
 
-
     /*
-    public void FriendObjectInitialize(Player friend,string friendState)
+    public void FriendObjectInitialize(int friendIconIndex,string friendNickName,string friendState,string friendUserId = "",int friendActorNumber = 0)
     {
-        friend.CustomProperties.TryGetValue("icon",out object iconIndex);
-        _friendIcon_Image.sprite = UIMenager.Instance.PlayerIcons[(int)iconIndex].sprite;
-        _friendName_Text.text = friend.NickName;
+        _friendIcon_Image.sprite = UIMenager.Instance.PlayerIcons[friendIconIndex].sprite;
+        _friendName_Text.text = friendNickName;
         _friendState_Text.text = friendState;
 
 
     }
     */
+    
 }

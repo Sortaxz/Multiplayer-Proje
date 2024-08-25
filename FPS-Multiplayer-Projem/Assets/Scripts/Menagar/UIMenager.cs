@@ -233,6 +233,9 @@ public class UIMenager : MonoBehaviour
         if(playerName != (string)saveSystem.PlayerPrefsDataLoad("playerName","string"))
         {
             PlayerPrefs.DeleteAll();
+
+            BinarySaveSystem.FriendDataDelete("FriendDataSave.bin");
+
             saveSystem.PlayerPrefsDataSave("playerName",playerName);
             SetActiveUIObject(playerProps_Panel.name);
         }
@@ -260,6 +263,9 @@ public class UIMenager : MonoBehaviour
             if(playerName != (string)saveSystem.PlayerPrefsDataLoad("playerName","string"))
             {
                 PlayerPrefs.DeleteAll();
+                
+                BinarySaveSystem.FriendDataDelete("FriendDataSave.bin");
+
                 saveSystem.PlayerPrefsDataSave("playerName",playerName);
                 SetActiveUIObject(playerProps_Panel.name);
             }
@@ -279,7 +285,6 @@ public class UIMenager : MonoBehaviour
 
     public void BaslatButton_Method()
     {
-
         SunucuYonetim.Instance.isConnected = true;
         SunucuYonetim.Instance.ConnetingServer(playerName);
         SetActiveUIObject(connecting_Panel.name);
@@ -448,12 +453,17 @@ public class UIMenager : MonoBehaviour
         {
             if(playerColorBaslatButtonActive && playerIconBaslatButtonActive)
             {
-                playerPropBaslatButton.gameObject.SetActive(playerPropKaydetButtonClick );
+                playerPropBaslatButton.gameObject.SetActive(playerPropKaydetButtonClick);
+                
                 SetPlayerProps();
+
+                ControlPlayerPropsActive();
+
             }
         }
         else
         {
+            SunucuYonetim.Instance.Refresh();
             SetActiveUIObject(menu_Panel.name);
             playerPropKaydetButtonClick = false;
 
@@ -469,10 +479,25 @@ public class UIMenager : MonoBehaviour
            
             saveSystem.PlayerPrefsDataSave("icon",icon_Index);
             saveSystem.PlayerPrefsDataSave("color",color_Index);
+
+            ControlPlayerPropsActive();
         }
 
 
 
+    }
+
+    private void ControlPlayerPropsActive()
+    {
+        for (int i = 0; i < playerIconImageProps.Length; i++)
+        {
+            playerIconImageProps[i].GetComponent<Button>().interactable = true;
+        }
+
+        for (int i = 0; i < playerColorImageProps.Length; i++)
+        {
+            playerColorImageProps[i].GetComponent<Button>().interactable = true;
+        }
     }
 
     public void PlayerIconButton_Method()
@@ -774,4 +799,9 @@ public class UIMenager : MonoBehaviour
 
     #endregion
 
+
+    public void OdaIslemlerRefreshButton_Method()
+    {
+        SunucuYonetim.Instance.OdaIslemlerRefresh();
+    }
 }

@@ -46,9 +46,6 @@ ScriptsOnlyBuild:
     - TMPro.TMP_Dropdown
     - TMPro.TMP_FontAsset
     - TMPro.TMP_InputField
-    - TMPro.TMP_Settings
-    - TMPro.TMP_SpriteAsset
-    - TMPro.TMP_StyleSheet
     - TMPro.TextMeshProUGUI
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
@@ -151,6 +148,9 @@ ScriptsOnlyBuild:
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: PlayerIconButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: OdaIslemlerRefreshButton_Method
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: BaslatButton_Method
@@ -434,61 +434,61 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 19188}
     - Class: 114
-      Script: {instanceID: 19308}
+      Script: {instanceID: 19310}
     - Class: 114
-      Script: {instanceID: 19324}
+      Script: {instanceID: 19326}
     - Class: 114
-      Script: {instanceID: 19584}
+      Script: {instanceID: 19586}
     - Class: 114
-      Script: {instanceID: 19984}
+      Script: {instanceID: 19986}
     - Class: 114
-      Script: {instanceID: 20132}
+      Script: {instanceID: 20134}
     - Class: 114
-      Script: {instanceID: 20198}
+      Script: {instanceID: 20200}
     - Class: 114
-      Script: {instanceID: 20252}
+      Script: {instanceID: 20254}
     - Class: 114
-      Script: {instanceID: 20268}
+      Script: {instanceID: 20270}
     - Class: 114
-      Script: {instanceID: 20324}
+      Script: {instanceID: 20326}
     - Class: 114
-      Script: {instanceID: 20670}
+      Script: {instanceID: 20672}
     - Class: 114
-      Script: {instanceID: 20712}
+      Script: {instanceID: 20714}
     - Class: 114
-      Script: {instanceID: 20904}
+      Script: {instanceID: 20906}
     - Class: 114
-      Script: {instanceID: 21056}
+      Script: {instanceID: 21058}
     - Class: 114
-      Script: {instanceID: 21142}
+      Script: {instanceID: 21144}
     - Class: 114
-      Script: {instanceID: 21366}
+      Script: {instanceID: 21368}
     - Class: 114
-      Script: {instanceID: 21382}
-    - Class: 114
-      Script: {instanceID: 21390}
+      Script: {instanceID: 21384}
     - Class: 114
       Script: {instanceID: 21392}
     - Class: 114
-      Script: {instanceID: 21398}
+      Script: {instanceID: 21394}
     - Class: 114
-      Script: {instanceID: 21502}
+      Script: {instanceID: 21400}
     - Class: 114
-      Script: {instanceID: 21816}
+      Script: {instanceID: 21504}
     - Class: 114
-      Script: {instanceID: 21984}
+      Script: {instanceID: 21818}
     - Class: 114
-      Script: {instanceID: 22500}
+      Script: {instanceID: 21986}
     - Class: 114
-      Script: {instanceID: 22850}
+      Script: {instanceID: 22504}
     - Class: 114
-      Script: {instanceID: 22974}
+      Script: {instanceID: 22854}
     - Class: 114
-      Script: {instanceID: 23138}
+      Script: {instanceID: 22978}
     - Class: 114
-      Script: {instanceID: 23266}
+      Script: {instanceID: 23142}
     - Class: 114
-      Script: {instanceID: 23276}
+      Script: {instanceID: 23270}
+    - Class: 114
+      Script: {instanceID: 23280}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -1980,6 +1980,12 @@ ScriptsOnlyBuild:
     className: TextToggleIsOnTransition
   - hash:
       serializedVersion: 2
+      Hash: 6cb8f3ee191934cb9b93c90b2342b7c2
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: BinarySaveSystem
+  - hash:
+      serializedVersion: 2
       Hash: a89b0448af4e1cd103a77f9fec0a961f
     assemblyName: Unity.VisualScripting.Core
     namespaceName: Unity.VisualScripting
@@ -2290,12 +2296,6 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core
     namespaceName: Unity.VisualScripting
     className: UnityOnSliderValueChangedMessageListener
-  - hash:
-      serializedVersion: 2
-      Hash: 6cb8f3ee191934cb9b93c90b2342b7c2
-    assemblyName: Assembly-CSharp
-    namespaceName: 
-    className: BinarySaveSystem
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity

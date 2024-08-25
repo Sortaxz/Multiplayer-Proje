@@ -80,9 +80,9 @@ public class SaveSystem : MonoBehaviour
         
     }
 
-    public string GetFriendPlayer(Player friendPlayer)
+    public string GetFriendPlayer(int friendPlayerActorNumber)
     {
-        return (string)PlayerPrefsDataLoad(friendPlayer.ActorNumber.ToString(),"string");
+        return (string)PlayerPrefsDataLoad(friendPlayerActorNumber.ToString(),"string");
         
     }
 

@@ -48,4 +48,9 @@ public class BinarySaveSystem : MonoBehaviour
         }
     }
 
+    public static void FriendDataDelete(string fileName)
+    {
+        File.Delete(fileName);
+        print("silindi");
+    }
 }
