@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -234,7 +233,6 @@ public class UIMenager : MonoBehaviour
         {
             PlayerPrefs.DeleteAll();
 
-            BinarySaveSystem.FriendDataDelete("FriendDataSave.bin");
 
             saveSystem.PlayerPrefsDataSave("playerName",playerName);
             SetActiveUIObject(playerProps_Panel.name);
@@ -264,7 +262,6 @@ public class UIMenager : MonoBehaviour
             {
                 PlayerPrefs.DeleteAll();
                 
-                BinarySaveSystem.FriendDataDelete("FriendDataSave.bin");
 
                 saveSystem.PlayerPrefsDataSave("playerName",playerName);
                 SetActiveUIObject(playerProps_Panel.name);
@@ -285,6 +282,7 @@ public class UIMenager : MonoBehaviour
 
     public void BaslatButton_Method()
     {
+        ControlPlayerPropsActive();
         SunucuYonetim.Instance.isConnected = true;
         SunucuYonetim.Instance.ConnetingServer(playerName);
         SetActiveUIObject(connecting_Panel.name);
@@ -299,7 +297,7 @@ public class UIMenager : MonoBehaviour
 
         menuPlayerIcon_Image.sprite = playerIcons[(int)iconIndex].sprite;
         
-
+        playerPropKaydetButton.gameObject.SetActive(false);
 
     }
 
@@ -308,7 +306,6 @@ public class UIMenager : MonoBehaviour
     {
         if(saveSystem.PlayerPrefsDataQuery("icon") && saveSystem.PlayerPrefsDataQuery("color") && saveSystem.PlayerPrefsDataQuery("playerName"))
         {
-            SunucuYonetim.Instance.GetFriend();
             
             string playerName = (string)saveSystem.PlayerPrefsDataLoad("playerName","string");
 
@@ -457,7 +454,6 @@ public class UIMenager : MonoBehaviour
                 
                 SetPlayerProps();
 
-                ControlPlayerPropsActive();
 
             }
         }
@@ -480,7 +476,7 @@ public class UIMenager : MonoBehaviour
             saveSystem.PlayerPrefsDataSave("icon",icon_Index);
             saveSystem.PlayerPrefsDataSave("color",color_Index);
 
-            ControlPlayerPropsActive();
+            
         }
 
 
@@ -498,6 +494,9 @@ public class UIMenager : MonoBehaviour
         {
             playerColorImageProps[i].GetComponent<Button>().interactable = true;
         }
+        playerIconBaslatButtonActive = false;
+        playerColorBaslatButtonActive = false;
+        EventSystem.current.currentSelectedGameObject.SetActive(false);
     }
 
     public void PlayerIconButton_Method()
