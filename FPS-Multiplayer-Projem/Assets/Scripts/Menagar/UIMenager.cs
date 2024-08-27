@@ -386,7 +386,7 @@ public class UIMenager : MonoBehaviour
         }
         else 
         {
-           
+            SunucuYonetim.Instance.OdaKurdu = false;
             SunucuYonetim.Instance.FriendRoom = false;
             SetActiveUIObject(menu_Panel.name);
         
