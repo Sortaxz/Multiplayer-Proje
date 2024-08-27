@@ -56,6 +56,9 @@ public class UIMenager : MonoBehaviour
     [SerializeField] private GameObject odaKurmaYüklemeEkran_Panel;
     public GameObject OdaKurmaYüklemeEkran_Panel {get { return odaKurmaYüklemeEkran_Panel;}}
 
+    [SerializeField] private GameObject warning_Panel;
+    public GameObject Warning_Panel {get { return warning_Panel;}}
+
     [SerializeField] private GameObject yeniOyuncu_Panel;
     public GameObject YeniOyuncu_Panel {get { return yeniOyuncu_Panel;}}
 
@@ -187,26 +190,9 @@ public class UIMenager : MonoBehaviour
         saveSystem  = SaveSystem.Instance;
     }
 
-
     private void Update() 
     {
         CheatActive();
-        
-        if(PhotonNetwork.InRoom)
-        {
-            print(PhotonNetwork.CurrentRoom.Name);
-        }
-
-
-        if(PhotonNetwork.InRoom)
-        {
-            foreach (Player friend in SunucuYonetim.Instance.FriendPlayer)
-            {
-                print(friend.NickName);
-            }
-        }
-        
-        
     }
 
     public void CheatActive()
@@ -239,14 +225,10 @@ public class UIMenager : MonoBehaviour
         }
         else
         {
-            SetActiveUIObject(oyunaBaglanma_Panel.name);
+            warning_Panel.SetActive(true);
 
         }
 
-        //SunucuYonetim.Instance.isConnected = true;
-        //SunucuYonetim.Instance.ConnetingServer(playerName);
-
-        //SetActiveUIObject(connecting_Panel.name);
     }
 
 
@@ -268,8 +250,7 @@ public class UIMenager : MonoBehaviour
             }
             else
             {
-                print("Böyle bir kayitli oyuncu var");
-                SetActiveUIObject(oyunaBaglanma_Panel.name);
+                warning_Panel.SetActive(true);
             }
 
             //SunucuYonetim.Instance.isConnected = true;
@@ -282,9 +263,12 @@ public class UIMenager : MonoBehaviour
 
     public void BaslatButton_Method()
     {
+
         ControlPlayerPropsActive();
+        
         SunucuYonetim.Instance.isConnected = true;
         SunucuYonetim.Instance.ConnetingServer(playerName);
+        
         SetActiveUIObject(connecting_Panel.name);
 
         menuKullaniciAdi_Text.text += PhotonNetwork.LocalPlayer.NickName;
@@ -306,7 +290,6 @@ public class UIMenager : MonoBehaviour
     {
         if(saveSystem.PlayerPrefsDataQuery("icon") && saveSystem.PlayerPrefsDataQuery("color") && saveSystem.PlayerPrefsDataQuery("playerName"))
         {
-            
             string playerName = (string)saveSystem.PlayerPrefsDataLoad("playerName","string");
 
             SunucuYonetim.Instance.isConnected = true;
@@ -317,10 +300,11 @@ public class UIMenager : MonoBehaviour
 
             iconIndex = (int)saveSystem.PlayerPrefsDataLoad("icon","int");
             colorIndex = (int)saveSystem.PlayerPrefsDataLoad("color","int");
+            
 
             SetPlayerProps();
 
-            menuPlayerIcon_Image.sprite = playerIcons[(int)iconIndex].sprite;
+            menuPlayerIcon_Image.sprite = playerIcons[iconIndex].sprite;
             
 
             SetActiveUIObject(connecting_Panel.name);
@@ -454,12 +438,13 @@ public class UIMenager : MonoBehaviour
                 
                 SetPlayerProps();
 
-
+                
             }
         }
         else
         {
-            SunucuYonetim.Instance.Refresh();
+            //SunucuYonetim.Instance.Refresh();
+
             SetActiveUIObject(menu_Panel.name);
             playerPropKaydetButtonClick = false;
 
@@ -469,12 +454,7 @@ public class UIMenager : MonoBehaviour
 
             SetPlayerProps();
 
-            PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("icon",out object icon_Index);
-            PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("color",out object color_Index);
             
-           
-            saveSystem.PlayerPrefsDataSave("icon",icon_Index);
-            saveSystem.PlayerPrefsDataSave("color",color_Index);
 
             
         }
@@ -524,6 +504,13 @@ public class UIMenager : MonoBehaviour
 
         
         PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
+
+        PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("icon",out object icon_Index);
+        PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("color",out object color_Index);
+            
+           
+        saveSystem.PlayerPrefsDataSave("icon",icon_Index);
+        saveSystem.PlayerPrefsDataSave("color",color_Index);
     }
 
     public void SetActiveUIObject(string panelName)
@@ -608,8 +595,22 @@ public class UIMenager : MonoBehaviour
             }
         }
 
+        if(!menuPlayerProfil)
+        {
+            playerPropKaydetButton.gameObject.SetActive(playerIconBaslatButtonActive && playerColorBaslatButtonActive);
+        }
+        else
+        {
+            playerPropKaydetButton.gameObject.SetActive(playerIconBaslatButtonActive || playerColorBaslatButtonActive);
+        }
+        playerProps = new ExitGames.Client.Photon.Hashtable()
+        {
+            {"icon",iconIndex},
+            {"color",colorIndex}
+        };
+
         
-        playerPropKaydetButton.gameObject.SetActive(playerIconBaslatButtonActive && playerColorBaslatButtonActive);
+        PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
     }
 
 
@@ -802,5 +803,11 @@ public class UIMenager : MonoBehaviour
     public void OdaIslemlerRefreshButton_Method()
     {
         SunucuYonetim.Instance.OdaIslemlerRefresh();
+    }
+
+    public void WarningExitButton_Method()
+    {
+        warning_Panel.SetActive(false);
+        kullaniciAdi_InputField.Select();
     }
 }

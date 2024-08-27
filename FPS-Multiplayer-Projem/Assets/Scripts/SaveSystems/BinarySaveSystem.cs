@@ -10,47 +10,49 @@ public class BinarySaveSystem : MonoBehaviour
     public static void FriendDataSave(SunucuYonetim sunucuYonetim)
     {
         BinaryFormatter formatter = new BinaryFormatter();
-        FileStream stream = new FileStream("FriendDataSave.bin", FileMode.Create);
+        string path = Application.persistentDataPath + "/friend.fun";
+        FileStream stream = new FileStream(path, FileMode.Create);
 
-        FriendData friendData = new FriendData(sunucuYonetim,false);
-        
-        formatter.Serialize(stream,friendData);
+        FriendData friendData = new FriendData(sunucuYonetim, false);
 
+        formatter.Serialize(stream, friendData);
         stream.Close();
+
+        Debug.Log("Friend data saved to: " + path);
     }
 
     public static FriendData FriendDataLoad(SunucuYonetim sunucuYonetim)
     {
-        string fileName = "FriendDataSave.bin";
+        string path = Application.persistentDataPath + "/friend.fun";
 
-        if(File.Exists(fileName)) 
+        if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
-            FileStream stream = new FileStream(fileName, FileMode.Open);
-            FriendData friendData = formatter.Deserialize(stream) as FriendData;
+            FileStream stream = new FileStream(path, FileMode.Open);
 
+            FriendData data = formatter.Deserialize(stream) as FriendData;
+            Debug.Log("Friend data loaded from: " + path);
             stream.Close();
 
-            return friendData;
+            return data;
         }
         else
         {
+            Debug.LogWarning("Friend data not found, creating new file at: " + path);
             BinaryFormatter formatter = new BinaryFormatter();
-            FileStream stream = new FileStream("FriendDataSave.bin", FileMode.Create);
+            FileStream stream = new FileStream(path, FileMode.Create);
 
-            FriendData friendData = new FriendData(sunucuYonetim,true);
-            
-            formatter.Serialize(stream,friendData);
-
+            FriendData friendData = new FriendData(sunucuYonetim, true);
+            formatter.Serialize(stream, friendData);
             stream.Close();
 
             return friendData;
         }
     }
 
-    public static void FriendDataDelete(string fileName)
+    public static void FriendDataDelete()
     {
-        File.Delete(fileName);
-        print("silindi");
+        string path = Application.persistentDataPath + "/friend.fun";
+        File.Delete(path);
     }
 }

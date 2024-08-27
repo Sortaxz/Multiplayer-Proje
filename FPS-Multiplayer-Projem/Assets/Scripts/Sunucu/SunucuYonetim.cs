@@ -38,8 +38,8 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject friendListPrefab;
     [SerializeField] private GameObject friendListContent;
     private Dictionary<int,GameObject> friendList = new Dictionary<int, GameObject>();
-    private List<Player> friendPlayer = new List<Player>();
-    public List<Player> FriendPlayer { get { return friendPlayer; } }
+    private List<string> friendPlayer = new List<string>();
+    public List<string> FrienPlayer { get { return friendPlayer; } }
 
     [Space]
     [Space]
@@ -74,16 +74,34 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         uIMenager = UIMenager.Instance;
         PV = GetComponent<PhotonView>();
         saveSystem = SaveSystem.Instance;
+
+        int friendCount = (int)saveSystem.PlayerPrefsDataLoad("friendCount","int");
+
+        for (int i = 0; i < friendCount; i++)
+        {
+            int friendNumber = i+1;
+            string friendName = (string)saveSystem.PlayerPrefsDataLoad($"{friendNumber}","string"); 
+            friendPlayer.Add(friendName);
+        }
+
+    }
+
+    private void Start()
+    {
+        uIMenager.friendPlayerNickName_Text.gameObject.SetActive(true);
+        foreach (string friend in friendPlayer)
+        {
+            uIMenager.friendPlayerNickName_Text.text += friend;
+        }
     }
 
     public void GetFriend()
     {
         FriendData friendData = BinarySaveSystem.FriendDataLoad(this);
 
-        if (friendData.Friends != null)
-        {
-            friends = friendData.Friends;
-        }
+        friends = friendData.Friends;
+
+        
     }
 
     public override void OnConnectedToMaster()
@@ -255,6 +273,8 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         }
         if(friendRoom)
         {
+            
+
             CreateFrinendsList();
 
         }
@@ -302,17 +322,17 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         }
         if(friendRoom)
         {   
-
-            if(PhotonNetwork.NickName != newPlayer.NickName && newPlayer.NickName != saveSystem.GetFriendPlayer(newPlayer.ActorNumber) && !friendList.ContainsKey(newPlayer.ActorNumber))
+            
+            if(PhotonNetwork.NickName != newPlayer.NickName && newPlayer.NickName != saveSystem.GetFriendPlayer(newPlayer.ActorNumber)  && !friendPlayer.Contains(newPlayer.NickName))
             {
                 GameObject friendListObject =  FriendListOlustur();
-
+                
+                print(newPlayer.UserId);
+                
                 friendListObject.GetComponent<FriendListControl>().FriendListInitialize(newPlayer);
-            
+
                 friendList.Add(newPlayer.ActorNumber,friendListObject);
             }
-            
-
         }
         
         
@@ -415,11 +435,11 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
             {
                 friendList = new Dictionary<int, GameObject>();
             }
-
             foreach (Player _friendPlayer in PhotonNetwork.PlayerList)
             {
-                if (PhotonNetwork.NickName != _friendPlayer.NickName && _friendPlayer.NickName != saveSystem.GetFriendPlayer(_friendPlayer.ActorNumber) && !friendList.ContainsKey(_friendPlayer.ActorNumber))
+                if (PhotonNetwork.NickName != _friendPlayer.NickName && _friendPlayer.NickName != saveSystem.GetFriendPlayer(_friendPlayer.ActorNumber) && !friendPlayer.Contains(_friendPlayer.NickName))
                 {
+                    
                     GameObject friendListObject = FriendListOlustur();
 
                     friendListObject.GetComponent<FriendListControl>().FriendListInitialize(_friendPlayer);
@@ -427,6 +447,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
                     friendList.Add(_friendPlayer.ActorNumber, friendListObject);
                 }
+                
 
             }
         }
@@ -436,11 +457,10 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     {
         if(value)
         {
-            if(!friendPlayer.Contains(_friend))
+            if(!friendPlayer.Contains(_friend.NickName))
             {
                 if (_friend.NickName == saveSystem.GetFriendPlayer(_friend.ActorNumber))
                 {
-                    //friendPlayer.Add(_friend);
 
                     GameObject friendObject = Instantiate(friendPrefab);
 
@@ -459,7 +479,6 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         {
             if (_friend.NickName == saveSystem.GetFriendPlayer(_friend.ActorNumber))
             {
-                //friendPlayer.Add(_friend);
 
                 GameObject friendObject = Instantiate(friendPrefab);
                 

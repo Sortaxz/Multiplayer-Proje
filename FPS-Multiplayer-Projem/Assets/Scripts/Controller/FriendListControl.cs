@@ -16,12 +16,19 @@ public class FriendListControl : MonoBehaviour
 
     private Player friendPlayer;
     public string friendName;
+    public string friendUserId;
+
+    private int friendCount;
 
     [Header("Friend objesi ile ilgili işlemler")]
     [SerializeField] private Image _friendIcon_Image;
     [SerializeField] private TextMeshProUGUI _friendName_Text;
     [SerializeField] private TextMeshProUGUI _friendState_Text;
     
+    private void Awake() 
+    {
+        friendCount = (int)SaveSystem.Instance.PlayerPrefsDataLoad("friendCount","int");
+    }
 
     void Start()
     {
@@ -29,20 +36,27 @@ public class FriendListControl : MonoBehaviour
         {
             addFriend_Button.onClick.AddListener(delegate
             {
-                SaveSystem.Instance.SetFriendPlayer(friendPlayer);
+                print(friendPlayer.ActorNumber);
+
+                friendCount += 1;
+                print(friendCount);
+
+                SaveSystem.Instance.SetFriendPlayer(friendPlayer.ActorNumber,friendPlayer.NickName,friendCount);
+                
                 SunucuYonetim.Instance.CreatFriendObject(friendPlayer,"online",false);
 
                 friendPlayer.CustomProperties.TryGetValue("icon",out object friendIconIndex);
 
                 string friendInfo = $"{friendPlayer.UserId},{friendPlayer.ActorNumber},{friendIconIndex},{friendPlayer.NickName}";
-
+                
                 SunucuYonetim.Instance.Friends.Add(friendInfo);
 
-                BinarySaveSystem.FriendDataSave(SunucuYonetim.Instance);
 
                 Destroy(gameObject);
+
             });
         }
+        
         
     }
 
@@ -50,6 +64,7 @@ public class FriendListControl : MonoBehaviour
     public void FriendListInitialize(Player player)
     {
         friendName = player.NickName;
+        friendUserId = player.UserId;
         friendPlayer = player;
         friendName_Text.text = player.NickName;
         player.CustomProperties.TryGetValue("icon",out object iconIndex);
@@ -68,15 +83,5 @@ public class FriendListControl : MonoBehaviour
 
     }
 
-    /*
-    public void FriendObjectInitialize(int friendIconIndex,string friendNickName,string friendState,string friendUserId = "",int friendActorNumber = 0)
-    {
-        _friendIcon_Image.sprite = UIMenager.Instance.PlayerIcons[friendIconIndex].sprite;
-        _friendName_Text.text = friendNickName;
-        _friendState_Text.text = friendState;
-
-
-    }
-    */
     
 }

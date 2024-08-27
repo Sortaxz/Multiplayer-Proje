@@ -1422,7 +1422,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 139896136}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1704306129}
+        m_TargetAssemblyTypeName: UIMenager, Assembly-CSharp
+        m_MethodName: WarningExitButton_Method
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &139896136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10517,8 +10529,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4279895552
-  m_fontColor: {r: 0, g: 0.024087882, b: 0.103773594, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -11191,8 +11203,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4279895552
-  m_fontColor: {r: 0, g: 0.024087882, b: 0.103773594, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -14503,7 +14515,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 696, y: 183}
+  m_AnchoredPosition: {x: -567, y: 183}
   m_SizeDelta: {x: 400, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1663647867
@@ -14730,6 +14742,7 @@ MonoBehaviour:
   odaIslemleri_Panel: {fileID: 446076422}
   randomOdaModSecim_Panel: {fileID: 812879077}
   "odaKurmaY\xFCklemeEkran_Panel": {fileID: 1211842831}
+  warning_Panel: {fileID: 197871318}
   yeniOyuncu_Panel: {fileID: 1322046073}
   kayitliOyuncu_Panel: {fileID: 1451458091}
   playerIcon_Panel: {fileID: 706490361}
@@ -14989,7 +15002,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 170, y: -47.99998}
-  m_SizeDelta: {x: 250, y: 75}
+  m_SizeDelta: {x: 270.1, y: 89.28}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1716977460
 MonoBehaviour:
@@ -15067,8 +15080,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 215833881, guid: 19558d3b30edd224a8e090e17c227943, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -15412,6 +15425,7 @@ GameObject:
   - component: {fileID: 1762209813}
   - component: {fileID: 1762209815}
   - component: {fileID: 1762209814}
+  - component: {fileID: 1762209816}
   m_Layer: 5
   m_Name: WarningIcon_Image
   m_TagString: Untagged
@@ -15476,6 +15490,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1762209812}
   m_CullTransparentMesh: 1
+--- !u!95 &1762209816
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1762209812}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0dd5e152764e6a346bc2dac88bb5cd3d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1764755967
 GameObject:
   m_ObjectHideFlags: 0
@@ -15772,7 +15807,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1770403251
 RectTransform:
   m_ObjectHideFlags: 0
@@ -18932,7 +18967,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -213, y: -47.99998}
-  m_SizeDelta: {x: 250, y: 75}
+  m_SizeDelta: {x: 270.1, y: 89.28}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2042958654
 MonoBehaviour:
@@ -19010,8 +19045,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 215833881, guid: 19558d3b30edd224a8e090e17c227943, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4

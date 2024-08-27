@@ -73,16 +73,17 @@ public class SaveSystem : MonoBehaviour
     }
     
 
-    public void SetFriendPlayer(Player friendPlayer)
+    public void SetFriendPlayer(int friendPlayerActorNumber,string friendPlayerName,int friendCount)
     {
-        SunucuYonetim.Instance.FriendPlayer.Add(friendPlayer);
-        PlayerPrefsDataSave(friendPlayer.ActorNumber.ToString(),friendPlayer.NickName);
+        
+        PlayerPrefsDataSave($"{friendPlayerActorNumber}",friendPlayerName);
+        PlayerPrefsDataSave("friendCount",friendCount);
         
     }
 
     public string GetFriendPlayer(int friendPlayerActorNumber)
     {
-        return (string)PlayerPrefsDataLoad(friendPlayerActorNumber.ToString(),"string");
+        return (string)PlayerPrefsDataLoad($"{friendPlayerActorNumber}","string");
         
     }
 
