@@ -80,7 +80,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         for (int i = 0; i < friendCount; i++)
         {
             int friendNumber = i+1;
-            string friendName = (string)saveSystem.PlayerPrefsDataLoad($"{friendNumber}","string"); 
+            string friendName = (string)saveSystem.GetFriendPlayer(friendNumber); 
             friendPlayer.Add(friendName);
         }
 
@@ -91,7 +91,6 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         uIMenager.friendPlayerNickName_Text.gameObject.SetActive(true);
         foreach (string friend in friendPlayer)
         {
-            uIMenager.friendPlayerNickName_Text.text += friend;
         }
     }
 
@@ -216,7 +215,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
             RoomOptions roomOptions = new RoomOptions()
             {
-                MaxPlayers = 2,
+                MaxPlayers = 3,
                 CustomRoomProperties = roomProps,
                 CustomRoomPropertiesForLobby = roomPropsString
             };
@@ -240,7 +239,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
                 {"gameMode",gameMode}
             };
 
-            PhotonNetwork.JoinRandomRoom(roomProps, 2);
+            PhotonNetwork.JoinRandomRoom(roomProps, 3);
         }
     }
 
@@ -268,7 +267,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
                     
                 uIMenager.SetActiveUIObject(findingMatchPanelName); 
                     
-                FindingMatchControl.Instance.StartMatchFindingButton_Method();
+                //FindingMatchControl.Instance.StartMatchFindingButton_Method();
             }
         }
         if(friendRoom)
@@ -296,7 +295,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
             };
             RoomOptions roomOptions = new RoomOptions()
             {
-                MaxPlayers = 2,
+                MaxPlayers = 3,
                 CustomRoomProperties = roomProps,
                 CustomRoomPropertiesForLobby = roomPropStrings
             };
@@ -363,6 +362,10 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         isConnected =true;
         normalRoom = false;
         
+        if(uIMenager.FindingMatch_Panel.activeSelf)
+        {
+            FindingMatchControl.Instance.UpdateButtons();
+        }
     }
 
     public override void OnLeftRoom()
@@ -615,5 +618,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
         CreateFrinendsList();
     }
+    
+
     
 }

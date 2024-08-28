@@ -30,6 +30,8 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
     private ExitGames.Client.Photon.Hashtable playerProps;
     private bool IsPlayerReady = true;
     private bool gameStarted = false; 
+    private bool readyCallMatch = false;
+    private bool counterStart = false;
     private float deger = 0;
     PhotonView PV;
     
@@ -49,14 +51,16 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
         }
         
         findMatchTime_Text.gameObject.SetActive(true);
-        Initialize(deger);
+        Initialize(deger,false);
 
     }
 
-    
+    private void Update() 
+    {
+        //UpdateButtons();    
+    }
     public void StartMatchFindingButton_Method()
     {
-        findMatchTime_Text.gameObject.SetActive(true);
         
         PV.RPC("RPC_StartFindMatch", RpcTarget.MasterClient, null); 
         gameStarted = true;
@@ -67,12 +71,11 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (gameStarted)
         {
-            findMatchTime_Text.gameObject.SetActive(false);
             PV.RPC("RPC_CancelFindMatch", RpcTarget.AllBuffered, null); 
         }
     }
 
-    public void Initialize(float waitTimeValue)
+    public void Initialize(float waitTimeValue,bool counterStart)
     {
         if(PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("gameMode",out object gameMode))
         {
@@ -83,9 +86,16 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
             matchProps_Text.text = ((int)randomGameMode == 1? GameMode.Dereceli : GameMode.Derecesiz).ToString();
         }
 
-        int minutes = Mathf.FloorToInt(waitTimeValue / 60);
-        int seconds = Mathf.FloorToInt(waitTimeValue % 60);
-        findMatchTime_Text.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        if(counterStart)
+        {
+            int minutes = Mathf.FloorToInt(waitTimeValue / 60);
+            int seconds = Mathf.FloorToInt(waitTimeValue % 60);
+            findMatchTime_Text.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        }
+        else
+        {
+            findMatchTime_Text.gameObject.SetActive(false);
+        }
     }
 
     public void UpdateButtons()
@@ -102,11 +112,13 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
                 startMatchFinding_Button.gameObject.SetActive(false);
                 cancelMatchFinding_Button.gameObject.SetActive(true); 
             }
+            findMatchTime_Text.gameObject.SetActive(gameStarted);
         }
         else
         {
             startMatchFinding_Button.gameObject.SetActive(PhotonNetwork.IsMasterClient);
             cancelMatchFinding_Button.gameObject.SetActive(false);
+            findMatchTime_Text.gameObject.SetActive(gameStarted);
         }
 
         
@@ -117,6 +129,7 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
     {
         if(gameObject.activeSelf)
         {
+            readyCallMatch = true;
             gameStarted = true;
             UpdateButtons();
             StartCoroutine(deneme());
@@ -126,9 +139,10 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void RPC_CancelFindMatch()
     {
+        readyCallMatch = false;
         StopCoroutine(deneme());
         deger = 0;
-        Initialize(deger);
+        Initialize(deger,false);
         gameStarted = false;
         UpdateButtons();
     }
@@ -142,14 +156,17 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
             if (PhotonNetwork.PlayerList.Length != PhotonNetwork.CurrentRoom.MaxPlayers)
             {
                 deger += Time.deltaTime;
-                Initialize(deger);
+                Initialize(deger,true);
             }   
             else
             {
                 deger = 0;
-                Initialize(deger);
+                Initialize(deger,false);
                 gameStarted = false;
-                PV.RPC("FinedMatch",RpcTarget.AllViaServer,true);
+                if(readyCallMatch)
+                {
+                    PV.RPC("FinedMatch",RpcTarget.AllViaServer,true);
+                }
             }
         }
     }
@@ -164,7 +181,7 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
         else
         {
             float sayi = (float)stream.ReceiveNext();
-            Initialize(sayi);
+            Initialize(sayi,true);
             gameStarted = (bool)stream.ReceiveNext();
             UpdateButtons();
         }
