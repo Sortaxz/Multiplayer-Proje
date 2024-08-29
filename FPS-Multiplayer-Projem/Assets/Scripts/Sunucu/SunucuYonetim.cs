@@ -619,6 +619,6 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         CreateFrinendsList();
     }
     
-
     
 }
+
