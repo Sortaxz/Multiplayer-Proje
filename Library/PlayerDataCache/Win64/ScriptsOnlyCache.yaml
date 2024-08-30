@@ -1,6 +1,8 @@
 ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp:
+    - CharacterAnimation
+    - CharacterControl
     - FriendListControl
     Assembly-CSharp.dll:
     - CheatController
@@ -46,12 +48,17 @@ ScriptsOnlyBuild:
     - TMPro.TMP_Dropdown
     - TMPro.TMP_FontAsset
     - TMPro.TMP_InputField
+    - TMPro.TMP_Settings
+    - TMPro.TMP_SpriteAsset
+    - TMPro.TMP_StyleSheet
     - TMPro.TextMeshProUGUI
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -335,9 +342,17 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 21
       Script: {instanceID: 0}
+    - Class: 23
+      Script: {instanceID: 0}
     - Class: 28
       Script: {instanceID: 0}
+    - Class: 33
+      Script: {instanceID: 0}
+    - Class: 43
+      Script: {instanceID: 0}
     - Class: 48
+      Script: {instanceID: 0}
+    - Class: 64
       Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
@@ -409,89 +424,93 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 16788}
     - Class: 114
-      Script: {instanceID: 16886}
+      Script: {instanceID: 16888}
     - Class: 114
-      Script: {instanceID: 17308}
+      Script: {instanceID: 17310}
     - Class: 114
-      Script: {instanceID: 17558}
+      Script: {instanceID: 17560}
     - Class: 114
-      Script: {instanceID: 17710}
+      Script: {instanceID: 17712}
     - Class: 114
-      Script: {instanceID: 17776}
+      Script: {instanceID: 17778}
     - Class: 114
-      Script: {instanceID: 17782}
+      Script: {instanceID: 17784}
     - Class: 114
-      Script: {instanceID: 17988}
+      Script: {instanceID: 17990}
     - Class: 114
-      Script: {instanceID: 18208}
+      Script: {instanceID: 18210}
     - Class: 114
-      Script: {instanceID: 18288}
+      Script: {instanceID: 18290}
     - Class: 114
-      Script: {instanceID: 18688}
+      Script: {instanceID: 18690}
     - Class: 114
-      Script: {instanceID: 19044}
+      Script: {instanceID: 19046}
     - Class: 114
-      Script: {instanceID: 19048}
+      Script: {instanceID: 19050}
     - Class: 114
-      Script: {instanceID: 19098}
+      Script: {instanceID: 19100}
     - Class: 114
-      Script: {instanceID: 19210}
+      Script: {instanceID: 19214}
     - Class: 114
-      Script: {instanceID: 19332}
+      Script: {instanceID: 19286}
     - Class: 114
-      Script: {instanceID: 19348}
+      Script: {instanceID: 19338}
     - Class: 114
-      Script: {instanceID: 19610}
+      Script: {instanceID: 19354}
     - Class: 114
-      Script: {instanceID: 20020}
+      Script: {instanceID: 19616}
     - Class: 114
-      Script: {instanceID: 20168}
+      Script: {instanceID: 20026}
     - Class: 114
-      Script: {instanceID: 20236}
+      Script: {instanceID: 20174}
     - Class: 114
-      Script: {instanceID: 20290}
+      Script: {instanceID: 20242}
     - Class: 114
-      Script: {instanceID: 20306}
+      Script: {instanceID: 20296}
     - Class: 114
-      Script: {instanceID: 20362}
+      Script: {instanceID: 20312}
     - Class: 114
-      Script: {instanceID: 20710}
+      Script: {instanceID: 20368}
     - Class: 114
-      Script: {instanceID: 20752}
+      Script: {instanceID: 20716}
     - Class: 114
-      Script: {instanceID: 20946}
+      Script: {instanceID: 20758}
     - Class: 114
-      Script: {instanceID: 21102}
+      Script: {instanceID: 20952}
     - Class: 114
-      Script: {instanceID: 21192}
+      Script: {instanceID: 21108}
     - Class: 114
-      Script: {instanceID: 21420}
+      Script: {instanceID: 21198}
     - Class: 114
-      Script: {instanceID: 21436}
+      Script: {instanceID: 21426}
     - Class: 114
-      Script: {instanceID: 21444}
+      Script: {instanceID: 21442}
     - Class: 114
-      Script: {instanceID: 21446}
+      Script: {instanceID: 21450}
     - Class: 114
       Script: {instanceID: 21452}
     - Class: 114
-      Script: {instanceID: 21558}
+      Script: {instanceID: 21458}
     - Class: 114
-      Script: {instanceID: 21874}
+      Script: {instanceID: 21564}
     - Class: 114
-      Script: {instanceID: 22044}
+      Script: {instanceID: 21880}
     - Class: 114
-      Script: {instanceID: 22564}
+      Script: {instanceID: 22048}
     - Class: 114
-      Script: {instanceID: 22918}
+      Script: {instanceID: 22290}
     - Class: 114
-      Script: {instanceID: 23046}
+      Script: {instanceID: 22570}
     - Class: 114
-      Script: {instanceID: 23212}
+      Script: {instanceID: 22924}
     - Class: 114
-      Script: {instanceID: 23342}
+      Script: {instanceID: 23052}
     - Class: 114
-      Script: {instanceID: 23352}
+      Script: {instanceID: 23220}
+    - Class: 114
+      Script: {instanceID: 23350}
+    - Class: 114
+      Script: {instanceID: 23360}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -613,6 +632,12 @@ ScriptsOnlyBuild:
     assemblyName: PhotonUnityNetworking.Demos
     namespaceName: Photon.Pun.Demo.Cockpit
     className: GameVersionField
+  - hash:
+      serializedVersion: 2
+      Hash: 5ff1053ebcafd90dbe9d30c980f452ed
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: GunControl
   - hash:
       serializedVersion: 2
       Hash: 00bbd9db8634496d079d17711b2ff7c4
@@ -1173,6 +1198,12 @@ ScriptsOnlyBuild:
     className: Mask
   - hash:
       serializedVersion: 2
+      Hash: 46555b8f4a119ebfa4d927e246baf3ee
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: FriendSystem
+  - hash:
+      serializedVersion: 2
       Hash: 32a1c2701dd12ad2fcaff3f496346fe8
     assemblyName: PhotonUnityNetworking.Demos
     namespaceName: Photon.Pun.Demo.Cockpit
@@ -1249,6 +1280,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core
     namespaceName: Unity.VisualScripting
     className: VariablesSaver
+  - hash:
+      serializedVersion: 2
+      Hash: 8643b5958127e5135569e3a4fed739ae
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: CharacterControl
   - hash:
       serializedVersion: 2
       Hash: 7053e305cdc1eb560f4c3be49d3b5136
@@ -2007,6 +2044,12 @@ ScriptsOnlyBuild:
     className: Dropdown
   - hash:
       serializedVersion: 2
+      Hash: 8fe834dd7e44d518679ffe2db1f105e0
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: CharacterAnimation
+  - hash:
+      serializedVersion: 2
       Hash: a5c9f0d2494103a7ce0ea05a2aa5c9ae
     assemblyName: PhotonUnityNetworking.Demos
     namespaceName: Photon.Pun.Demo.Cockpit
@@ -2215,6 +2258,12 @@ ScriptsOnlyBuild:
     assemblyName: PhotonUnityNetworking.Demos
     namespaceName: Photon.Pun.Demo.Cockpit
     className: AppVersionProperty
+  - hash:
+      serializedVersion: 2
+      Hash: 5d6c311315ac44bf76f158223c0ab8fb
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: InputManager
   - hash:
       serializedVersion: 2
       Hash: ff76cf6cf52b4db7b95af6ffadca9288

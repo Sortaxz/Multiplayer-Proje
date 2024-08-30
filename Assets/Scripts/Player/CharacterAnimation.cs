@@ -24,6 +24,8 @@ public class CharacterAnimation : PlayerAnimation
         PlayPlayerMoveAnimation("isLeftWalking",left,"bool");
         PlayPlayerMoveAnimation("isRunning",runing,"bool",forward);
         PlayPlayerMoveAnimation("isWalkingBack",backward,"bool");
+        PlayPlayerMoveAnimation("isJumping",isJumping,"bool");
+            
 
     }
 
@@ -47,7 +49,7 @@ public class CharacterAnimation : PlayerAnimation
 
     public void PlayPlayerMoveAnimation(string animationBoolName,bool animationDirection,string setValueType, bool  additionalAnimationDirection =false)
     {
-        if(animationBoolName == "isRunning")
+        if(animationBoolName == "isRunning" )
         {
             if(animationDirection && additionalAnimationDirection || additionalAnimationDirection && animationDirection)
             {
@@ -58,7 +60,7 @@ public class CharacterAnimation : PlayerAnimation
                 SetAnimation(animationBoolName,animationDirection,setValueType);
             }
         }
-        else
+        else if(animationBoolName != "isRunning")
         {
             if(animationDirection)
             {

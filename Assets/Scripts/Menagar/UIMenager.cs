@@ -714,7 +714,6 @@ public class UIMenager : MonoBehaviour
             }
             else
             {
-                SunucuYonetim.Instance.ExitFriendRoom();
 
                 SunucuYonetim.Instance.RandomOdaKurdu = true;
                 SunucuYonetim.Instance.NormalRoom = true;
@@ -749,11 +748,7 @@ public class UIMenager : MonoBehaviour
         }
         else
         {
-            SunucuYonetim.Instance.ExitFriendRoom();
 
-            SunucuYonetim.Instance.RandomOdaKurdu = true;
-            SunucuYonetim.Instance.NormalRoom = true;
-            
             gameMode = GameMode.Derecesiz;
     
             string mod = gameMode.ToString(); 
@@ -771,10 +766,7 @@ public class UIMenager : MonoBehaviour
     
     public void OdaKur()
     {
-        SunucuYonetim.Instance.ExitFriendRoom();
 
-        SunucuYonetim.Instance.NormalRoom = true;
-        SunucuYonetim.Instance.OdaKurdu = true;
 
         roomName = odaAdi_InputField.text;
 

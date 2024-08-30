@@ -20,5 +20,5 @@ public class PlayerAnimation : InputManager
     protected bool isRightWalking => left ? true : false;
     protected bool isLeftWalking => right ? true : false; 
     protected bool isRunning => runing ? true : false;
+    protected bool isJumping => CharacterControl.IsPlayerJump ? true : false;
 }
-

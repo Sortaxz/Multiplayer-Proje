@@ -36,22 +36,6 @@ public class FriendListControl : MonoBehaviour
         {
             addFriend_Button.onClick.AddListener(delegate
             {
-                print(friendPlayer.ActorNumber);
-
-                friendCount += 1;
-                print(friendCount);
-
-                SaveSystem.Instance.SetFriendPlayer(friendPlayer.ActorNumber,friendPlayer.NickName,friendCount);
-                
-                SunucuYonetim.Instance.CreatFriendObject(friendPlayer,"online",false);
-
-                friendPlayer.CustomProperties.TryGetValue("icon",out object friendIconIndex);
-
-                string friendInfo = $"{friendPlayer.UserId},{friendPlayer.ActorNumber},{friendIconIndex},{friendPlayer.NickName}";
-                
-                SunucuYonetim.Instance.Friends.Add(friendInfo);
-
-
                 Destroy(gameObject);
 
             });
