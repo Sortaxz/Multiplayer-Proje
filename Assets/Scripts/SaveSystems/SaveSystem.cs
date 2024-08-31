@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Realtime;
@@ -6,26 +7,13 @@ using UnityEngine;
 
 public class SaveSystem : MonoBehaviour
 {
-    private static SaveSystem instance;
-    public static SaveSystem Instance
-    {
-        get
-        {
-            if(instance == null)
-            {
-                instance = FindObjectOfType<SaveSystem>();
-            }
-            return instance;
-        }
-    }
-    int friendCount = 1;
-
+    
     private void Awake() 
     {
         DontDestroyOnLoad(gameObject);    
     }
 
-    public void PlayerPrefsDataSave(string saveVariableName,object value)
+    public static void PlayerPrefsDataSave(string saveVariableName,object value)
     {
         if(value is int valueIsInt)
         {
@@ -43,7 +31,7 @@ public class SaveSystem : MonoBehaviour
         
     }
 
-    public object PlayerPrefsDataLoad(string loadVariableName,string returnValue)
+    public static object PlayerPrefsDataLoad(string loadVariableName,string returnValue)
     {
         object data = null;
         switch(returnValue)
@@ -67,25 +55,45 @@ public class SaveSystem : MonoBehaviour
         return data;
     }
 
-    public bool PlayerPrefsDataQuery(string firstDataQueryName )
+    public static bool PlayerPrefsDataQuery(string firstDataQueryName )
     {
         return PlayerPrefs.HasKey(firstDataQueryName);
     }
     
-
-    public void SetFriendPlayer(int friendPlayerActorNumber,string friendPlayerName,int friendCount)
+    public static void SaveFriend(List<string> friendsList)
     {
-        
-        PlayerPrefsDataSave($"{friendPlayerActorNumber}",friendPlayerName);
-        PlayerPrefsDataSave("friendCount",friendCount);
-        
+        string friends = string.Join(",",friendsList);
+
+        PlayerPrefs.SetString("FriendsList", friends);
+
+        PlayerPrefs.Save();
+
+        print("Arkadaş Listesine eklendi");
+
+
     }
 
-    public string GetFriendPlayer(int friendPlayerActorNumber)
+    public static List<string> LoadFriedns(string isSave)
     {
-        return (string)PlayerPrefsDataLoad($"{friendPlayerActorNumber}","string");
-        
+        if(PlayerPrefsDataQuery("FriendsList")  && isSave == "friend")
+        {
+            string friends = PlayerPrefs.GetString("FriendsList");
+            
+            List<string> friendsList = new List<string>(friends.Split(','));
+            
+            Debug.Log("Arkadaş listesi yüklendi.");
+
+            return friendsList;
+        }
+        else
+        {
+            List<string> friendsList = new List<string>();
+            
+            print("Kaydedilmiş arkadaş listesi bulunamadi");
+            return friendsList;
+        }
     }
+
 
     public GameMode GetRoomMod()
     {

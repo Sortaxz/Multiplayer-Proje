@@ -8,10 +8,10 @@ ScriptsOnlyBuild:
     - CheatController
     - FindingMatchControl
     - FriendListControl
+    - FriendSystem
     - HandleControl
     - PlayerListControl
     - PlayerMessageController
-    - SaveSystem
     - SettingsController
     - SunucuYonetim
     - UIMenager
@@ -55,10 +55,8 @@ ScriptsOnlyBuild:
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -450,6 +448,8 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 19100}
     - Class: 114
+      Script: {instanceID: 19124}
+    - Class: 114
       Script: {instanceID: 19214}
     - Class: 114
       Script: {instanceID: 19286}
@@ -507,8 +507,6 @@ ScriptsOnlyBuild:
       Script: {instanceID: 23052}
     - Class: 114
       Script: {instanceID: 23220}
-    - Class: 114
-      Script: {instanceID: 23350}
     - Class: 114
       Script: {instanceID: 23360}
     - Class: 115
@@ -1198,7 +1196,7 @@ ScriptsOnlyBuild:
     className: Mask
   - hash:
       serializedVersion: 2
-      Hash: 46555b8f4a119ebfa4d927e246baf3ee
+      Hash: dca25c1356ba8c18fe60ac0f9787168a
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: FriendSystem
@@ -2272,7 +2270,7 @@ ScriptsOnlyBuild:
     className: SignalEmitter
   - hash:
       serializedVersion: 2
-      Hash: a6883b771dc2d121258dde9a77601364
+      Hash: 82196f396ebf7d4315c7e3ebb2795528
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: SunucuYonetim

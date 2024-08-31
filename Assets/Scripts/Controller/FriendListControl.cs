@@ -27,7 +27,6 @@ public class FriendListControl : MonoBehaviour
     
     private void Awake() 
     {
-        friendCount = (int)SaveSystem.Instance.PlayerPrefsDataLoad("friendCount","int");
     }
 
     void Start()
@@ -58,13 +57,10 @@ public class FriendListControl : MonoBehaviour
     }
 
 
-    public void FriendObjectInitialize(int friendIconIndex,string friendNickName,string friendState,string friendUserId = "",int friendActorNumber = 0)
+    public void FriendObjectInitialize(FriendInfo friendInfo)
     {
-        _friendIcon_Image.sprite = UIMenager.Instance.PlayerIcons[friendIconIndex].sprite;
-        _friendName_Text.text = friendNickName;
-        _friendState_Text.text = friendState;
-
-
+        _friendState_Text.text = friendInfo.IsOnline ? "Online" : "Offline";
+        _friendName_Text.text = friendInfo.UserId;
     }
 
     

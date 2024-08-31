@@ -29,12 +29,11 @@ public class SettingsController : MonoBehaviour
 
     private void Awake() 
     {
-        saveSystem = SaveSystem.Instance;
         DontDestroyOnLoad(gameObject);
        
-        if(saveSystem.PlayerPrefsDataQuery("screenSize"))
+        if(SaveSystem.PlayerPrefsDataQuery("screenSize"))
         {
-            selectScreenSizeName = (string)saveSystem.PlayerPrefsDataLoad("screenSize","string");
+            selectScreenSizeName = (string)SaveSystem.PlayerPrefsDataLoad("screenSize","string");
             
             if(selectScreenSizeName == "FullScreen Window")
             {
@@ -42,8 +41,8 @@ public class SettingsController : MonoBehaviour
             }
             else
             {
-                screenWith = (int)saveSystem.PlayerPrefsDataLoad("screenWith","int"); 
-                screenHeight = (int)saveSystem.PlayerPrefsDataLoad("screenHeight","int"); 
+                screenWith = (int)SaveSystem.PlayerPrefsDataLoad("screenWith","int"); 
+                screenHeight = (int)SaveSystem.PlayerPrefsDataLoad("screenHeight","int"); 
                 Screen.SetResolution(screenWith,screenHeight,FullScreenMode.Windowed);
             }
         }           
@@ -76,7 +75,7 @@ public class SettingsController : MonoBehaviour
         gameObject.SetActive(menu_Panel.activeSelf);
         menu_Panel.SetActive(!menu_Panel.activeSelf);
 
-        saveSystem.PlayerPrefsDataSave("screenSize",selectScreenSizeName);
+        SaveSystem.PlayerPrefsDataSave("screenSize",selectScreenSizeName);
 
 
         if(selectScreenSizeName != "FullScreen Window")
@@ -84,8 +83,8 @@ public class SettingsController : MonoBehaviour
             int screenWith = int.Parse(screenWith_InputField.text);
             int screenHeight = int.Parse(screenHeight_InputField.text);
 
-            saveSystem.PlayerPrefsDataSave("screenWith",screenWith);
-            saveSystem.PlayerPrefsDataSave("screenHeight",screenWith);
+            SaveSystem.PlayerPrefsDataSave("screenWith",screenWith);
+            SaveSystem.PlayerPrefsDataSave("screenHeight",screenWith);
             print("Windowed");
             Screen.SetResolution(screenWith,screenHeight,FullScreenMode.Windowed);
         }

@@ -6,46 +6,101 @@ using UnityEngine;
 
 public class FriendSystem : MonoBehaviourPunCallbacks
 {
-    LoadBalancingClient loadBalancingClient;
-    private List<string> friendsList = new List<string>();
-
-    void Start()
+    private static FriendSystem instance;
+    public static FriendSystem Instance
     {
-        PhotonNetwork.AddCallbackTarget(this);
-
-        // Arkadaşları ekleme (örnek)
-        
-        if(PhotonNetwork.IsConnectedAndReady)
+        get
         {
-            PhotonNetwork.FindFriends(friendsList.ToArray());
+            if (instance == null)
+            {
+                instance = FindObjectOfType<FriendSystem>();
+            }
+            return instance;
         }
     }
-    
-    public override void OnConnectedToMaster()
+
+
+    [Header("Current Friend Objesi ile ilgili işlemler")]
+    [SerializeField] private GameObject friendPrefab;
+    [SerializeField] private GameObject friendContent;
+    private Dictionary<int,GameObject> currentFriends = new Dictionary<int,GameObject>();
+
+    private List<string> friendList = new List<string>();
+
+    private List<string> friendIconsIndex = new List<string>();
+
+
+    private void Start() 
     {
-        PhotonNetwork.FindFriends(friendsList.ToArray());
+        friendList = SaveSystem.LoadFriedns("friend");
+        ShowFriend();
+        
     }
 
-
-    public override void OnFriendListUpdate(List<FriendInfo> friendList)
+    private void Update() 
     {
-        foreach (var friend in friendList)
+          
+    }
+
+    public void AddFriend(string friendName)
+    {
+        if(!friendList.Contains(friendName))
         {
-            if (friend.IsOnline && friendsList.Contains(friend.UserId))
+            friendList.Add(friendName);
+            SaveSystem.SaveFriend(friendList);
+        }
+        else
+        {
+            print("Ekliceğiniz kişi zaten arkadaşiniz...");
+        }
+    }
+
+    public void ShowFriend()
+    {
+        foreach (string friend in friendList)
+        {
+            print("Arkadaşin : " + friend);
+        }
+    }
+
+    public IEnumerator CheckFriends()
+    {
+        while(true)
+        {
+            if(friendList.Count > 0)
             {
-                Debug.Log(friend.UserId + " is online and in room: " + friend.Room);
+                if(!PhotonNetwork.InRoom && PhotonNetwork.IsConnectedAndReady)
+                {
+                    PhotonNetwork.FindFriends(friendList.ToArray());
+                }
             }
             else
             {
-                Debug.Log(friend.UserId + " is offline.");
+                print("Arkadaş listeniz boş");
             }
+
+            yield return new WaitForSeconds(1);
+
         }
     }
 
-    void OnDestroy()
+    public void CreatCurrentFriend(List<FriendInfo> friendInfo)
     {
-        PhotonNetwork.RemoveCallbackTarget(this);
-    }
+        for (int i = 0; i < friendInfo.Count; i++)
+        {
+            if(!currentFriends.ContainsKey(i))
+            {
+                GameObject currentFriend = Instantiate(friendPrefab,friendContent.transform);
+                currentFriend.transform.localScale = Vector3.one;
+                currentFriends.Add(i, currentFriend);
+            }
+            else
+            {
+                currentFriends[i].GetComponent<FriendListControl>().FriendObjectInitialize(friendInfo[i]);
+            }
 
+
+        }
+    }
 
 }

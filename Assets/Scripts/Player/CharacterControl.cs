@@ -22,11 +22,6 @@ public class CharacterControl : InputManager
         rb = GetComponent<Rigidbody>();
     }
     
-    
-
-    void Update()
-    {
-    }
 
     private void FixedUpdate()
     {
@@ -37,10 +32,15 @@ public class CharacterControl : InputManager
     {
         if (forward)
         {
-            rb.AddForce(Vector3.forward * 7);
+            rb.AddForce(Vector3.forward * 9,ForceMode.Force);
             playerStop = true;
         }
 
+        if(runing)
+        {
+            rb.AddForce(Vector3.forward * 14,ForceMode.Force);
+            playerStop = true;
+        }
 
         if (!forward && !backward && !left && !right && playerStop)
         {
@@ -55,7 +55,7 @@ public class CharacterControl : InputManager
 
         if (backward)
         {
-            rb.AddForce(Vector3.back * 7);
+            rb.AddForce(Vector3.back * 9,ForceMode.Force);
             playerStop = true;
 
         }
@@ -63,15 +63,14 @@ public class CharacterControl : InputManager
 
         if (left)
         {
-            rb.AddForce(Vector3.left * 7);
+            rb.AddForce(Vector3.left * 9 ,ForceMode.Force);
             playerStop = true;
-
         }
 
 
         if (right)
         {
-            rb.AddForce(Vector3.right * 7);
+            rb.AddForce(Vector3.right * 9,ForceMode.Force);
             playerStop = true;
         }
 
