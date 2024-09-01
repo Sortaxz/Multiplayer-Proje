@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
@@ -25,6 +26,9 @@ public class FriendListControl : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _friendName_Text;
     [SerializeField] private TextMeshProUGUI _friendState_Text;
     
+    private const byte FriendRequestEventCode = 1;
+    private const byte FriendRequestResponseEventCode = 2;
+    
     private void Awake() 
     {
     }
@@ -44,24 +48,20 @@ public class FriendListControl : MonoBehaviour
     }
 
 
-    public void FriendListInitialize(Player player)
+    public void FriendListInitialize(string frienNickName,int friendIconIndex)
     {
-        friendName = player.NickName;
-        friendUserId = player.UserId;
-        friendPlayer = player;
-        friendName_Text.text = player.NickName;
-        player.CustomProperties.TryGetValue("icon",out object iconIndex);
-
-        friendIcon_Image.sprite = UIMenager.Instance.PlayerIcons[(int)iconIndex].sprite;
+        friendIcon_Image.sprite = UIMenager.Instance.PlayerIcons[friendIconIndex].sprite;
+        friendName_Text.text = frienNickName;
 
     }
 
 
-    public void FriendObjectInitialize(FriendInfo friendInfo)
+    public void FriendObjectInitialize(FriendInfo friendInfo,int friendIconIndex)
     {
         _friendState_Text.text = friendInfo.IsOnline ? "Online" : "Offline";
         _friendName_Text.text = friendInfo.UserId;
+        _friendIcon_Image.sprite = UIMenager.Instance.PlayerIcons[friendIconIndex].sprite;
     }
 
-    
+   
 }

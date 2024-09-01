@@ -54,13 +54,12 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     private bool randomOdaKurdu = false;
     public bool RandomOdaKurdu { get { return randomOdaKurdu;} set { randomOdaKurdu = value;}}
 
-    LoadBalancingClient loadBalancingClient = new LoadBalancingClient();
+
+
     private void Awake()
     {
         uIMenager = UIMenager.Instance;
         PV = GetComponent<PhotonView>();
-
-       
     }
 
     
@@ -82,6 +81,8 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
         }
         
+        FriendSystem.Instance.CreatCurrentFriend();
+
         PhotonNetwork.JoinLobby();
 
         
@@ -153,9 +154,14 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
         foreach (Player player in PhotonNetwork.PlayerList)
         {
+        
             if(player.NickName != PhotonNetwork.LocalPlayer.NickName)
             {
-                FriendSystem.Instance.AddFriend(player.UserId);
+                player.CustomProperties.TryGetValue("icon",out object iconIndex);
+                
+                int friendIconIndex = (int)iconIndex;
+
+                FriendSystem.Instance.AddFriend(player.UserId,iconIndex.ToString());
             }
             
             GameObject playerListObje = PlayerListOlustur(player.ActorNumber,player.NickName,player);
@@ -200,9 +206,12 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
+
         if(newPlayer.NickName != PhotonNetwork.LocalPlayer.NickName)
         {
-            FriendSystem.Instance.AddFriend(newPlayer.UserId);
+            newPlayer.CustomProperties.TryGetValue("icon",out object iconIndex);
+            int friendIconIndex = (int)iconIndex;
+            FriendSystem.Instance.AddFriend(newPlayer.UserId,iconIndex.ToString());
         }
 
         GameObject playerListObje =  PlayerListOlustur(newPlayer.ActorNumber,newPlayer.NickName,newPlayer);
@@ -270,12 +279,10 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
     public override void OnFriendListUpdate(List<FriendInfo> friendList)
     {
-        foreach (FriendInfo friend in friendList)
+        if(friendList.Count > 0 )
         {
-            print(friend.UserId +friend.IsOnline);
+            FriendSystem.Instance.CurrentFriendState(friendList);
         }
-
-        FriendSystem.Instance.CreatCurrentFriend(friendList);
     }
 
 
@@ -355,8 +362,6 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
             PhotonNetwork.LeaveRoom();
         }
     }    
-
-    
     
 }
 

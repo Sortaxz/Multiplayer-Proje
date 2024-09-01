@@ -60,11 +60,16 @@ public class SaveSystem : MonoBehaviour
         return PlayerPrefs.HasKey(firstDataQueryName);
     }
     
-    public static void SaveFriend(List<string> friendsList)
+    public static void SaveFriend(List<string> friendsList,List<string> friendsIconList)
     {
         string friends = string.Join(",",friendsList);
 
         PlayerPrefs.SetString("FriendsList", friends);
+
+        string friendsIcon = string.Join(",",friendsIconList);
+
+        PlayerPrefs.SetString("FriendsIconList", friendsIcon);
+        
 
         PlayerPrefs.Save();
 
@@ -73,27 +78,54 @@ public class SaveSystem : MonoBehaviour
 
     }
 
-    public static List<string> LoadFriedns(string isSave)
+    public static List<string> LoadFriedns(string isSave ="")
     {
-        if(PlayerPrefsDataQuery("FriendsList")  && isSave == "friend")
+        if(isSave == "friendsList")
         {
-            string friends = PlayerPrefs.GetString("FriendsList");
-            
-            List<string> friendsList = new List<string>(friends.Split(','));
-            
-            Debug.Log("Arkadaş listesi yüklendi.");
+            if(PlayerPrefsDataQuery("FriendsList"))
+            {
+                string friends = PlayerPrefs.GetString("FriendsList");
+                
+                List<string> friendsList = new List<string>(friends.Split(','));
+                
+                Debug.Log("Arkadaş listesi yüklendi.");
 
-            return friendsList;
+                return friendsList;
+            }
+            else 
+            {
+                List<string> friendsList = new List<string>();
+                
+                print("Kaydedilmiş arkadaş listesi bulunamadi");
+                return friendsList;
+            }
         }
         else
         {
-            List<string> friendsList = new List<string>();
-            
-            print("Kaydedilmiş arkadaş listesi bulunamadi");
-            return friendsList;
+            if(PlayerPrefsDataQuery("FriendsIconList"))
+            {
+                string friendsIcon = PlayerPrefs.GetString("FriendsIconList");
+                
+                List<string> friendsIconList = new List<string>(friendsIcon.Split(','));
+                
+                Debug.Log("Arkadaş listesi yüklendi.");
+
+                return friendsIconList;
+            }
+            else 
+            {
+                List<string> friendsIconList = new List<string>();
+                
+                print("Kaydedilmiş arkadaş listesi bulunamadi");
+                return friendsIconList;
+            }
         }
+        
+        
+        
     }
 
+    
 
     public GameMode GetRoomMod()
     {

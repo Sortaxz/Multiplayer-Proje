@@ -88,6 +88,9 @@ public class UIMenager : MonoBehaviour
     [SerializeField] private GameObject friendListPrefab;
     public GameObject  FriendListPrefab { get { return friendListPrefab;}}
     
+    private Dictionary<string,GameObject> friendList = new Dictionary<string, GameObject>();
+
+
     [Space]
     [Space]
 
@@ -151,7 +154,6 @@ public class UIMenager : MonoBehaviour
     [Space]
 
     
-
     public TextMeshProUGUI friendPlayerNickName_Text;
     
     private PhotonView pv;
@@ -212,8 +214,7 @@ public class UIMenager : MonoBehaviour
     {
         playerName = kullaniciAdi_InputField.text;
         
-        kullaniciAdi_InputField.text = "";
-
+        
         if(playerName != (string)SaveSystem.PlayerPrefsDataLoad("playerName","string"))
         {
             PlayerPrefs.DeleteAll();
@@ -225,9 +226,10 @@ public class UIMenager : MonoBehaviour
         else
         {
             warning_Panel.SetActive(true);
+            kullaniciAdi_InputField.text = "";
+            kullaniciAdi_InputField.Select();
 
         }
-
     }
 
 
@@ -237,12 +239,10 @@ public class UIMenager : MonoBehaviour
         {
             playerName = kullaniciAdi_InputField.text;
 
-            kullaniciAdi_InputField.text = "";
             
             if(playerName != (string)SaveSystem.PlayerPrefsDataLoad("playerName","string"))
             {
                 PlayerPrefs.DeleteAll();
-                
 
                 SaveSystem.PlayerPrefsDataSave("playerName",playerName);
                 SetActiveUIObject(playerProps_Panel.name);
@@ -250,6 +250,9 @@ public class UIMenager : MonoBehaviour
             else
             {
                 warning_Panel.SetActive(true);
+                kullaniciAdi_InputField.text = "";
+                kullaniciAdi_InputField.Select();
+
             }
 
         
@@ -259,6 +262,7 @@ public class UIMenager : MonoBehaviour
 
     public void BaslatButton_Method()
     {
+        FriendSystem.Instance.LoadFriendDate();
 
         ControlPlayerPropsActive();
         
@@ -286,8 +290,10 @@ public class UIMenager : MonoBehaviour
     {
         if(SaveSystem.PlayerPrefsDataQuery("icon") && SaveSystem.PlayerPrefsDataQuery("color") && SaveSystem.PlayerPrefsDataQuery("playerName"))
         {
+            FriendSystem.Instance.LoadFriendDate();
+            
             string playerName = (string)SaveSystem.PlayerPrefsDataLoad("playerName","string");
-
+            SaveSystem.PlayerPrefsDataSave("playerName",playerName);
             SunucuYonetim.Instance.isConnected = true;
             SunucuYonetim.Instance.ConnetingServer(playerName);
 
@@ -785,7 +791,7 @@ public class UIMenager : MonoBehaviour
     {
         SetActiveUIObject(arakadasİslem_Panel.name);
         menuPlayerProfil = true;
-        
+        FriendSystem.Instance.CurrentFriendsList();
     }
 
     
@@ -793,10 +799,7 @@ public class UIMenager : MonoBehaviour
     #endregion
 
 
-    public void OdaIslemlerRefreshButton_Method()
-    {
-    }
-
+    
     public void WarningExitButton_Method()
     {
         warning_Panel.SetActive(false);
@@ -804,32 +807,23 @@ public class UIMenager : MonoBehaviour
     }
 
 
-    /*
-    public void CreateCurrentFriend()
+    public void CreateCurrentFriendList(List<string> friendList,List<string> friendIconList)
     {
-        int currentFriendsCount = SaveSystem.GetAllFriednUserIdArray().Length;
-
-        for (int i = 0; i < currentFriendsCount; i++)
+        int currentFriendCount = FriendSystem.Instance.CurrentFriends.Count;
+        for (int i = 0; i < currentFriendCount; i++)
         {
-            if(CurrentFriends.Contains(CurrentFriends[i]))
+            GameObject currentFriendListObjesi = Instantiate(friendListPrefab,friendListContent.transform);
+            currentFriendListObjesi.transform.localScale = Vector3.one;
+
+            if(i<friendList.Count && i < friendIconList.Count)
             {
-                GameObject currentFriend = Instantiate(friendPrefab);
-                currentFriend.transform.SetParent(friendContent.transform);
-                currentFriend.transform.localScale = Vector3.one;
-                    
-                CurrentFriends.Add(currentFriend.GetComponent<FriendListControl>());
+                string friendNickName = friendList[i];
+                int friendIconIndex = int.Parse(friendIconList[i]);
+
+                currentFriendListObjesi.GetComponent<FriendListControl>().FriendListInitialize(friendNickName,friendIconIndex);
             }
 
         }
     }
-
-    public void CurrentFriendInitialize(List<FriendInfo> friendInfo)
-    {
-        for (int i = 0; i < friendInfo.Count; i++)
-        {
-            CurrentFriends[i].FriendObjectInitialize(friendInfo[i]);
-        }
-    }
-    */
 
 }
