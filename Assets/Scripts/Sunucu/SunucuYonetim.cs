@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using System.Linq;
 
 public class SunucuYonetim : MonoBehaviourPunCallbacks
 {
@@ -91,8 +89,6 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         
-        
-        
     }
 
     public void CreateRoom(GameMode mod,string odaAdi)
@@ -161,7 +157,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
                 
                 int friendIconIndex = (int)iconIndex;
 
-                FriendSystem.Instance.AddFriend(player.UserId,iconIndex.ToString());
+                //FriendSystem.Instance.AddFriend(player.UserId,iconIndex.ToString());
             }
             
             GameObject playerListObje = PlayerListOlustur(player.ActorNumber,player.NickName,player);
@@ -211,7 +207,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         {
             newPlayer.CustomProperties.TryGetValue("icon",out object iconIndex);
             int friendIconIndex = (int)iconIndex;
-            FriendSystem.Instance.AddFriend(newPlayer.UserId,iconIndex.ToString());
+            //FriendSystem.Instance.AddFriend(newPlayer.UserId,iconIndex.ToString());
         }
 
         GameObject playerListObje =  PlayerListOlustur(newPlayer.ActorNumber,newPlayer.NickName,newPlayer);

@@ -6,6 +6,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class FriendListControl : MonoBehaviour
@@ -14,10 +15,9 @@ public class FriendListControl : MonoBehaviour
     [SerializeField] private Image friendIcon_Image;
     [SerializeField] private TextMeshProUGUI friendName_Text;
     [SerializeField] private Button addFriend_Button;
+    [SerializeField] private Button removeFriend_Button;
 
     private Player friendPlayer;
-    public string friendName;
-    public string friendUserId;
 
     private int friendCount;
 
@@ -26,24 +26,64 @@ public class FriendListControl : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _friendName_Text;
     [SerializeField] private TextMeshProUGUI _friendState_Text;
     
-    private const byte FriendRequestEventCode = 1;
-    private const byte FriendRequestResponseEventCode = 2;
-    
+    [Space]
+    [Space]
+
+    [Header("Friend isteği ile ilgili işlemler")]
+    [SerializeField] private TextMeshProUGUI friendRequest_Text;
+    [SerializeField] private Button friendRequesAccept_Button;
+    [SerializeField] private Button friendRequesDecline_Button;
+
+    private bool addedFriend = false;
+
     private void Awake() 
     {
-    }
-
-    void Start()
-    {
-        if(addFriend_Button != null)
+        if(gameObject.CompareTag("FriendAcceptOrReject_Panel"))
         {
-            addFriend_Button.onClick.AddListener(delegate
+            //print("Arakaşlik isteği paneli aktif");
+
+            friendRequesAccept_Button.onClick.AddListener(delegate
             {
-                Destroy(gameObject);
+                //print("Arkadaş isteğ kabul edildi artik arkadaşsiniz..");
+
+                addedFriend = true;
+
+                FriendSystem.Instance.AddFriend_Method1();
+               
+
+                if(addedFriend)
+                {
+                    friendRequesAccept_Button.gameObject.SetActive(false);
+                }
+
+                gameObject.SetActive(false);
+
+            });
+
+            friendRequesDecline_Button.onClick.AddListener(delegate
+            {
+                //print("Arkadaş isteğ kabul edilmedi");
+
+                addedFriend = false;
+
+                if(!addedFriend)
+                {
+                    friendRequesAccept_Button.gameObject.SetActive(false);
+                }
+
+                gameObject.SetActive(false);
 
             });
         }
         
+       
+
+        
+    }
+
+    void Start()
+    {
+         
         
     }
 
@@ -63,5 +103,12 @@ public class FriendListControl : MonoBehaviour
         _friendIcon_Image.sprite = UIMenager.Instance.PlayerIcons[friendIconIndex].sprite;
     }
 
+    public void FriendRequestInitialize(string friendRequest)
+    {
+        if(gameObject.activeSelf)
+        {
+            friendRequest_Text .text = friendRequest;
+        }
+    }
    
 }

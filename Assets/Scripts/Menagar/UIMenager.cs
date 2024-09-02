@@ -71,14 +71,21 @@ public class UIMenager : MonoBehaviour
 
     #endregion
 
+
+    #region  Random Oda ile ilgili İşlemler
+
     [Header("Random Oda ile ilgili İşlemler")]
     [SerializeField] private GameObject randomOda_Panel;
     public GameObject RandomOda_Panel { get { return randomOda_Panel;}}
     [SerializeField] private GameObject randomOdaUst_Panel;
     [SerializeField] private GameObject randomOdaAlt_Panel;
 
+    #endregion
+
     [Space]
     [Space]
+
+    #region  Arkadas Panel ile ilgili işlemler
 
     [Header("Arkadas Panel ile ilgili işlemler")]
 
@@ -90,9 +97,78 @@ public class UIMenager : MonoBehaviour
     
     private Dictionary<string,GameObject> friendList = new Dictionary<string, GameObject>();
 
+    #endregion
 
     [Space]
     [Space]
+
+    #region  Arkadaş Kabul veya Reddetme ile ilgili işlemler
+    [Header("Arkadaş Kabul veya Reddetme ile ilgili işlemler")]
+
+    [SerializeField] private GameObject FriendAcceptOrReject_Panel;
+
+    #endregion
+    
+    #region  Player Props Panel İşlenler
+
+    [Header("Player Props Panel İşlenleri")]
+    [SerializeField] private Image[] playerIconImageProps;
+    [SerializeField] private Image[] playerColorImageProps;
+    
+    #endregion
+
+    [Space]
+    [Space]
+
+    #region  Conneting Panel İşlenleri
+    
+    [Header("Conneting Panel İşlenleri")]
+    [SerializeField] private string[] oyunIpUclari; 
+    [SerializeField] private TextMeshProUGUI oyunIpUcu_Text;
+    [SerializeField] private TextMeshProUGUI connecting_Text;
+    
+    #endregion
+
+    [Space]
+    [Space]
+
+    #region  Maç Arama Panel İşlemler
+    
+    [Header("Maç Arama Panel İşlemler")]
+    [SerializeField] private GameObject findingMatch_Panel;
+    public GameObject FindingMatch_Panel { get { return findingMatch_Panel;}}
+    [SerializeField] private GameObject karşilaşmaKabulReddet_Panel;
+    public GameObject KarşilaşmaKabulReddet_Panel { get { return karşilaşmaKabulReddet_Panel;}}
+
+    #endregion
+
+    [Space]
+    [Space]
+    
+
+    #region  Karşilaşma Kabul veya Reddet Panel İşlemler
+
+    [Header("Karşilaşma Kabul veya Reddet Panel İşlemleri")]
+    [SerializeField] private  Button karşilaşmayiKabulEt_Button;
+    [SerializeField] private  Button karşilaşmayiReddet_Button;
+
+    #endregion
+
+    [Space]
+    [Space]
+
+    #region  Oda Kurma İşlemleri
+    
+    [Header("Oda Kurma İşlemleri")]
+    [SerializeField] private TMP_InputField odaAdi_InputField;
+    public TMP_InputField OdaAdi_InputField { get { return odaAdi_InputField;} set { odaAdi_InputField = value;}}
+    
+    #endregion
+
+    [Space]
+    [Space]
+
+    #region  Other Properties ve Variables
 
     [SerializeField] private Image[] playerIcons;
     public Image[] PlayerIcons { get { return playerIcons;}}
@@ -114,45 +190,6 @@ public class UIMenager : MonoBehaviour
     [SerializeField] private Button yeniOyuncu_Button;
 
     [SerializeField] private Button oyunuBaslatButton;
-
-    [Header("Pleyar Props Panel İşlenleri")]
-    [SerializeField] private Image[] playerIconImageProps;
-    [SerializeField] private Image[] playerColorImageProps;
-    [Space]
-    [Space]
-
-    
-    [Header("Conneting Panel İşlenleri")]
-    [SerializeField] private string[] oyunIpUclari; 
-    [SerializeField] private TextMeshProUGUI oyunIpUcu_Text;
-    [SerializeField] private TextMeshProUGUI connecting_Text;
-    
-    [Space]
-    [Space]
-
-
-    [Header("Maç Arama Panel İşlemler")]
-    [SerializeField] private GameObject findingMatch_Panel;
-    public GameObject FindingMatch_Panel { get { return findingMatch_Panel;}}
-    [SerializeField] private GameObject karşilaşmaKabulReddet_Panel;
-    public GameObject KarşilaşmaKabulReddet_Panel { get { return karşilaşmaKabulReddet_Panel;}}
-    [Space]
-    [Space]
-
-    [Header("Karşilaşma Kabul veya Reddet Panel İşlemleri")]
-    [SerializeField] private  Button karşilaşmayiKabulEt_Button;
-    [SerializeField] private  Button karşilaşmayiReddet_Button;
-
-    [Space]
-    [Space]
-
-    [Header("Oda Kurma İşlemleri")]
-    [SerializeField] private TMP_InputField odaAdi_InputField;
-    public TMP_InputField OdaAdi_InputField { get { return odaAdi_InputField;} set { odaAdi_InputField = value;}}
-    
-    [Space]
-    [Space]
-
     
     public TextMeshProUGUI friendPlayerNickName_Text;
     
@@ -184,6 +221,10 @@ public class UIMenager : MonoBehaviour
     private bool findCheatController = false;
 
     public bool odaKurdu = false;
+
+    #endregion
+
+
 
     private void Awake() 
     {
@@ -806,24 +847,52 @@ public class UIMenager : MonoBehaviour
         kullaniciAdi_InputField.Select();
     }
 
-
-    public void CreateCurrentFriendList(List<string> friendList,List<string> friendIconList)
+    private bool isCreatFriendList = false;
+    
+    public void CreateCurrentFriendList(List<string> _friendList,List<string> friendIconList)
     {
-        int currentFriendCount = FriendSystem.Instance.CurrentFriends.Count;
-        for (int i = 0; i < currentFriendCount; i++)
+        print(_friendList.Count);
+        foreach (string item in _friendList)
         {
-            GameObject currentFriendListObjesi = Instantiate(friendListPrefab,friendListContent.transform);
-            currentFriendListObjesi.transform.localScale = Vector3.one;
-
-            if(i<friendList.Count && i < friendIconList.Count)
-            {
-                string friendNickName = friendList[i];
-                int friendIconIndex = int.Parse(friendIconList[i]);
-
-                currentFriendListObjesi.GetComponent<FriendListControl>().FriendListInitialize(friendNickName,friendIconIndex);
-            }
-
+            print("CreateCurrentFriendList " +item);
         }
-    }
+        for (int i = 0; i < _friendList.Count; i++)
+        {
+            string friendNickName = "";
+            int friendIconIndex= 0;
 
+            if(friendNickName != PhotonNetwork.LocalPlayer.UserId)
+            {
+                print("isim tanimlandi");
+                friendNickName = _friendList[i];
+                friendIconIndex = int.Parse(friendIconList[i]);
+                print("friendNickName : "+friendNickName + "friendIconIndex : " + friendIconIndex);
+                isCreatFriendList = true;
+            }
+            
+
+            if(isCreatFriendList)
+            {
+                if(!friendList.ContainsKey(friendNickName) && friendNickName != PhotonNetwork.LocalPlayer.UserId)
+                {
+                    print("Oluşturdu");
+                    GameObject currentFriendListObjesi = Instantiate(friendListPrefab,friendListContent.transform);
+                    currentFriendListObjesi.transform.localScale = Vector3.one;
+
+                    
+                    currentFriendListObjesi.GetComponent<FriendListControl>().FriendListInitialize(friendNickName,friendIconIndex);
+                    friendList.Add(friendNickName,currentFriendListObjesi);
+                }
+            }
+        }
+    } 
+    
+
+
+    public GameObject FriendshipAnswer(bool value)
+    {
+        FriendAcceptOrReject_Panel.SetActive(value);
+
+        return FriendAcceptOrReject_Panel;
+    }
 }

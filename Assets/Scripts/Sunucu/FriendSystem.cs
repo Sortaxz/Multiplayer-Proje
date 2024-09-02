@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 
-public class FriendSystem : MonoBehaviourPunCallbacks
+public class FriendSystem : MonoBehaviour,IOnEventCallback
 {
     private static FriendSystem instance;
     public static FriendSystem Instance
@@ -28,8 +29,19 @@ public class FriendSystem : MonoBehaviourPunCallbacks
     private List<string> friendList = new List<string>();
 
     private List<string> friendIconsIndex = new List<string>();
- 
-  
+    
+    private string senderFriendPlayer;
+
+    private void OnEnable()
+    {
+        PhotonNetwork.AddCallbackTarget(this);
+    }
+
+    private void OnDisable()
+    {
+        PhotonNetwork.RemoveCallbackTarget(this);
+    }
+
     public void LoadFriendDate()
     {
         friendList = SaveSystem.LoadFriedns("friendsList");
@@ -52,16 +64,11 @@ public class FriendSystem : MonoBehaviourPunCallbacks
         }
     }
 
-    public void AddFriendIcon()
-    {
-    }
+   
 
     public void ShowFriend()
     {
-        foreach (var item in friendList)
-        {
-            print(item);
-        }
+       
     }
 
     public IEnumerator CheckFriends()
@@ -139,6 +146,66 @@ public class FriendSystem : MonoBehaviourPunCallbacks
         UIMenager.Instance.CreateCurrentFriendList(friendList,friendIconsIndex);
     }
 
+    public void SendFriendRequest(Player friend)
+    {
+        print(friend.UserId);
+        object[] content = new object[]{PhotonNetwork.LocalPlayer.UserId,friend.UserId};
+        
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions();
+        raiseEventOptions.TargetActors = new int[]{friend.ActorNumber};
 
+        PhotonNetwork.RaiseEvent((byte)CustomEvents.FriendRequest, content,raiseEventOptions,SendOptions.SendReliable);
+        print("arkadaşlik isteği gönderildi");
 
+    }
+
+    public void OnEvent(EventData photonEvent)
+    {
+        switch (photonEvent.Code)
+        {
+            case (byte)CustomEvents.FriendRequest:
+                HandleFriendRequest(photonEvent);
+                break;
+            
+            /*case (byte)CustomEvents.RemoveFriend:
+                HandleRemoveFriend(photonEvent);
+                break;
+            */
+        }
+    }
+    
+    private void HandleFriendRequest(EventData photonEvent)
+    {
+        object[] data = (object[])photonEvent.CustomData;
+        string senderUserId = data[0].ToString();
+        string receiverUserId = data[1].ToString();
+        
+        print("receiverUserId : "+receiverUserId + "senderUserId : "+senderUserId + "eklenen oyuncu : " + PhotonNetwork.LocalPlayer.UserId);
+        
+        GameObject friendAcceptOrReject_Panel = UIMenager.Instance.FriendshipAnswer((receiverUserId == PhotonNetwork.LocalPlayer.UserId));
+        string friendRequestText = $"{senderUserId} sana arkadaşlik isteği atti arkadaş olmak ister misin ?";
+        friendAcceptOrReject_Panel.GetComponent<FriendListControl>().FriendRequestInitialize(friendRequestText);
+        
+       
+        senderFriendPlayer = senderUserId;
+
+    }
+
+    public void AddFriend_Method1()
+    {
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        {
+            print(senderFriendPlayer);
+            if(PhotonNetwork.PlayerList[i].UserId == senderFriendPlayer)
+            {
+                PhotonNetwork.PlayerList[i].CustomProperties.TryGetValue("icon",out object iconIndex);
+                
+                int friendIconIndex = (int)iconIndex;
+
+                AddFriend(PhotonNetwork.PlayerList[i].UserId,friendIconIndex.ToString());
+            
+            }
+        }
+    }
+    
 }
