@@ -169,7 +169,7 @@ public class UIMenager : MonoBehaviour
     [Space]
 
     #region  Other Properties ve Variables
-
+    [SerializeField] private Button exitImageButton;
     [SerializeField] private Image[] playerIcons;
     public Image[] PlayerIcons { get { return playerIcons;}}
 
@@ -851,11 +851,7 @@ public class UIMenager : MonoBehaviour
     
     public void CreateCurrentFriendList(List<string> _friendList,List<string> friendIconList)
     {
-        print(_friendList.Count);
-        foreach (string item in _friendList)
-        {
-            print("CreateCurrentFriendList " +item);
-        }
+       
         for (int i = 0; i < _friendList.Count; i++)
         {
             string friendNickName = "";
@@ -863,10 +859,8 @@ public class UIMenager : MonoBehaviour
 
             if(friendNickName != PhotonNetwork.LocalPlayer.UserId)
             {
-                print("isim tanimlandi");
                 friendNickName = _friendList[i];
                 friendIconIndex = int.Parse(friendIconList[i]);
-                print("friendNickName : "+friendNickName + "friendIconIndex : " + friendIconIndex);
                 isCreatFriendList = true;
             }
             
@@ -875,7 +869,6 @@ public class UIMenager : MonoBehaviour
             {
                 if(!friendList.ContainsKey(friendNickName) && friendNickName != PhotonNetwork.LocalPlayer.UserId)
                 {
-                    print("Oluşturdu");
                     GameObject currentFriendListObjesi = Instantiate(friendListPrefab,friendListContent.transform);
                     currentFriendListObjesi.transform.localScale = Vector3.one;
 
@@ -894,5 +887,17 @@ public class UIMenager : MonoBehaviour
         FriendAcceptOrReject_Panel.SetActive(value);
 
         return FriendAcceptOrReject_Panel;
+    }
+
+    public void RemoveFriendList(string removeFriendList)
+    {
+        Destroy(friendList[removeFriendList]);
+        friendList.Remove(removeFriendList);
+    }
+
+    public void ExitButton_Method()
+    {
+        SunucuYonetim.Instance.LeftRoom();
+        SetActiveUIObject(menu_Panel.name);
     }
 }

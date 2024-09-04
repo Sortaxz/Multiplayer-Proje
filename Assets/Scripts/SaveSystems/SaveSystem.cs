@@ -62,6 +62,12 @@ public class SaveSystem : MonoBehaviour
     
     public static void SaveFriend(List<string> friendsList,List<string> friendsIconList)
     {
+
+        foreach (var item in friendsList)
+        {
+            print(item);
+        }
+
         string friends = string.Join(",",friendsList);
 
         PlayerPrefs.SetString("FriendsList", friends);
@@ -88,6 +94,14 @@ public class SaveSystem : MonoBehaviour
                 
                 List<string> friendsList = new List<string>(friends.Split(','));
                 
+                for (int i = 0; i < friendsList.Count; i++)
+                {
+                    if(friendsList[i] == "")
+                    {
+                        friendsList.Remove(friendsList[i]);
+                    }
+                }
+                
                 Debug.Log("Arkadaş listesi yüklendi.");
 
                 return friendsList;
@@ -108,6 +122,14 @@ public class SaveSystem : MonoBehaviour
                 
                 List<string> friendsIconList = new List<string>(friendsIcon.Split(','));
                 
+                for (int i = 0; i < friendsIconList.Count; i++)
+                {
+                    if(friendsIconList[i] == "")
+                    {
+                        friendsIconList.Remove(friendsIconList[i]);
+                    }
+                }
+
                 Debug.Log("Arkadaş listesi yüklendi.");
 
                 return friendsIconList;

@@ -151,6 +151,9 @@ ScriptsOnlyBuild:
     fullTypeName: SettingsController
     methodName: EkranBoyutButton_Method
   - assembly: Assembly-CSharp
+    fullTypeName: FriendListControl
+    methodName: RemoveFriendButton_Method
+  - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: PlayerIconButton_Method
   - assembly: Assembly-CSharp
@@ -201,6 +204,9 @@ ScriptsOnlyBuild:
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: DerecesizMode_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: ExitButton_Method
   - assembly: Assembly-CSharp
     fullTypeName: FindingMatchControl
     methodName: CancelMatchFindingButton_Method
@@ -327,6 +333,9 @@ ScriptsOnlyBuild:
   - assembly: Assembly-CSharp
     fullTypeName: CheatController
     methodName: Send_Message
+  - assembly: Assembly-CSharp
+    fullTypeName: FriendListControl
+    methodName: RemoveFriendButton_Method
   sceneClasses:
     Assets/Scenes/GameScene.unity:
     - Class: 1
@@ -1753,7 +1762,7 @@ ScriptsOnlyBuild:
     className: UnityOnTriggerStay2DMessageListener
   - hash:
       serializedVersion: 2
-      Hash: 72c07d918a65466bb5dabb8b89d4e0dd
+      Hash: fdfc52165739a95a1e4c3d9d8d862487
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: UIMenager
