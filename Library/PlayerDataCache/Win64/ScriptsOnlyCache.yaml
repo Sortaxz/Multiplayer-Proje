@@ -55,8 +55,10 @@ ScriptsOnlyBuild:
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -206,7 +208,7 @@ ScriptsOnlyBuild:
     methodName: DerecesizMode_Method
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
-    methodName: ExitButton_Method
+    methodName: ExitIconButton_Method
   - assembly: Assembly-CSharp
     fullTypeName: FindingMatchControl
     methodName: CancelMatchFindingButton_Method
@@ -249,6 +251,9 @@ ScriptsOnlyBuild:
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: KayitliOyuncuButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: UIMenager
+    methodName: MenuExitButton_Method
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: OdaKurmaButton_Method
@@ -2358,4 +2363,4 @@ ScriptsOnlyBuild:
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
   - Assets/Scenes/GameScene.unity
-  playerPath: C:/Users/SORTAXZ/Desktop/MultiPlayer-Proje/FPS-Multiplayer-Projem.exe
+  playerPath: C:/Users/SORTAXZ/Desktop/Multiplayer-Projem/FPS-Multiplayer-Projem.exe

@@ -461,6 +461,11 @@ public class UIMenager : MonoBehaviour
         SetActiveUIObject(settings_Panel.name);
     }
 
+    public void MenuExitButton_Method()
+    {
+        Application.Quit();
+    }
+
     #endregion
 
     public void PlayerPropSaveButton_Method()
@@ -895,7 +900,7 @@ public class UIMenager : MonoBehaviour
         friendList.Remove(removeFriendList);
     }
 
-    public void ExitButton_Method()
+    public void ExitIconButton_Method()
     {
         SunucuYonetim.Instance.LeftRoom();
         SetActiveUIObject(menu_Panel.name);
