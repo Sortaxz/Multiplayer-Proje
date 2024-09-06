@@ -22,17 +22,17 @@ public class PlayerListControl : MonoBehaviour
         {
             addFriend_Button.onClick.AddListener(()=>
             {   
-                print(addedFriend.UserId);
                 addedFriend.CustomProperties.TryGetValue("icon",out object _friendIconIndex);
                 
                 string friendUserId = addedFriend.UserId;
                 int friendIconIndex = (int)_friendIconIndex;
-                
 
-                FriendSystem.Instance.AddFriend(addedFriend.UserId, friendIconIndex.ToString());
+
+                //FriendSystem.Instance.AddFriend(addedFriend.UserId, friendIconIndex.ToString());
+
                 FriendSystem.Instance.SendFriendRequest(addedFriend);
                 
-                addFriend_Button.gameObject.SetActive(false);
+                //addFriend_Button.gameObject.SetActive(false);
             });
         }
         else
@@ -56,5 +56,6 @@ public class PlayerListControl : MonoBehaviour
     {
         addFriend_Button.gameObject.SetActive(false);
     }
+    
    
 }

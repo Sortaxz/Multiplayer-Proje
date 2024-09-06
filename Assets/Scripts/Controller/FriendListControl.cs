@@ -35,6 +35,8 @@ public class FriendListControl : MonoBehaviour
     [SerializeField] private Button friendRequesDecline_Button;
 
     private bool addedFriend = false;
+    
+
     private int friendIconIndex = -1;
 
     private void Awake() 
@@ -49,13 +51,9 @@ public class FriendListControl : MonoBehaviour
 
                 addedFriend = true;
 
-                FriendSystem.Instance.AddFriend_Method1();
+                FriendSystem.Instance.AddFriend_Method();
                
 
-                if(addedFriend)
-                {
-                    friendRequesAccept_Button.gameObject.SetActive(false);
-                }
 
                 gameObject.SetActive(false);
 
@@ -64,13 +62,7 @@ public class FriendListControl : MonoBehaviour
             friendRequesDecline_Button.onClick.AddListener(delegate
             {
                 //print("Arkadaş isteğ kabul edilmedi");
-
-                addedFriend = false;
-
-                if(!addedFriend)
-                {
-                    friendRequesAccept_Button.gameObject.SetActive(false);
-                }
+                
 
                 gameObject.SetActive(false);
 
@@ -79,12 +71,6 @@ public class FriendListControl : MonoBehaviour
         
        
 
-        
-    }
-
-    void Start()
-    {
-         
         
     }
 
@@ -118,4 +104,7 @@ public class FriendListControl : MonoBehaviour
         FriendSystem.Instance.UnFriend(friendName_Text.text,friendIconIndex.ToString());
         UIMenager.Instance.RemoveFriendList(friendName_Text.text);
     }
+
+
+    
 }

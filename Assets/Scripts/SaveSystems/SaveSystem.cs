@@ -62,12 +62,6 @@ public class SaveSystem : MonoBehaviour
     
     public static void SaveFriend(List<string> friendsList,List<string> friendsIconList)
     {
-
-        foreach (var item in friendsList)
-        {
-            print(item);
-        }
-
         string friends = string.Join(",",friendsList);
 
         PlayerPrefs.SetString("FriendsList", friends);
@@ -102,7 +96,7 @@ public class SaveSystem : MonoBehaviour
                     }
                 }
                 
-                Debug.Log("Arkadaş listesi yüklendi.");
+                //Debug.Log("Arkadaş listesi yüklendi.");
 
                 return friendsList;
             }
@@ -110,7 +104,7 @@ public class SaveSystem : MonoBehaviour
             {
                 List<string> friendsList = new List<string>();
                 
-                print("Kaydedilmiş arkadaş listesi bulunamadi");
+                //print("Kaydedilmiş arkadaş listesi bulunamadi");
                 return friendsList;
             }
         }
@@ -130,7 +124,7 @@ public class SaveSystem : MonoBehaviour
                     }
                 }
 
-                Debug.Log("Arkadaş listesi yüklendi.");
+                //Debug.Log("Arkadaş listesi yüklendi.");
 
                 return friendsIconList;
             }
@@ -138,7 +132,7 @@ public class SaveSystem : MonoBehaviour
             {
                 List<string> friendsIconList = new List<string>();
                 
-                print("Kaydedilmiş arkadaş listesi bulunamadi");
+                //print("Kaydedilmiş arkadaş listesi bulunamadi");
                 return friendsIconList;
             }
         }
