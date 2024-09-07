@@ -1,18 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
     void Start()
     {
-        
+        CharacterSpawn();
     }
 
-    // Update is called once per frame
     void Update()
     {
         
     }
+
+    private void CharacterSpawn()
+    {
+        PhotonNetwork.Instantiate("Player",Vector3.zero,Quaternion.identity,0,null);
+    }
+
 }

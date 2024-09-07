@@ -60,7 +60,7 @@ public class SaveSystem : MonoBehaviour
         return PlayerPrefs.HasKey(firstDataQueryName);
     }
     
-    public static void SaveFriend(List<string> friendsList,List<string> friendsIconList)
+    public static void SaveFriend(List<string> friendsList,List<string> friendsIconList,List<string> currentFriendNumber)
     {
         string friends = string.Join(",",friendsList);
 
@@ -69,7 +69,10 @@ public class SaveSystem : MonoBehaviour
         string friendsIcon = string.Join(",",friendsIconList);
 
         PlayerPrefs.SetString("FriendsIconList", friendsIcon);
-        
+
+        string friendNumber = string.Join(",",currentFriendNumber);
+
+        PlayerPrefs.SetString("FriendActorNumber",friendNumber);       
 
         PlayerPrefs.Save();
 
@@ -78,7 +81,7 @@ public class SaveSystem : MonoBehaviour
 
     }
 
-    public static List<string> LoadFriedns(string isSave ="")
+    public static List<string> LoadFriedns(string isSave ="" )
     {
         if(isSave == "friendsList")
         {
@@ -108,7 +111,7 @@ public class SaveSystem : MonoBehaviour
                 return friendsList;
             }
         }
-        else
+        else if(isSave == "friendsIconList")
         {
             if(PlayerPrefsDataQuery("FriendsIconList"))
             {
@@ -136,7 +139,29 @@ public class SaveSystem : MonoBehaviour
                 return friendsIconList;
             }
         }
-        
+        else
+        {
+            if(PlayerPrefsDataQuery("FriendActorNumber"))
+            {
+                string friendsActorNumber = PlayerPrefs.GetString("FriendActorNumber");
+
+                List<string> _friendsActorNumber = new List<string>(friendsActorNumber.Split(','));
+
+                for (int i = 0; i < _friendsActorNumber.Count; i++)
+                {
+                    if(_friendsActorNumber[i] == "")
+                    {
+                        _friendsActorNumber.Remove(_friendsActorNumber[i]);
+                    }
+                }
+                return _friendsActorNumber;
+            }
+            else
+            {
+
+                return new List<string>();
+            }
+        }
         
         
     }

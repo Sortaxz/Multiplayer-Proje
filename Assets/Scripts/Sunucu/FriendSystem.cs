@@ -30,7 +30,7 @@ public class FriendSystem : MonoBehaviour,IOnEventCallback
     public Dictionary<string,GameObject> CurrentFriends { get { return currentFriends; } }
     private List<string> friendList = new List<string>();
     public List<string> FriendList { get { return friendList; } }
-
+    private List<string> currentFriendNumber = new List<string>();
     private List<string> friendIconsIndex = new List<string>();
     private List<Player> friends= new List<Player>();
     public List<Player> Friends { get { return friends;} set { friends = value; } }
@@ -47,12 +47,9 @@ public class FriendSystem : MonoBehaviour,IOnEventCallback
     {
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+            for (int i = 0; i < currentFriendNumber.Count; i++)
             {
-                if(PhotonNetwork.PlayerList[i].CustomProperties.TryGetValue("friendAccept",out object friendAccept))
-                {
-                    print("player nickname : "+PhotonNetwork.PlayerList[i].UserId +"friendAccept : "+friendAccept);
-                }
+                print($"{i} : "+currentFriendNumber[i]);
             }
         }    
     }
@@ -70,20 +67,21 @@ public class FriendSystem : MonoBehaviour,IOnEventCallback
     public void LoadFriendDate()
     {
         friendList = SaveSystem.LoadFriedns("friendsList");
-        friendIconsIndex = SaveSystem.LoadFriedns();
-        
+        friendIconsIndex = SaveSystem.LoadFriedns("friendsIconList");
+        currentFriendNumber = SaveSystem.LoadFriedns();
     }
 
 
-    public void AddFriend(string friendName,string friendIconIndex)
+    public void AddFriend(string friendName,string friendIconIndex,int friendActorNumber)
     {
         if(!friendList.Contains(friendName))
         {
             friendList.Add(friendName);
             friendIconsIndex.Add(friendIconIndex);
 
+            currentFriendNumber.Add(friendActorNumber.ToString());
            
-            SaveSystem.SaveFriend(friendList,friendIconsIndex);
+            SaveSystem.SaveFriend(friendList,friendIconsIndex,currentFriendNumber);
         }
         else
         {
@@ -189,6 +187,7 @@ public class FriendSystem : MonoBehaviour,IOnEventCallback
             case (byte)CustomEvents.FriendAccept:
                 HandleAcceptFriend(photonEvent);
                 break;
+            
         }
     }
     
@@ -227,7 +226,7 @@ public class FriendSystem : MonoBehaviour,IOnEventCallback
                 
                 int friendIconIndex = (int)iconIndex;
 
-                AddFriend(PhotonNetwork.PlayerList[i].UserId,friendIconIndex.ToString());
+                AddFriend(senderPlayer.UserId,friendIconIndex.ToString(),senderPlayer.ActorNumber);
 
 
                 SunucuYonetim.Instance.PlayerList[senderFriendPlayer].GetComponent<PlayerListControl>().CloseAddFrienButtonActive();
@@ -247,8 +246,11 @@ public class FriendSystem : MonoBehaviour,IOnEventCallback
         string receiverUserId = data[0].ToString();
         string senderUserId = data[1].ToString();
         string reciverUserIconIndex = data[2].ToString();
+        
+        int receiverPlayerActorNumber = (int)data[3];
 
-        AddFriend(receiverUserId,reciverUserIconIndex);
+
+        AddFriend(receiverUserId,reciverUserIconIndex,receiverPlayerActorNumber);
 
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
@@ -262,10 +264,10 @@ public class FriendSystem : MonoBehaviour,IOnEventCallback
     private void Arkadaşlik_Method(Player senderPlayer,Player receiverPlayer)
     {
         receiverPlayer.CustomProperties.TryGetValue("icon",out object reciverIconIndex);
-        object[] content = new object[]{receiverPlayer.UserId,senderPlayer.UserId,reciverIconIndex};
+        object[] content = new object[]{receiverPlayer.UserId,senderPlayer.UserId,reciverIconIndex,receiverPlayer.ActorNumber};
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions();
         raiseEventOptions.TargetActors = new int[]{senderPlayer.ActorNumber};
-
+        
         PhotonNetwork.RaiseEvent((byte)CustomEvents.FriendAccept, content,raiseEventOptions,SendOptions.SendReliable);
     }
     
@@ -276,20 +278,24 @@ public class FriendSystem : MonoBehaviour,IOnEventCallback
 
         
     }
+    
 
     private void RemoveFriend(string unfriendNickName, string unfriendIconIndex)
     {
+
         friendList.Remove(unfriendNickName);
         friendIconsIndex.Remove(unfriendIconIndex);
-
-    
 
         Destroy(currentFriends[unfriendNickName]);
         currentFriends.Remove(unfriendNickName);
 
-        SaveSystem.SaveFriend(friendList, friendIconsIndex);
+        SaveSystem.SaveFriend(friendList, friendIconsIndex, currentFriendNumber);
+
+
+
     }
 
+    
     
     
 

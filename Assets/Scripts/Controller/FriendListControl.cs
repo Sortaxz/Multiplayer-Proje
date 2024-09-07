@@ -1,12 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using ExitGames.Client.Photon;
-using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class FriendListControl : MonoBehaviour
@@ -17,9 +14,6 @@ public class FriendListControl : MonoBehaviour
     [SerializeField] private Button addFriend_Button;
     [SerializeField] private Button removeFriend_Button;
 
-    private Player friendPlayer;
-
-    private int friendCount;
 
     [Header("Friend objesi ile ilgili işlemler")]
     [SerializeField] private Image _friendIcon_Image;
@@ -100,7 +94,6 @@ public class FriendListControl : MonoBehaviour
     
     public void RemoveFriendButton_Method()
     {
-        print("Arkadaşliktan çikartildi");
         FriendSystem.Instance.UnFriend(friendName_Text.text,friendIconIndex.ToString());
         UIMenager.Instance.RemoveFriendList(friendName_Text.text);
     }

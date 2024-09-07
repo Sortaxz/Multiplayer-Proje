@@ -2081,6 +2081,9 @@ GameObject:
   - component: {fileID: 1835347338095085955}
   - component: {fileID: 4869947115694277167}
   - component: {fileID: 6625527033403511447}
+  - component: {fileID: 2122869864031343028}
+  - component: {fileID: 3260852007338377627}
+  - component: {fileID: 8337053524298288049}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -2189,8 +2192,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e96fdd8ca4600947a3394f16dc5a01c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gunPrefab: {fileID: 0}
-  playerRightHand: {fileID: 0}
+  characterCamera: {fileID: 3593689395343090727}
+  mouseSensitivity: 3
+  sprintSpeed: 6
+  walkSpeed: 3
+  jumpForce: 5
+  smothTime: 0.15
 --- !u!114 &6625527033403511447
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2203,6 +2210,82 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36c2055be2405604899a396cf4b6570d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2122869864031343028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8346492503406635046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 3260852007338377627}
+  - {fileID: 8337053524298288049}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &3260852007338377627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8346492503406635046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 0
+  m_TeleportEnabled: 0
+  m_TeleportIfDistanceGreaterThan: 3
+--- !u!114 &8337053524298288049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8346492503406635046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 2
+    Name: isWalking
+  - Type: 4
+    SynchronizeType: 2
+    Name: isRunning
+  - Type: 4
+    SynchronizeType: 2
+    Name: isRightWalking
+  - Type: 4
+    SynchronizeType: 2
+    Name: isLeftWalking
+  - Type: 4
+    SynchronizeType: 2
+    Name: isWalkingBack
+  - Type: 4
+    SynchronizeType: 2
+    Name: isJumping
+  m_SynchronizeLayers:
+  - SynchronizeType: 2
+    LayerIndex: 0
 --- !u!1 &8388301332429865515
 GameObject:
   m_ObjectHideFlags: 0

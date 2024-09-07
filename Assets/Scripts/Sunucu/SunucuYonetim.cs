@@ -348,5 +348,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     {
         PV.RPC("Method2",RpcTarget.AllViaServer,null);
     }
+
+   
 }
 
