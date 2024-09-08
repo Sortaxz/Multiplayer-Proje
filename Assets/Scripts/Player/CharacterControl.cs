@@ -18,11 +18,20 @@ public class CharacterControl : InputManager
     private float verticalLookRotation;
 
     public static bool IsPlayerJump { get { return isPlayerJump;} set { isPlayerJump = value; } }
+
+    private string playerNickName;
+    public string PlayerNickName { get { return playerNickName;}}
+
+    private int playerActorNumber;
+    public  int PlayerActorNumber { get { return playerActorNumber;}}
     private void Awake() 
     {
         pw = GetComponent<PhotonView>();
         rb = GetComponent<Rigidbody>();
 
+        playerNickName = pw.Owner.NickName;
+        playerActorNumber = pw.Owner.ActorNumber;
+        
         if(!pw.IsMine)
         {
             Destroy(characterCamera.gameObject);

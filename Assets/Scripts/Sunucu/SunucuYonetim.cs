@@ -110,7 +110,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
             RoomOptions roomOptions = new RoomOptions()
             {
-                MaxPlayers = 3,
+                MaxPlayers = 2,
                 CustomRoomProperties = roomProps,
                 CustomRoomPropertiesForLobby = roomPropsString,
                 PublishUserId = true
@@ -134,7 +134,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
             {
                 {"gameMode",gameMode}
             };
-            PhotonNetwork.JoinRandomRoom(roomProps, 3);
+            PhotonNetwork.JoinRandomRoom(roomProps, 2);
         }
     }
 
@@ -176,7 +176,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
             };
             RoomOptions roomOptions = new RoomOptions()
             {
-                MaxPlayers = 3,
+                MaxPlayers = 2,
                 CustomRoomProperties = roomProps,
                 CustomRoomPropertiesForLobby = roomPropStrings,
                 PublishUserId = true

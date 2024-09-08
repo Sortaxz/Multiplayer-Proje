@@ -5,19 +5,52 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField]private CharacterControl[] characterOfPlayers;
+    [SerializeField]private List<CharacterControl> newCharacterOfPlayers = new List<CharacterControl>();
+    private bool findCharacterOfPlayers = false;
     void Start()
     {
-        CharacterSpawn();
+        StartCoroutine(FindCharacter());
     }
 
     void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.F))
+        {
+            
+            foreach (var item in characterOfPlayers)
+            {
+                print(item.PlayerNickName+"-"+item.PlayerActorNumber);
+            }
+        }
     }
 
-    private void CharacterSpawn()
+    private IEnumerator FindCharacter()
     {
-        PhotonNetwork.Instantiate("Player",Vector3.zero,Quaternion.identity,0,null);
+        while(true && !findCharacterOfPlayers)
+        {
+            if(characterOfPlayers.Length != PhotonNetwork.CurrentRoom.MaxPlayers)
+            {
+                characterOfPlayers = FindObjectsOfType<CharacterControl>();
+
+            }
+            else
+            {
+                findCharacterOfPlayers = true;
+            }
+
+            yield return new WaitForSeconds(.1f);
+        
+        }
+        if(findCharacterOfPlayers)
+        {
+            for (int i = 0; i < characterOfPlayers.Length; i++)
+            {
+                int playerIndex = characterOfPlayers[i].PlayerActorNumber;
+                characterOfPlayers[playerIndex-1] = characterOfPlayers[i];
+            }
+        }
+        
     }
 
 }
