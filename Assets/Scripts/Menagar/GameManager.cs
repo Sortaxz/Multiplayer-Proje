@@ -1,56 +1,137 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
+using Photon.Realtime;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviourPunCallbacks
 {
     [SerializeField]private CharacterControl[] characterOfPlayers;
-    [SerializeField]private List<CharacterControl> newCharacterOfPlayers = new List<CharacterControl>();
+    [SerializeField] private GameObject loadingScren;
+    [SerializeField] private Text infoText;
     private bool findCharacterOfPlayers = false;
+
+    public override void OnEnable()
+    {
+        CountdownTimer.OnCountdownTimerHasExpired += OnCountDownTimerIsExpired;
+        base.OnEnable();
+    }
+
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        CountdownTimer.OnCountdownTimerHasExpired -= OnCountDownTimerIsExpired;
+    }
+
+    private void Awake() 
+    {
+        ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable()
+        {
+            {"PlayerLoadedLevel",true}
+        };
+        PhotonNetwork.LocalPlayer.SetCustomProperties(props);    
+    }
+    
     void Start()
     {
+        
+
         StartCoroutine(FindCharacter());
     }
 
-    void Update()
+    #region  Pun Callbacks
+
+    public override void OnDisconnected(DisconnectCause cause)
     {
-        if(Input.GetKeyDown(KeyCode.F))
+    }
+
+    public override void OnLeftRoom()
+    {
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+    }
+
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
+    {
+        if(!PhotonNetwork.IsMasterClient)
         {
-            
-            foreach (var item in characterOfPlayers)
+            return;
+        }
+
+        bool StartTimeIsSet  = CountdownTimer.TryGetStartTime(out int startTimeStamp);
+
+        if(changedProps.ContainsKey("PlayerLoadedLevel"))
+        {
+            if(CheckAllPlayerLoadedLevel())
             {
-                print(item.PlayerNickName+"-"+item.PlayerActorNumber);
+                if(!StartTimeIsSet)
+                {
+                    CountdownTimer.SetStartTime();
+                }
+            }
+            else
+            {
+
+                infoText.text = "Diğer oyuncular bekleniyor...";
             }
         }
     }
 
+    #endregion
+
+
     private IEnumerator FindCharacter()
     {
-        while(true && !findCharacterOfPlayers)
+        yield return new WaitForSeconds(4);
+        CharacterControl[] newCharacterOfPlayers = FindObjectsOfType<CharacterControl>();
+        characterOfPlayers = new CharacterControl[newCharacterOfPlayers.Length];
+        for (int i = 0; i < newCharacterOfPlayers.Length; i++)
         {
-            if(characterOfPlayers.Length != PhotonNetwork.CurrentRoom.MaxPlayers)
+            if(i == newCharacterOfPlayers[i].PlayerActorNumber-1)
             {
-                characterOfPlayers = FindObjectsOfType<CharacterControl>();
-
+                characterOfPlayers[i] = newCharacterOfPlayers[i];
             }
             else
             {
-                findCharacterOfPlayers = true;
+                characterOfPlayers[newCharacterOfPlayers[i].PlayerActorNumber-1] = newCharacterOfPlayers[i];
             }
+        }
+        
+    }
 
-            yield return new WaitForSeconds(.1f);
-        
-        }
-        if(findCharacterOfPlayers)
+    private void StartGame()
+    {
+        SpawnManager.Instance.CharacterSpawn();
+    }
+
+    private bool CheckAllPlayerLoadedLevel()
+    {
+        foreach (Player player in PhotonNetwork.PlayerList)
         {
-            for (int i = 0; i < characterOfPlayers.Length; i++)
+            if(player.CustomProperties.TryGetValue("PlayerLoadedLevel",out object playerLoadedLevel))
             {
-                int playerIndex = characterOfPlayers[i].PlayerActorNumber;
-                characterOfPlayers[playerIndex-1] = characterOfPlayers[i];
+                if((bool)playerLoadedLevel)
+                {
+                    continue;
+                }
+
+                return false;
             }
         }
-        
+
+        return true;
+ 
+     }
+    
+    private void OnCountDownTimerIsExpired()
+    {
+        loadingScren.gameObject.SetActive(false);
+        StartGame();
     }
 
 }

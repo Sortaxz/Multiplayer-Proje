@@ -329,6 +329,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     private void IntroScene(int sceneIndex)
     {
         PhotonNetwork.LoadLevel(1);
+        StopAllCoroutines();
     }
 
 

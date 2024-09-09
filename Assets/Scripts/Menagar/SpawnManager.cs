@@ -5,13 +5,29 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
+    private static SpawnManager instance;
+    public static SpawnManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<SpawnManager>();
+            }
+            return instance;
+        }
+    }
+    [SerializeField] private Transform spawnPoints;
     private void Awake() 
     {
-        CharacterSpawn();
+        //CharacterSpawn();
     }
 
-    private void CharacterSpawn()
+    public void CharacterSpawn()
     {
-        PhotonNetwork.Instantiate("Player",Vector3.zero,Quaternion.identity,0,null);
+        float x = Random.Range(-35f,35f);
+        float y = 1;
+        float z = Random.Range(-36,36);
+        GameObject spanwCharacter = PhotonNetwork.Instantiate("Player", new Vector3(x,y,z),Quaternion.identity,0,null);
     }
 }
