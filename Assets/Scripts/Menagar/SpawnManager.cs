@@ -23,11 +23,12 @@ public class SpawnManager : MonoBehaviour
         //CharacterSpawn();
     }
 
-    public void CharacterSpawn()
+    public GameObject CharacterSpawn(PhotonView PV)
     {
         float x = Random.Range(-35f,35f);
         float y = 1;
         float z = Random.Range(-36,36);
-        GameObject spanwCharacter = PhotonNetwork.Instantiate("Player", new Vector3(x,y,z),Quaternion.identity,0,null);
+        GameObject spanwCharacter = PhotonNetwork.Instantiate("Player", new Vector3(x,y,z),Quaternion.identity,0,new object[]{PV.ViewID});
+        return spanwCharacter;
     }
 }

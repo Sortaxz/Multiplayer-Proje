@@ -4,6 +4,8 @@ ScriptsOnlyBuild:
     - CharacterAnimation
     - CharacterControl
     - FriendListControl
+    - GunInfo
+    - SingleShotgun
     Assembly-CSharp.dll:
     - CheatController
     - FindingMatchControl
@@ -13,6 +15,8 @@ ScriptsOnlyBuild:
     - HandleControl
     - PlayerListControl
     - PlayerMessageController
+    - PlayerPropImageControl
+    - PlayerScriptableObject
     - SettingsController
     - SpawnManager
     - SunucuYonetim
@@ -52,6 +56,9 @@ ScriptsOnlyBuild:
     - TMPro.TMP_Dropdown
     - TMPro.TMP_FontAsset
     - TMPro.TMP_InputField
+    - TMPro.TMP_Settings
+    - TMPro.TMP_SpriteAsset
+    - TMPro.TMP_StyleSheet
     - TMPro.TextMeshProUGUI
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
@@ -67,6 +74,8 @@ ScriptsOnlyBuild:
     - UnityEditor.TestTools.TestRunner.TestRun.TestJobDataHolder
     UnityEngine.UI:
     - UnityEngine.UI.Button
+    - UnityEngine.UI.CanvasScaler
+    - UnityEngine.UI.GraphicRaycaster
     - UnityEngine.UI.Image
     - UnityEngine.UI.Shadow
     - UnityEngine.UI.Slider
@@ -164,12 +173,6 @@ ScriptsOnlyBuild:
     methodName: BaslatButton_Method
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method
-  - assembly: Assembly-CSharp
-    fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method2
-  - assembly: Assembly-CSharp
-    fullTypeName: UIMenager
     methodName: WarningExitButton_Method
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
@@ -186,18 +189,6 @@ ScriptsOnlyBuild:
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: YeniOyuncuButton_Method
-  - assembly: Assembly-CSharp
-    fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method
-  - assembly: Assembly-CSharp
-    fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method2
-  - assembly: Assembly-CSharp
-    fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method
-  - assembly: Assembly-CSharp
-    fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method2
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: Method
@@ -218,37 +209,13 @@ ScriptsOnlyBuild:
     methodName: GeriDon_Button
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method
-  - assembly: Assembly-CSharp
-    fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method2
-  - assembly: Assembly-CSharp
-    fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method
-  - assembly: Assembly-CSharp
-    fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method2
-  - assembly: Assembly-CSharp
-    fullTypeName: UIMenager
     methodName: PlayerColorButton_Method
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: PlayerPropSaveButton_Method
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method
-  - assembly: Assembly-CSharp
-    fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method2
-  - assembly: Assembly-CSharp
-    fullTypeName: UIMenager
     methodName: MenuProfilButton_Method
-  - assembly: Assembly-CSharp
-    fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method
-  - assembly: Assembly-CSharp
-    fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method2
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: KayitliOyuncuButton_Method
@@ -266,52 +233,10 @@ ScriptsOnlyBuild:
     methodName: BaglanButton_Method
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method
-  - assembly: Assembly-CSharp
-    fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method2
-  - assembly: Assembly-CSharp
-    fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method
-  - assembly: Assembly-CSharp
-    fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method2
-  - assembly: Assembly-CSharp
-    fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method
-  - assembly: Assembly-CSharp
-    fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method2
-  - assembly: Assembly-CSharp
-    fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method
-  - assembly: Assembly-CSharp
-    fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method2
-  - assembly: Assembly-CSharp
-    fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method
-  - assembly: Assembly-CSharp
-    fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method2
-  - assembly: Assembly-CSharp
-    fullTypeName: UIMenager
     methodName: GeriDon_Button
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method
-  - assembly: Assembly-CSharp
-    fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method2
-  - assembly: Assembly-CSharp
-    fullTypeName: UIMenager
     methodName: SetttingsButton_Method
-  - assembly: Assembly-CSharp
-    fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method
-  - assembly: Assembly-CSharp
-    fullTypeName: UIMenager
-    methodName: PlayerPropButton_Method2
   - assembly: Assembly-CSharp
     fullTypeName: UIMenager
     methodName: ArkadaslarButton_Method
@@ -373,25 +298,25 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 16630}
+      Script: {instanceID: 16632}
     - Class: 114
       Script: {instanceID: 16686}
     - Class: 114
       Script: {instanceID: 17244}
     - Class: 114
-      Script: {instanceID: 17728}
+      Script: {instanceID: 17730}
     - Class: 114
-      Script: {instanceID: 17778}
+      Script: {instanceID: 17780}
     - Class: 114
-      Script: {instanceID: 17990}
+      Script: {instanceID: 17994}
     - Class: 114
-      Script: {instanceID: 18210}
+      Script: {instanceID: 18214}
     - Class: 114
-      Script: {instanceID: 20522}
+      Script: {instanceID: 20526}
     - Class: 114
-      Script: {instanceID: 20954}
+      Script: {instanceID: 20960}
     - Class: 114
-      Script: {instanceID: 21444}
+      Script: {instanceID: 21458}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -399,6 +324,8 @@ ScriptsOnlyBuild:
     - Class: 157
       Script: {instanceID: 0}
     - Class: 196
+      Script: {instanceID: 0}
+    - Class: 213
       Script: {instanceID: 0}
     - Class: 222
       Script: {instanceID: 0}
@@ -472,87 +399,95 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 17560}
     - Class: 114
-      Script: {instanceID: 17712}
+      Script: {instanceID: 17640}
     - Class: 114
-      Script: {instanceID: 17778}
+      Script: {instanceID: 17714}
     - Class: 114
-      Script: {instanceID: 17784}
+      Script: {instanceID: 17780}
     - Class: 114
-      Script: {instanceID: 17990}
+      Script: {instanceID: 17786}
     - Class: 114
-      Script: {instanceID: 18210}
+      Script: {instanceID: 17982}
     - Class: 114
-      Script: {instanceID: 18290}
+      Script: {instanceID: 17994}
     - Class: 114
-      Script: {instanceID: 18690}
+      Script: {instanceID: 18214}
     - Class: 114
-      Script: {instanceID: 19046}
+      Script: {instanceID: 18294}
+    - Class: 114
+      Script: {instanceID: 18694}
     - Class: 114
       Script: {instanceID: 19050}
     - Class: 114
-      Script: {instanceID: 19100}
+      Script: {instanceID: 19054}
     - Class: 114
-      Script: {instanceID: 19124}
+      Script: {instanceID: 19104}
     - Class: 114
-      Script: {instanceID: 19214}
+      Script: {instanceID: 19128}
     - Class: 114
-      Script: {instanceID: 19286}
+      Script: {instanceID: 19218}
     - Class: 114
-      Script: {instanceID: 19338}
+      Script: {instanceID: 19290}
     - Class: 114
-      Script: {instanceID: 19354}
+      Script: {instanceID: 19342}
     - Class: 114
-      Script: {instanceID: 19616}
+      Script: {instanceID: 19358}
     - Class: 114
-      Script: {instanceID: 20026}
+      Script: {instanceID: 19620}
     - Class: 114
-      Script: {instanceID: 20174}
+      Script: {instanceID: 20030}
     - Class: 114
-      Script: {instanceID: 20242}
+      Script: {instanceID: 20178}
     - Class: 114
-      Script: {instanceID: 20296}
+      Script: {instanceID: 20246}
     - Class: 114
-      Script: {instanceID: 20312}
+      Script: {instanceID: 20300}
     - Class: 114
-      Script: {instanceID: 20368}
+      Script: {instanceID: 20316}
     - Class: 114
-      Script: {instanceID: 20718}
+      Script: {instanceID: 20372}
     - Class: 114
-      Script: {instanceID: 20760}
+      Script: {instanceID: 20722}
     - Class: 114
-      Script: {instanceID: 20954}
+      Script: {instanceID: 20764}
     - Class: 114
-      Script: {instanceID: 21110}
+      Script: {instanceID: 20960}
     - Class: 114
-      Script: {instanceID: 21200}
+      Script: {instanceID: 21020}
     - Class: 114
-      Script: {instanceID: 21428}
+      Script: {instanceID: 21120}
     - Class: 114
-      Script: {instanceID: 21444}
+      Script: {instanceID: 21212}
     - Class: 114
-      Script: {instanceID: 21452}
+      Script: {instanceID: 21442}
     - Class: 114
-      Script: {instanceID: 21454}
+      Script: {instanceID: 21458}
     - Class: 114
-      Script: {instanceID: 21460}
+      Script: {instanceID: 21466}
     - Class: 114
-      Script: {instanceID: 21566}
+      Script: {instanceID: 21468}
     - Class: 114
-      Script: {instanceID: 21882}
+      Script: {instanceID: 21474}
     - Class: 114
-      Script: {instanceID: 22050}
+      Script: {instanceID: 21580}
     - Class: 114
-      Script: {instanceID: 22292}
+      Script: {instanceID: 21896}
     - Class: 114
-      Script: {instanceID: 22572}
+      Script: {instanceID: 22064}
     - Class: 114
-      Script: {instanceID: 22926}
+      Script: {instanceID: 22308}
     - Class: 114
-      Script: {instanceID: 23054}
+      Script: {instanceID: 22588}
     - Class: 114
-      Script: {instanceID: 23222}
+      Script: {instanceID: 22942}
     - Class: 114
-      Script: {instanceID: 23362}
+      Script: {instanceID: 23070}
+    - Class: 114
+      Script: {instanceID: 23238}
+    - Class: 114
+      Script: {instanceID: 23378}
+    - Class: 114
+      Script: {instanceID: 37364}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -588,16 +523,16 @@ ScriptsOnlyBuild:
   scriptHashData:
   - hash:
       serializedVersion: 2
-      Hash: b5007673bbbdb9d12597a1d8201370f5
-    assemblyName: UnityEngine.UI
-    namespaceName: UnityEngine.UI
-    className: Text
-  - hash:
-      serializedVersion: 2
       Hash: 915204dac8acad99f076d6e72ada0a0f
     assemblyName: UnityEngine.UI
     namespaceName: UnityEngine.UI
     className: Button
+  - hash:
+      serializedVersion: 2
+      Hash: b5007673bbbdb9d12597a1d8201370f5
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UI
+    className: Text
   - hash:
       serializedVersion: 2
       Hash: 8dff8e9853297d341afa0c11f9091b59
@@ -852,6 +787,12 @@ ScriptsOnlyBuild:
     className: PlayerListControl
   - hash:
       serializedVersion: 2
+      Hash: 290d72e4c4fb213086cdf88c39f33a00
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: GunInfo
+  - hash:
+      serializedVersion: 2
       Hash: 1321993db8249e1e05e1e0492b2bbdc3
     assemblyName: Unity.VisualScripting.Core
     namespaceName: Unity.VisualScripting
@@ -946,6 +887,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core
     namespaceName: Unity.VisualScripting
     className: CoroutineRunner
+  - hash:
+      serializedVersion: 2
+      Hash: 048dffc9320d7b843a1c975ef723fe6a
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: SingleShotgun
   - hash:
       serializedVersion: 2
       Hash: 6ddf94363c6ce4b02d9fdd51290cb0f9
@@ -1326,7 +1273,7 @@ ScriptsOnlyBuild:
     className: VariablesSaver
   - hash:
       serializedVersion: 2
-      Hash: f5d31f00ea745d1c346f55e769aeabbb
+      Hash: decbb0811b8e6f076329b6cc6334909f
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: CharacterControl
@@ -1746,6 +1693,18 @@ ScriptsOnlyBuild:
     className: CanvasScaler
   - hash:
       serializedVersion: 2
+      Hash: f68f060afe1e834c3c2783631451d823
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: PlayerScriptableObject
+  - hash:
+      serializedVersion: 2
+      Hash: bd41fc6de55a5582185b580de3a905fd
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: ItemInfo
+  - hash:
+      serializedVersion: 2
       Hash: ef38c1407dba8c1f5d69f5db61a694fe
     assemblyName: Unity.VisualScripting.Core
     namespaceName: Unity.VisualScripting
@@ -1806,7 +1765,7 @@ ScriptsOnlyBuild:
     className: UnityOnTriggerStay2DMessageListener
   - hash:
       serializedVersion: 2
-      Hash: fdfc52165739a95a1e4c3d9d8d862487
+      Hash: 7c439571db4c9d5ffcf756cc56973503
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: UIMenager
@@ -2050,6 +2009,12 @@ ScriptsOnlyBuild:
     assemblyName: PhotonUnityNetworking.Demos
     namespaceName: Photon.Pun.Demo.Cockpit
     className: CountOfRoomsProperty
+  - hash:
+      serializedVersion: 2
+      Hash: 80ffccf3c0b54af57ef14cdc3020b050
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: GameUI
   - hash:
       serializedVersion: 2
       Hash: 830c3b545f6e6ee60a4cebab90516f2c
@@ -2398,6 +2363,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core
     namespaceName: Unity.VisualScripting
     className: UnityOnSliderValueChangedMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 12ce06e57d684da57231872fcd256017
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: PlayerPropImageControl
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity

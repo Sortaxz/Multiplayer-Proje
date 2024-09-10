@@ -20,6 +20,18 @@ public class UIMenager : MonoBehaviour
             return instance;
         }
     }
+    
+    [Space]
+    [Space]
+    [Space]
+
+    [SerializeField] private PlayerScriptableObject playerScriptableObject;
+    public PlayerScriptableObject PlayerScriptableObject { get { return playerScriptableObject; } }
+
+    [Space]
+    [Space]
+    [Space]
+
     #region  Paneller
     [SerializeField] private GameObject connecting_Panel;
     public GameObject ConnectingPanel { get { return connecting_Panel;}}
@@ -68,6 +80,7 @@ public class UIMenager : MonoBehaviour
     [SerializeField] private GameObject playerIcon_Panel;
 
     [SerializeField] private GameObject playerColor_Panel;
+    [SerializeField] private GameObject MatchWaitingScreen;
 
     #endregion
 
@@ -103,6 +116,7 @@ public class UIMenager : MonoBehaviour
     [Space]
 
     #region  Arkadaş Kabul veya Reddetme ile ilgili işlemler
+
     [Header("Arkadaş Kabul veya Reddetme ile ilgili işlemler")]
 
     [SerializeField] private GameObject FriendAcceptOrReject_Panel;
@@ -112,9 +126,11 @@ public class UIMenager : MonoBehaviour
     #region  Player Props Panel İşlenler
 
     [Header("Player Props Panel İşlenleri")]
-    [SerializeField] private Image[] playerIconImageProps;
-    [SerializeField] private Image[] playerColorImageProps;
-    
+    [SerializeField] private List<Image> playerIconImageProps;
+    [SerializeField] private List<Image> playerColorImageProps;
+    [SerializeField] private Transform PlayerIcon_Content;
+    [SerializeField] private Transform PlayerColor_Content;
+    [SerializeField] private GameObject playerPropImagePrefab;
     #endregion
 
     [Space]
@@ -191,6 +207,7 @@ public class UIMenager : MonoBehaviour
 
     [SerializeField] private Button oyunuBaslatButton;
     
+
     public TextMeshProUGUI friendPlayerNickName_Text;
     
     private PhotonView pv;
@@ -207,6 +224,8 @@ public class UIMenager : MonoBehaviour
 
     private bool menuPlayerProfil = false;
     private bool isPlayerReady = false;
+    private bool value= false;
+    private bool findCheatController = false;
 
     private string roomName;
     public string RoomName {get {return roomName;}}
@@ -214,13 +233,10 @@ public class UIMenager : MonoBehaviour
     private int iconIndex;
     private int colorIndex;
 
-
-
     private int i = 0;
-    private bool value= false;
-    private bool findCheatController = false;
 
-    public bool odaKurdu = false;
+    private int playerPropIconCount = 0;
+    private int playerPropColorCount = 0;
 
     #endregion
 
@@ -320,7 +336,8 @@ public class UIMenager : MonoBehaviour
         PlayerPrefs.SetInt("icon",(int)iconIndex);
         PlayerPrefs.SetInt("color",(int)colorIndex);
 
-        menuPlayerIcon_Image.sprite = playerIcons[(int)iconIndex].sprite;
+        //menuPlayerIcon_Image.sprite = playerIcons[(int)iconIndex].sprite;
+        menuPlayerIcon_Image.sprite =  playerScriptableObject.PlayerIconSprites[(int)iconIndex];
         
         playerPropKaydetButton.gameObject.SetActive(false);
 
@@ -347,7 +364,7 @@ public class UIMenager : MonoBehaviour
 
             SetPlayerProps();
 
-            menuPlayerIcon_Image.sprite = playerIcons[iconIndex].sprite;
+            menuPlayerIcon_Image.sprite =  playerScriptableObject.PlayerIconSprites[iconIndex];
             
 
             SetActiveUIObject(connecting_Panel.name);
@@ -493,27 +510,26 @@ public class UIMenager : MonoBehaviour
 
             playerPropKaydetButton.GetComponent<Image>().color = playerPropKaydetButtonClick ?  Color.green : Color.white;
 
-            menuPlayerIcon_Image.sprite = playerIcons[iconIndex].sprite;
+            //menuPlayerIcon_Image.sprite = playerIcons[iconIndex].sprite;
+            menuPlayerIcon_Image.sprite = playerScriptableObject.PlayerIconSprites[iconIndex];
 
             SetPlayerProps();
 
             
-
+            ControlPlayerPropsActive();
             
         }
-
-
 
     }
 
     private void ControlPlayerPropsActive()
     {
-        for (int i = 0; i < playerIconImageProps.Length; i++)
+        for (int i = 0; i < playerIconImageProps.Count; i++)
         {
             playerIconImageProps[i].GetComponent<Button>().interactable = true;
         }
 
-        for (int i = 0; i < playerColorImageProps.Length; i++)
+        for (int i = 0; i < playerColorImageProps.Count; i++)
         {
             playerColorImageProps[i].GetComponent<Button>().interactable = true;
         }
@@ -526,14 +542,20 @@ public class UIMenager : MonoBehaviour
     {
         playerIcon_Panel.SetActive(!playerIcon_Panel.activeSelf);
         playerColor_Panel.SetActive(false);
-        
+
+        PlayerPropsSettingsUI("icon",playerPropIconCount);
+        playerPropIconCount ++;
+    
     }
 
     public void PlayerColorButton_Method()
     {
         playerIcon_Panel.SetActive(false);
         playerColor_Panel.SetActive(!playerColor_Panel.activeSelf);
-        
+
+        PlayerPropsSettingsUI("color",playerPropColorCount);
+        playerPropColorCount ++;
+    
     }
 
 
@@ -606,7 +628,7 @@ public class UIMenager : MonoBehaviour
             
             if(playerIconBaslatButtonActive)
             {
-                for (int i = 0; i < playerIconImageProps.Length; i++)
+                for (int i = 0; i < playerIconImageProps.Count; i++)
                 {
                     if(i!= iconIndex)
                     {
@@ -616,7 +638,7 @@ public class UIMenager : MonoBehaviour
             }
             else
             {
-                for (int i = 0; i < playerIconImageProps.Length; i++)
+                for (int i = 0; i < playerIconImageProps.Count; i++)
                 {
                     playerIconImageProps[i].GetComponent<Button>().interactable = true;
                 }  
@@ -630,7 +652,7 @@ public class UIMenager : MonoBehaviour
 
             if(playerColorBaslatButtonActive)
             {
-                for (int i = 0; i < playerColorImageProps.Length; i++)
+                for (int i = 0; i < playerColorImageProps.Count; i++)
                 {
                     if(i!= colorIndex)
                     {
@@ -641,7 +663,7 @@ public class UIMenager : MonoBehaviour
             else
             {
 
-                for (int i = 0; i < playerColorImageProps.Length; i++)
+                for (int i = 0; i < playerColorImageProps.Count; i++)
                 {
                     playerColorImageProps[i].GetComponent<Button>().interactable = true;
                 }  
@@ -667,7 +689,7 @@ public class UIMenager : MonoBehaviour
     }
 
 
-    public void PlayerPropButton_Method2(bool value)
+    public void PlayerPropButton_Method2()
     {
 
         if(playerIconBaslatButtonActive && playerColorBaslatButtonActive)
@@ -728,7 +750,7 @@ public class UIMenager : MonoBehaviour
 
         karşilaşmaKabulReddet_Panel.SetActive(false);
 
-        
+    
     }
 
 
@@ -904,5 +926,28 @@ public class UIMenager : MonoBehaviour
     {
         SunucuYonetim.Instance.LeftRoom();
         SetActiveUIObject(menu_Panel.name);
+    }
+
+    private void PlayerPropsSettingsUI(string playerPropsType,int count)
+    {
+       
+        if(playerPropsType == "icon" && count < 1)
+        {
+            for (int i = 0; i < playerScriptableObject.PlayerIconSprites.Length; i++)
+            {
+                GameObject image = Instantiate(playerPropImagePrefab,PlayerIcon_Content);
+                image.GetComponent<Image>().sprite = playerScriptableObject.PlayerIconSprites[i];
+                playerIconImageProps.Add( image.GetComponent<Image>());
+            }
+        }
+        else if(playerPropsType == "color" && count < 1)
+        {
+            for (int i = 0; i < playerScriptableObject.PlayerColors.Length; i++)
+            {
+                GameObject image2 = Instantiate(playerPropImagePrefab,PlayerColor_Content);
+                image2.GetComponent<Image>().color = playerScriptableObject.PlayerColors[i];
+                playerColorImageProps.Add( image2.GetComponent<Image>());
+            }
+        }
     }
 }

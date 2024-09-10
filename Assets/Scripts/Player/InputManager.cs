@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
-public  class InputManager : MonoBehaviour 
+public  class InputManager : MonoBehaviourPunCallbacks
 {
     protected bool jump => Input.GetKey(KeyCode.Space);
     protected bool forward => Input.GetKey(KeyCode.W);

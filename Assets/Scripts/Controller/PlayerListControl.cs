@@ -48,7 +48,7 @@ public class PlayerListControl : MonoBehaviour
         playerId = oyuncuId;
         playerListName_Text.text = oyuncuName;
         player.CustomProperties.TryGetValue("icon",out object iconIndex);
-        playerListIcon_Image.sprite = UIMenager.Instance.PlayerIcons[(int)iconIndex].sprite;
+        playerListIcon_Image.sprite = UIMenager.Instance.PlayerScriptableObject.PlayerIconSprites[(int)iconIndex];
         playerNickName = oyuncuName;
     }
 

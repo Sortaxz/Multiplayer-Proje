@@ -71,7 +71,8 @@ public class FriendListControl : MonoBehaviour
 
     public void FriendListInitialize(string frienNickName,int _friendIconIndex)
     {
-        friendIcon_Image.sprite = UIMenager.Instance.PlayerIcons[_friendIconIndex].sprite;
+        //friendIcon_Image.sprite = UIMenager.Instance.PlayerIcons[_friendIconIndex].sprite;
+        friendIcon_Image.sprite = UIMenager.Instance.PlayerScriptableObject.PlayerIconSprites[_friendIconIndex];
         friendName_Text.text = frienNickName;
         friendIconIndex = _friendIconIndex;
     }
@@ -81,7 +82,7 @@ public class FriendListControl : MonoBehaviour
     {
         _friendState_Text.text = friendInfo.IsOnline ? "Online" : "Offline";
         _friendName_Text.text = friendInfo.UserId;
-        _friendIcon_Image.sprite = UIMenager.Instance.PlayerIcons[friendIconIndex].sprite;
+        _friendIcon_Image.sprite = UIMenager.Instance.PlayerScriptableObject.PlayerIconSprites[friendIconIndex];
     }
 
     public void FriendRequestInitialize(string friendRequest)

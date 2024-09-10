@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject loadingScren;
     [SerializeField] private Text infoText;
     private bool findCharacterOfPlayers = false;
+    private PhotonView PV;
+    GameObject character;
 
     public override void OnEnable()
     {
@@ -33,12 +35,11 @@ public class GameManager : MonoBehaviourPunCallbacks
             {"PlayerLoadedLevel",true}
         };
         PhotonNetwork.LocalPlayer.SetCustomProperties(props);    
+        PV = GetComponent<PhotonView>();
     }
     
     void Start()
     {
-        
-
         StartCoroutine(FindCharacter());
     }
 
@@ -55,7 +56,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
     }
-
+    
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
         if(!PhotonNetwork.IsMasterClient)
@@ -106,7 +107,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void StartGame()
     {
-        SpawnManager.Instance.CharacterSpawn();
+        character = SpawnManager.Instance.CharacterSpawn(PV);
+        Camera.main.gameObject.SetActive(false);
     }
 
     private bool CheckAllPlayerLoadedLevel()
@@ -134,4 +136,20 @@ public class GameManager : MonoBehaviourPunCallbacks
         StartGame();
     }
 
+    public void Die()
+    {
+        PhotonNetwork.Destroy(character);
+        character = SpawnManager.Instance.CharacterSpawn(PV);
+        
+    }
+
+    public bool IsStartGame()
+    {   
+        bool startGame = false;
+        if(PhotonNetwork.InRoom)
+        {
+            startGame = (bool)SaveSystem.PlayerPrefsDataLoad("startGame","bool");
+        }
+        return startGame;
+    }
 }
