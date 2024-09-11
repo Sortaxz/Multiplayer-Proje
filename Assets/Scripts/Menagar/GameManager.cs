@@ -9,6 +9,8 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
+    [SerializeField] private PlayerScriptableObject playerScriptableObject;
+    public PlayerScriptableObject PlayerScriptableObject { get { return playerScriptableObject; } }
     [SerializeField]private CharacterControl[] characterOfPlayers;
     [SerializeField] private GameObject loadingScren;
     [SerializeField] private Text infoText;
@@ -41,6 +43,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     void Start()
     {
         StartCoroutine(FindCharacter());
+    }
+
+    private void Update() 
+    {
+        
     }
 
     #region  Pun Callbacks
@@ -88,7 +95,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private IEnumerator FindCharacter()
     {
-        yield return new WaitForSeconds(4);
+        yield return new WaitForSeconds(10);
         CharacterControl[] newCharacterOfPlayers = FindObjectsOfType<CharacterControl>();
         characterOfPlayers = new CharacterControl[newCharacterOfPlayers.Length];
         for (int i = 0; i < newCharacterOfPlayers.Length; i++)
@@ -108,6 +115,13 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void StartGame()
     {
         character = SpawnManager.Instance.CharacterSpawn(PV);
+        
+        PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("color",out object color);
+        int playerColorIndex = (int)color;
+        print(playerColorIndex);
+
+        character.GetComponent<CharacterControl>().CharacterMSHRenderer.materials[1].color = playerScriptableObject.PlayerColors[playerColorIndex];
+
         Camera.main.gameObject.SetActive(false);
     }
 
@@ -139,8 +153,15 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void Die()
     {
         PhotonNetwork.Destroy(character);
+
         character = SpawnManager.Instance.CharacterSpawn(PV);
-        
+
+        PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("color",out object color);
+        int playerColorIndex = (int)color;
+        print(playerColorIndex);
+
+        character.GetComponent<CharacterControl>().CharacterMSHRenderer.materials[1].color = playerScriptableObject.PlayerColors[playerColorIndex];
+
     }
 
     public bool IsStartGame()

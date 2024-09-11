@@ -60,7 +60,6 @@ namespace Photon.Pun.UtilityScripts
 
         public void Start()
         {
-            if (this.Text == null) Debug.LogError("Reference to 'Text' is not set. Please set a valid reference.", this);
         }
 
         public override void OnEnable()
@@ -103,7 +102,6 @@ namespace Photon.Pun.UtilityScripts
             this.isTimerRunning = false;
             this.enabled = false;
 
-            Debug.Log("Emptying info text.", this.Text);
             this.Text.text = string.Empty;
 
             if (OnCountdownTimerHasExpired != null) OnCountdownTimerHasExpired();
@@ -112,7 +110,6 @@ namespace Photon.Pun.UtilityScripts
 
         public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
         {
-            Debug.Log("CountdownTimer.OnRoomPropertiesUpdate " + propertiesThatChanged.ToStringFull());
             Initialize();
         }
 

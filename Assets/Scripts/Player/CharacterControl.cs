@@ -26,8 +26,10 @@ public class CharacterControl : InputManager,IDamageable
     #endregion
 
     [SerializeField] private Item[] gunItems;
-
-
+    [SerializeField] private SkinnedMeshRenderer characterMSHRenderer;
+    public SkinnedMeshRenderer CharacterMSHRenderer {get { return characterMSHRenderer;}}
+    [SerializeField] private Material characterMainMaterial;
+    public Material CharacterMainMaterial { get { return characterMainMaterial;} set { characterMainMaterial = value; } }
     private int gunItemIndex;
     private int previousGunItemIndex = -1;
 
@@ -55,10 +57,11 @@ public class CharacterControl : InputManager,IDamageable
         playerNickName = pw.Owner.NickName;
         playerActorNumber = pw.Owner.ActorNumber;
         transform.name = playerNickName;
-        
+
         if(pw.IsMine)
         {
             EquipGunItem(0);
+
         }
         else
         {
@@ -192,6 +195,8 @@ public class CharacterControl : InputManager,IDamageable
         if(!pw.IsMine && targetPlayer == pw.Owner)
         {
             EquipGunItem((int)changedProps["gunItemIndex"]);
+            targetPlayer.CustomProperties.TryGetValue("color",out object colorIndex);
+            characterMSHRenderer.materials[1].color = gameManager.PlayerScriptableObject.PlayerColors[(int)colorIndex];
         }
     }
 
