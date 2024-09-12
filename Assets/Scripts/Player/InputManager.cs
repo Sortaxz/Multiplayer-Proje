@@ -13,6 +13,8 @@ public  class InputManager : MonoBehaviourPunCallbacks
     protected bool runing => Input.GetKey(KeyCode.LeftShift);
     protected float Horizontal => Input.GetAxis("Horizontal") ;
     protected float Vertical => Input.GetAxis("Vertical") ;
+    protected float mouseScrollWhell => Input.GetAxisRaw("Mouse ScrollWheel");
+    protected bool mosueLeftKey => Input.GetMouseButtonDown(0);
 }
 
 public class PlayerAnimation : InputManager

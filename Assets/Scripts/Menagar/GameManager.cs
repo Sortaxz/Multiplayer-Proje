@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
@@ -15,6 +16,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject loadingScren;
     [SerializeField] private Text infoText;
     private bool findCharacterOfPlayers = false;
+    public bool FindCharacterOfPlayers { get { return findCharacterOfPlayers;} set { findCharacterOfPlayers = value;}}
     private PhotonView PV;
     GameObject character;
 
@@ -34,7 +36,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable()
         {
-            {"PlayerLoadedLevel",true}
+            {"PlayerLoadedLevel",true},
         };
         PhotonNetwork.LocalPlayer.SetCustomProperties(props);    
         PV = GetComponent<PhotonView>();
@@ -93,21 +95,35 @@ public class GameManager : MonoBehaviourPunCallbacks
     #endregion
 
 
-    private IEnumerator FindCharacter()
+    public IEnumerator FindCharacter()
     {
-        yield return new WaitForSeconds(10);
-        CharacterControl[] newCharacterOfPlayers = FindObjectsOfType<CharacterControl>();
-        characterOfPlayers = new CharacterControl[newCharacterOfPlayers.Length];
-        for (int i = 0; i < newCharacterOfPlayers.Length; i++)
+        while(true && !findCharacterOfPlayers)
         {
-            if(i == newCharacterOfPlayers[i].PlayerActorNumber-1)
+            //yield return new WaitForSeconds(10);
+            CharacterControl[] newCharacterOfPlayers = FindObjectsOfType<CharacterControl>();
+            characterOfPlayers = new CharacterControl[newCharacterOfPlayers.Length];
+            for (int i = 0; i < newCharacterOfPlayers.Length; i++)
             {
-                characterOfPlayers[i] = newCharacterOfPlayers[i];
+                if(i == newCharacterOfPlayers[i].PlayerActorNumber-1)
+                {
+                    characterOfPlayers[i] = newCharacterOfPlayers[i];
+                }
+                else
+                {
+                    if(newCharacterOfPlayers[i].PlayerActorNumber-1 < newCharacterOfPlayers.Length)
+                    {
+                        characterOfPlayers[newCharacterOfPlayers[i].PlayerActorNumber-1] = newCharacterOfPlayers[i];
+                    }
+                }
             }
-            else
+
+            if(newCharacterOfPlayers.Length == PhotonNetwork.CurrentRoom.PlayerCount)
             {
-                characterOfPlayers[newCharacterOfPlayers[i].PlayerActorNumber-1] = newCharacterOfPlayers[i];
+                findCharacterOfPlayers = true;
+                StopCoroutine(FindCharacter());
+                StartCoroutine(FindOtherPlayerCharacter());
             }
+            yield return new WaitForSeconds(.1f);
         }
         
     }
@@ -115,14 +131,19 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void StartGame()
     {
         character = SpawnManager.Instance.CharacterSpawn(PV);
-        
+        ExitGames.Client.Photon.Hashtable playerProps = new ExitGames.Client.Photon.Hashtable();
+
+        playerProps.Add("life",true);
+        PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
+
         PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("color",out object color);
         int playerColorIndex = (int)color;
-        print(playerColorIndex);
 
         character.GetComponent<CharacterControl>().CharacterMSHRenderer.materials[1].color = playerScriptableObject.PlayerColors[playerColorIndex];
 
         Camera.main.gameObject.SetActive(false);
+
+        GameUI.Instance.Active();
     }
 
     private bool CheckAllPlayerLoadedLevel()
@@ -158,10 +179,9 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("color",out object color);
         int playerColorIndex = (int)color;
-        print(playerColorIndex);
 
         character.GetComponent<CharacterControl>().CharacterMSHRenderer.materials[1].color = playerScriptableObject.PlayerColors[playerColorIndex];
-
+        StartCoroutine(FindOtherPlayerCharacter());
     }
 
     public bool IsStartGame()
@@ -172,5 +192,39 @@ public class GameManager : MonoBehaviourPunCallbacks
             startGame = (bool)SaveSystem.PlayerPrefsDataLoad("startGame","bool");
         }
         return startGame;
+    }
+
+    private IEnumerator FindOtherPlayerCharacter()
+    {
+        while(true)
+        {
+            if(characterOfPlayers != null && characterOfPlayers.Length == PhotonNetwork.CurrentRoom.PlayerCount)
+            {
+                for (int i = 0; i < characterOfPlayers.Length; i++)
+                {
+                    if(characterOfPlayers[i] != null)
+                    {
+                        string userId = characterOfPlayers[i].GetComponent<PhotonView>().Owner.UserId;
+                        if(PhotonNetwork.LocalPlayer.UserId != userId)
+                        {
+                            print(userId);
+                            if(characterOfPlayers[i].OtherPlayerHealtBar.fillAmount <= 0)
+                            {
+                                characterOfPlayers[i].OtherPlayerHealtBar.fillAmount = 1f;
+                                characterOfPlayers[i].OtherPlayerHealtBar.gameObject.SetActive(true);
+                            }
+                            else
+                            {
+                                characterOfPlayers[i].OtherPlayerHealtBar.gameObject.SetActive(true);
+                            }
+                        }
+
+                    }
+                }
+                StopCoroutine(FindOtherPlayerCharacter());
+            }
+
+            yield return new WaitForSeconds(.1f);
+        }
     }
 }

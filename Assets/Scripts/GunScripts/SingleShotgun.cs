@@ -10,7 +10,6 @@ public class SingleShotgun : Gun
 
     public override void Use()
     {
-        print("Using gun " + itemInfo.itemName);
         Shoot();
     }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
+using UnityEngine.UI;
 using Hashtable =ExitGames.Client.Photon.Hashtable;
 
 public class CharacterControl : InputManager,IDamageable
@@ -29,6 +30,8 @@ public class CharacterControl : InputManager,IDamageable
     [SerializeField] private SkinnedMeshRenderer characterMSHRenderer;
     public SkinnedMeshRenderer CharacterMSHRenderer {get { return characterMSHRenderer;}}
     [SerializeField] private Material characterMainMaterial;
+    [SerializeField] private Image otherPlayerHealtBar;
+    public Image OtherPlayerHealtBar { get {return otherPlayerHealtBar;}}
     public Material CharacterMainMaterial { get { return characterMainMaterial;} set { characterMainMaterial = value; } }
     private int gunItemIndex;
     private int previousGunItemIndex = -1;
@@ -42,9 +45,9 @@ public class CharacterControl : InputManager,IDamageable
 
     const float maxHealt= 100f;
     float currentHealt  = maxHealt;
-
     GameManager gameManager;
-
+    Hashtable playerProps;
+    private bool isLife = false;
     private void Awake() 
     {
         currentHealt = maxHealt;
@@ -68,8 +71,19 @@ public class CharacterControl : InputManager,IDamageable
             Destroy(characterCamera.gameObject);
 
         }
+
+        isLife = true;
+        
+        playerProps = new Hashtable();
+        playerProps.Add("life",isLife);
+        playerProps.Add("healt",currentHealt);
+        PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
+
+        GameUI.Instance.OtherPlayerHealtBar = otherPlayerHealtBar.GetComponentInChildren<Image>();
     }
+
     
+
     private void Update()
     {
         if(!pw.IsMine)
@@ -78,43 +92,14 @@ public class CharacterControl : InputManager,IDamageable
         Look();
         Move();
         
-        for (int i = 0; i < gunItems.Length; i++)
-        {
-            if(Input.GetKeyDown((i+1).ToString()))
-            {
-                EquipGunItem(i);
-                break;
-            }
-        }
+        WeaponSelection();
 
-        if(Input.GetAxisRaw("Mouse ScrollWheel")>0f)
+        if(Input.GetKeyDown(KeyCode.P))
         {
-            if(gunItemIndex >= gunItems.Length -1)
-            {
-                EquipGunItem(0);
-            }
-            else
-            {
-                EquipGunItem(gunItemIndex + 1);
-            }
+            
+            PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("healt",out object healt);
+            print(healt);
         }
-        else if(Input.GetAxisRaw("Mouse ScrollWheel") < 0f)
-        {
-            if(gunItemIndex <= 0)
-            {
-                EquipGunItem(gunItems.Length-1);
-            }
-            else
-            {
-                EquipGunItem(gunItemIndex - 1);
-            }
-        }
-
-        if(Input.GetMouseButtonDown(0))
-        {
-            gunItems[gunItemIndex].Use();
-        }
-
     }
     
     private void FixedUpdate()
@@ -165,6 +150,46 @@ public class CharacterControl : InputManager,IDamageable
         isGround = false;    
     }
 
+    private void WeaponSelection()
+    {
+        for (int i = 0; i < gunItems.Length; i++)
+        {
+            if(Input.GetKeyDown((i+1).ToString()))
+            {
+                EquipGunItem(i);
+                break;
+            }
+        }
+
+        if(mouseScrollWhell>0f)
+        {
+            if(gunItemIndex >= gunItems.Length -1)
+            {
+                EquipGunItem(0);
+            }
+            else
+            {
+                EquipGunItem(gunItemIndex + 1);
+            }
+        }
+        else if(mouseScrollWhell < 0f)
+        {
+            if(gunItemIndex <= 0)
+            {
+                EquipGunItem(gunItems.Length-1);
+            }
+            else
+            {
+                EquipGunItem(gunItemIndex - 1);
+            }
+        }
+
+        if(mosueLeftKey)
+        {
+            gunItems[gunItemIndex].Use();
+        }
+    }
+
     private void EquipGunItem(int gunItemIndex)
     {
         if(gunItemIndex == previousGunItemIndex)
@@ -183,9 +208,23 @@ public class CharacterControl : InputManager,IDamageable
 
         if(pw.IsMine)
         {
+            /*
             Hashtable hash = new Hashtable();
             hash.Add("gunItemIndex",gunItemIndex);
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+            */
+            if(playerProps == null)
+            {
+                playerProps = new Hashtable();
+                playerProps.Add("gunItemIndex",gunItemIndex);
+                PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
+            }
+            else
+            {
+                playerProps["gunItemIndex"] = gunItemIndex;
+                PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
+            }
+
         }
 
     }
@@ -194,10 +233,28 @@ public class CharacterControl : InputManager,IDamageable
     {
         if(!pw.IsMine && targetPlayer == pw.Owner)
         {
-            EquipGunItem((int)changedProps["gunItemIndex"]);
+            targetPlayer.CustomProperties.TryGetValue("gunItemIndex",out object itemIndex);
+            EquipGunItem((int)itemIndex);
+
             targetPlayer.CustomProperties.TryGetValue("color",out object colorIndex);
+
             characterMSHRenderer.materials[1].color = gameManager.PlayerScriptableObject.PlayerColors[(int)colorIndex];
+
+            targetPlayer.CustomProperties.TryGetValue("healt",out object healt);
+            print(targetPlayer.UserId + "-" +healt);
         }
+
+        if(targetPlayer.CustomProperties.TryGetValue("life",out object life))
+        {
+            gameManager.FindCharacterOfPlayers = false;
+            if((bool)life)
+            {
+                StartCoroutine(gameManager.FindCharacter());
+            }
+        }
+
+        
+
     }
 
     public void TakeDamage(float damage)
@@ -210,17 +267,30 @@ public class CharacterControl : InputManager,IDamageable
     {
         if(!pw.IsMine)
             return;
-
+        float deger = damage / 100; 
         currentHealt -= damage;
+        GameUI.Instance.PlayerHealtBar(deger);
+        otherPlayerHealtBar.fillAmount -= deger;
+
+        playerProps["healt"] = currentHealt;
+        PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
 
         if(currentHealt < 0)
         {
             Die();
+            otherPlayerHealtBar.fillAmount = 1;
         }
     }
 
     private void Die()
     {
+        isLife = false;
+        playerProps["life"] = false;
+        currentHealt = 100;
+        PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
+
+
         gameManager.Die();
+       
     }
 }

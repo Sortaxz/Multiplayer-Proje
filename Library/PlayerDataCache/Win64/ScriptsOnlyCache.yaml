@@ -7,17 +7,23 @@ ScriptsOnlyBuild:
     - GunInfo
     - SingleShotgun
     Assembly-CSharp.dll:
+    - CharacterAnimation
+    - CharacterControl
     - CheatController
     - FindingMatchControl
     - FriendListControl
     - FriendSystem
     - GameManager
+    - GameUI
+    - GunInfo
     - HandleControl
+    - HealtBar_Control
     - PlayerListControl
     - PlayerMessageController
     - PlayerPropImageControl
     - PlayerScriptableObject
     - SettingsController
+    - SingleShotgun
     - SpawnManager
     - SunucuYonetim
     - UIMenager
@@ -42,6 +48,9 @@ ScriptsOnlyBuild:
     PhotonUnityNetworking.Utilities.dll:
     - Photon.Pun.UtilityScripts.CountdownTimer
     PhotonUnityNetworking.dll:
+    - Photon.Pun.PhotonAnimatorView
+    - Photon.Pun.PhotonRigidbodyView
+    - Photon.Pun.PhotonTransformView
     - Photon.Pun.PhotonView
     - Photon.Pun.ServerSettings
     Unity.Rider.Editor.dll:
@@ -56,6 +65,9 @@ ScriptsOnlyBuild:
     - TMPro.TMP_Dropdown
     - TMPro.TMP_FontAsset
     - TMPro.TMP_InputField
+    - TMPro.TMP_Settings
+    - TMPro.TMP_SpriteAsset
+    - TMPro.TMP_StyleSheet
     - TMPro.TextMeshProUGUI
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
@@ -311,11 +323,15 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 18218}
     - Class: 114
-      Script: {instanceID: 20530}
+      Script: {instanceID: 19092}
     - Class: 114
-      Script: {instanceID: 21022}
+      Script: {instanceID: 20532}
     - Class: 114
-      Script: {instanceID: 21460}
+      Script: {instanceID: 21024}
+    - Class: 114
+      Script: {instanceID: 21462}
+    - Class: 114
+      Script: {instanceID: 22216}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -424,69 +440,69 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 19058}
     - Class: 114
-      Script: {instanceID: 19108}
+      Script: {instanceID: 19110}
     - Class: 114
-      Script: {instanceID: 19132}
+      Script: {instanceID: 19134}
     - Class: 114
-      Script: {instanceID: 19222}
+      Script: {instanceID: 19224}
     - Class: 114
-      Script: {instanceID: 19294}
+      Script: {instanceID: 19296}
     - Class: 114
-      Script: {instanceID: 19346}
+      Script: {instanceID: 19348}
     - Class: 114
-      Script: {instanceID: 19362}
+      Script: {instanceID: 19364}
     - Class: 114
-      Script: {instanceID: 19624}
+      Script: {instanceID: 19626}
     - Class: 114
-      Script: {instanceID: 20034}
+      Script: {instanceID: 20036}
     - Class: 114
-      Script: {instanceID: 20182}
+      Script: {instanceID: 20184}
     - Class: 114
-      Script: {instanceID: 20250}
+      Script: {instanceID: 20252}
     - Class: 114
-      Script: {instanceID: 20304}
+      Script: {instanceID: 20306}
     - Class: 114
-      Script: {instanceID: 20320}
+      Script: {instanceID: 20322}
     - Class: 114
-      Script: {instanceID: 20376}
+      Script: {instanceID: 20378}
     - Class: 114
-      Script: {instanceID: 20726}
+      Script: {instanceID: 20728}
     - Class: 114
-      Script: {instanceID: 20768}
+      Script: {instanceID: 20770}
     - Class: 114
-      Script: {instanceID: 21022}
+      Script: {instanceID: 21024}
     - Class: 114
-      Script: {instanceID: 21122}
+      Script: {instanceID: 21124}
     - Class: 114
-      Script: {instanceID: 21214}
+      Script: {instanceID: 21216}
     - Class: 114
-      Script: {instanceID: 21444}
+      Script: {instanceID: 21446}
     - Class: 114
-      Script: {instanceID: 21460}
-    - Class: 114
-      Script: {instanceID: 21468}
+      Script: {instanceID: 21462}
     - Class: 114
       Script: {instanceID: 21470}
     - Class: 114
-      Script: {instanceID: 21476}
+      Script: {instanceID: 21472}
     - Class: 114
-      Script: {instanceID: 21582}
+      Script: {instanceID: 21478}
     - Class: 114
-      Script: {instanceID: 21898}
+      Script: {instanceID: 21584}
     - Class: 114
-      Script: {instanceID: 22066}
+      Script: {instanceID: 21900}
     - Class: 114
-      Script: {instanceID: 22310}
+      Script: {instanceID: 22068}
     - Class: 114
-      Script: {instanceID: 22590}
+      Script: {instanceID: 22312}
     - Class: 114
-      Script: {instanceID: 22944}
+      Script: {instanceID: 22592}
     - Class: 114
-      Script: {instanceID: 23072}
+      Script: {instanceID: 22946}
     - Class: 114
-      Script: {instanceID: 23240}
+      Script: {instanceID: 23074}
     - Class: 114
-      Script: {instanceID: 23380}
+      Script: {instanceID: 23242}
+    - Class: 114
+      Script: {instanceID: 23382}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -1188,6 +1204,12 @@ ScriptsOnlyBuild:
     className: PlayerAnimatorManager
   - hash:
       serializedVersion: 2
+      Hash: 8f080fcace9b165e5f56dae2baef8f95
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: HealtBar_Control
+  - hash:
+      serializedVersion: 2
       Hash: 3b8680eaf961a1e89edd59c1a2f3fdf4
     assemblyName: PhotonUnityNetworking.Demos
     namespaceName: Photon.Pun.Demo.Cockpit
@@ -1284,7 +1306,7 @@ ScriptsOnlyBuild:
     className: VariablesSaver
   - hash:
       serializedVersion: 2
-      Hash: 9a2abc0a917982b606fc2949ea942c54
+      Hash: 26cd05a1e3bd10c5b1a38462b2c297e5
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: CharacterControl
@@ -2016,7 +2038,7 @@ ScriptsOnlyBuild:
     className: CountOfRoomsProperty
   - hash:
       serializedVersion: 2
-      Hash: 80ffccf3c0b54af57ef14cdc3020b050
+      Hash: 47ba49a993e50e7c69241e6d95926903
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: GameUI

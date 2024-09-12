@@ -64,7 +64,6 @@ namespace Photon.Pun.UtilityScripts
 
         public override void OnEnable()
         {
-            Debug.Log("OnEnable CountdownTimer");
             base.OnEnable();
 
             // the starttime may already be in the props. look it up.
@@ -74,7 +73,6 @@ namespace Photon.Pun.UtilityScripts
         public override void OnDisable()
         {
             base.OnDisable();
-            Debug.Log("OnDisable CountdownTimer");
         }
 
 
@@ -120,7 +118,6 @@ namespace Photon.Pun.UtilityScripts
             if (TryGetStartTime(out propStartTime))
             {
                 this.startTime = propStartTime;
-                Debug.Log("Initialize sets StartTime " + this.startTime + " server time now: " + PhotonNetwork.ServerTimestamp + " remain: " + TimeRemaining());
 
 
                 this.isTimerRunning = TimeRemaining() > 0;
@@ -167,7 +164,6 @@ namespace Photon.Pun.UtilityScripts
             PhotonNetwork.CurrentRoom.SetCustomProperties(props);
 
 
-            Debug.Log("Set Custom Props for Time: "+ props.ToStringFull() + " wasSet: "+wasSet);
         }
     }
 }
