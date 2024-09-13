@@ -8,7 +8,6 @@ ScriptsOnlyBuild:
     - SingleShotgun
     Assembly-CSharp.dll:
     - CharacterAnimation
-    - CharacterControl
     - CheatController
     - FindingMatchControl
     - FriendListControl
@@ -48,9 +47,6 @@ ScriptsOnlyBuild:
     PhotonUnityNetworking.Utilities.dll:
     - Photon.Pun.UtilityScripts.CountdownTimer
     PhotonUnityNetworking.dll:
-    - Photon.Pun.PhotonAnimatorView
-    - Photon.Pun.PhotonRigidbodyView
-    - Photon.Pun.PhotonTransformView
     - Photon.Pun.PhotonView
     - Photon.Pun.ServerSettings
     Unity.Rider.Editor.dll:
@@ -65,9 +61,6 @@ ScriptsOnlyBuild:
     - TMPro.TMP_Dropdown
     - TMPro.TMP_FontAsset
     - TMPro.TMP_InputField
-    - TMPro.TMP_Settings
-    - TMPro.TMP_SpriteAsset
-    - TMPro.TMP_StyleSheet
     - TMPro.TextMeshProUGUI
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
@@ -296,11 +289,21 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 48
       Script: {instanceID: 0}
+    - Class: 54
+      Script: {instanceID: 0}
     - Class: 64
+      Script: {instanceID: 0}
+    - Class: 74
       Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
     - Class: 89
+      Script: {instanceID: 0}
+    - Class: 90
+      Script: {instanceID: 0}
+    - Class: 91
+      Script: {instanceID: 0}
+    - Class: 95
       Script: {instanceID: 0}
     - Class: 104
       Script: {instanceID: 0}
@@ -315,9 +318,13 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 17246}
     - Class: 114
+      Script: {instanceID: 17644}
+    - Class: 114
       Script: {instanceID: 17734}
     - Class: 114
       Script: {instanceID: 17784}
+    - Class: 114
+      Script: {instanceID: 17986}
     - Class: 114
       Script: {instanceID: 17998}
     - Class: 114
@@ -332,9 +339,15 @@ ScriptsOnlyBuild:
       Script: {instanceID: 21462}
     - Class: 114
       Script: {instanceID: 22216}
+    - Class: 114
+      Script: {instanceID: 22312}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
+      Script: {instanceID: 0}
+    - Class: 136
+      Script: {instanceID: 0}
+    - Class: 137
       Script: {instanceID: 0}
     - Class: 157
       Script: {instanceID: 0}
@@ -2390,6 +2403,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core
     namespaceName: Unity.VisualScripting
     className: UnityOnSliderValueChangedMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: d8b9eb7acd51779211f14744f934ddad
+    assemblyName: Assembly-CSharp
+    namespaceName: Kutuphanem
+    className: Animasyon
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
