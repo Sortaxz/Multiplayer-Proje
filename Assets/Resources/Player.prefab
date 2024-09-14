@@ -4548,10 +4548,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowLayerWeightsInspector: 1
   ShowParameterInspector: 1
-  m_SynchronizeParameters: []
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 2
+    Name: isWalking
+  - Type: 4
+    SynchronizeType: 2
+    Name: isRunning
+  - Type: 4
+    SynchronizeType: 2
+    Name: isRightWalking
+  - Type: 4
+    SynchronizeType: 2
+    Name: isLeftWalking
+  - Type: 4
+    SynchronizeType: 2
+    Name: isWalkingBack
+  - Type: 4
+    SynchronizeType: 2
+    Name: isJumping
+  - Type: 4
+    SynchronizeType: 2
+    Name: isCrounch
+  - Type: 1
+    SynchronizeType: 2
+    Name: crounchSpeed
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
+  - SynchronizeType: 0
+    LayerIndex: 1
 --- !u!114 &3074108910655071372
 MonoBehaviour:
   m_ObjectHideFlags: 0

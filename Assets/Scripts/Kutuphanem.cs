@@ -143,7 +143,7 @@ namespace Kutuphanem
 
         public void CharacterMove(Animator anim,string speedValue,float maksimumUzunluk,float tamHiz, float yürümeHizi)
         {
-            if (runing)
+            if (leftShift)
             {
                 anim.SetBool("İleriAktifMi",true);
                 maxSpeed = tamHiz;

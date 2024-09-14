@@ -10,7 +10,9 @@ public  class InputManager : MonoBehaviourPunCallbacks
     protected bool left => Input.GetKey(KeyCode.A);
     protected bool right => Input.GetKey(KeyCode.D);
     protected bool backward => Input.GetKey(KeyCode.S);
-    protected bool runing => Input.GetKey(KeyCode.LeftShift);
+    protected bool leftShift => Input.GetKey(KeyCode.LeftShift);
+    protected bool ctrl => Input.GetKey(KeyCode.C);
+    protected bool rewenal => Input.GetKeyDown(KeyCode.R);
     protected float Horizontal => Input.GetAxis("Horizontal") ;
     protected float Vertical => Input.GetAxis("Vertical") ;
     protected float mouseScrollWhell => Input.GetAxisRaw("Mouse ScrollWheel");
@@ -20,8 +22,16 @@ public  class InputManager : MonoBehaviourPunCallbacks
 public class PlayerAnimation : InputManager
 {
     protected bool isWalking => forward ? true : false;
-    protected bool isRightWalking => left ? true : false;
-    protected bool isLeftWalking => right ? true : false; 
-    protected bool isRunning => runing ? true : false;
+    protected bool isRightWalking => right ? true : false;
+    protected bool isLeftWalking => left ? true : false; 
+    protected bool isRunning => forward && leftShift ? true : false;
     protected bool isJumping => CharacterControl.IsPlayerJump ? true : false;
+
+    protected bool isCrounchIdle =>ctrl ? true : false;
+    protected bool isCrounchLeft =>ctrl && left ? true : false;
+    protected bool isCrounchRight =>ctrl && right ? true : false;
+    protected bool isCrouncWalkForward => ctrl && forward ? true : false;
+    protected bool isCrounchWalkBackward => ctrl && backward ? true : false;
+
+    protected bool isReload => rewenal ? true : false;
 }

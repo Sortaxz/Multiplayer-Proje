@@ -48,6 +48,7 @@ public class CharacterControl : InputManager,IDamageable
     GameManager gameManager;
     Hashtable playerProps;
     private bool isLife = false;
+    private bool resetSpeed = false;
     private void Awake() 
     {
         currentHealt = maxHealt;
@@ -108,8 +109,8 @@ public class CharacterControl : InputManager,IDamageable
             return;
     
         PlayerMovement();
-        rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);
-    
+       
+        
     }
 
     private void Move()
@@ -130,19 +131,35 @@ public class CharacterControl : InputManager,IDamageable
 
     private void PlayerMovement()
     {
+        PlayerJumpMove();
+        PlayerMoveForce();
+    }
 
-        if(jump && !isGround)
+    private void PlayerMoveForce()
+    {
+        if (!forward && !left && !right && !backward && !leftShift && !ctrl)
+        {
+            rb.velocity = Vector3.zero;
+        }
+        else
+        {
+            rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);
+
+        }
+    }
+
+    private void PlayerJumpMove()
+    {
+        if (jump && !isGround)
         {
             rb.AddForce(Vector3.up * 300);
             isGround = true;
             isPlayerJump = true;
         }
-        else if(!jump && isGround)
+        else if (!jump && isGround)
         {
             isPlayerJump = false;
         }
-       
-        
     }
 
     private void OnCollisionEnter(Collision other) 
@@ -208,11 +225,7 @@ public class CharacterControl : InputManager,IDamageable
 
         if(pw.IsMine)
         {
-            /*
-            Hashtable hash = new Hashtable();
-            hash.Add("gunItemIndex",gunItemIndex);
-            PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
-            */
+           
             if(playerProps == null)
             {
                 playerProps = new Hashtable();

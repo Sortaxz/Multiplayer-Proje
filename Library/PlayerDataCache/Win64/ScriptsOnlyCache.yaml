@@ -8,6 +8,7 @@ ScriptsOnlyBuild:
     - SingleShotgun
     Assembly-CSharp.dll:
     - CharacterAnimation
+    - CharacterControl
     - CheatController
     - FindingMatchControl
     - FriendListControl
@@ -47,6 +48,9 @@ ScriptsOnlyBuild:
     PhotonUnityNetworking.Utilities.dll:
     - Photon.Pun.UtilityScripts.CountdownTimer
     PhotonUnityNetworking.dll:
+    - Photon.Pun.PhotonAnimatorView
+    - Photon.Pun.PhotonRigidbodyView
+    - Photon.Pun.PhotonTransformView
     - Photon.Pun.PhotonView
     - Photon.Pun.ServerSettings
     Unity.Rider.Editor.dll:
@@ -61,6 +65,9 @@ ScriptsOnlyBuild:
     - TMPro.TMP_Dropdown
     - TMPro.TMP_FontAsset
     - TMPro.TMP_InputField
+    - TMPro.TMP_Settings
+    - TMPro.TMP_SpriteAsset
+    - TMPro.TMP_StyleSheet
     - TMPro.TextMeshProUGUI
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
@@ -293,15 +300,9 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 64
       Script: {instanceID: 0}
-    - Class: 74
-      Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
     - Class: 89
-      Script: {instanceID: 0}
-    - Class: 90
-      Script: {instanceID: 0}
-    - Class: 91
       Script: {instanceID: 0}
     - Class: 95
       Script: {instanceID: 0}
@@ -332,15 +333,15 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 19092}
     - Class: 114
-      Script: {instanceID: 20532}
+      Script: {instanceID: 20534}
     - Class: 114
-      Script: {instanceID: 21024}
+      Script: {instanceID: 21026}
     - Class: 114
-      Script: {instanceID: 21462}
+      Script: {instanceID: 21464}
     - Class: 114
-      Script: {instanceID: 22216}
+      Script: {instanceID: 22218}
     - Class: 114
-      Script: {instanceID: 22312}
+      Script: {instanceID: 22314}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -467,55 +468,55 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 19626}
     - Class: 114
-      Script: {instanceID: 20036}
+      Script: {instanceID: 20038}
     - Class: 114
-      Script: {instanceID: 20184}
+      Script: {instanceID: 20186}
     - Class: 114
-      Script: {instanceID: 20252}
+      Script: {instanceID: 20254}
     - Class: 114
-      Script: {instanceID: 20306}
+      Script: {instanceID: 20308}
     - Class: 114
-      Script: {instanceID: 20322}
+      Script: {instanceID: 20324}
     - Class: 114
-      Script: {instanceID: 20378}
+      Script: {instanceID: 20380}
     - Class: 114
-      Script: {instanceID: 20728}
+      Script: {instanceID: 20730}
     - Class: 114
-      Script: {instanceID: 20770}
+      Script: {instanceID: 20772}
     - Class: 114
-      Script: {instanceID: 21024}
+      Script: {instanceID: 21026}
     - Class: 114
-      Script: {instanceID: 21124}
+      Script: {instanceID: 21126}
     - Class: 114
-      Script: {instanceID: 21216}
+      Script: {instanceID: 21218}
     - Class: 114
-      Script: {instanceID: 21446}
+      Script: {instanceID: 21448}
     - Class: 114
-      Script: {instanceID: 21462}
-    - Class: 114
-      Script: {instanceID: 21470}
+      Script: {instanceID: 21464}
     - Class: 114
       Script: {instanceID: 21472}
     - Class: 114
-      Script: {instanceID: 21478}
+      Script: {instanceID: 21474}
     - Class: 114
-      Script: {instanceID: 21584}
+      Script: {instanceID: 21480}
     - Class: 114
-      Script: {instanceID: 21900}
+      Script: {instanceID: 21586}
     - Class: 114
-      Script: {instanceID: 22068}
+      Script: {instanceID: 21902}
     - Class: 114
-      Script: {instanceID: 22312}
+      Script: {instanceID: 22070}
     - Class: 114
-      Script: {instanceID: 22592}
+      Script: {instanceID: 22314}
     - Class: 114
-      Script: {instanceID: 22946}
+      Script: {instanceID: 22594}
     - Class: 114
-      Script: {instanceID: 23074}
+      Script: {instanceID: 22948}
     - Class: 114
-      Script: {instanceID: 23242}
+      Script: {instanceID: 23076}
     - Class: 114
-      Script: {instanceID: 23382}
+      Script: {instanceID: 23244}
+    - Class: 114
+      Script: {instanceID: 23384}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -1425,6 +1426,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core
     namespaceName: Unity.VisualScripting
     className: UnityOnPointerClickMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: d8b9eb7acd51779211f14744f934ddad
+    assemblyName: Assembly-CSharp
+    namespaceName: Kutuphanem
+    className: Animasyon
   - hash:
       serializedVersion: 2
       Hash: f4a018bbb3d774bf740145ade24d381c
@@ -2403,12 +2410,6 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core
     namespaceName: Unity.VisualScripting
     className: UnityOnSliderValueChangedMessageListener
-  - hash:
-      serializedVersion: 2
-      Hash: d8b9eb7acd51779211f14744f934ddad
-    assemblyName: Assembly-CSharp
-    namespaceName: Kutuphanem
-    className: Animasyon
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
