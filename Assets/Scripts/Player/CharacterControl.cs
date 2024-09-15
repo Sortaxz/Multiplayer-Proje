@@ -19,8 +19,8 @@ public class CharacterControl : InputManager,IDamageable
     private bool playerStop = false;
     private static bool isGround = false;
     
-    private static bool isPlayerJump = false;
     private float verticalLookRotation;
+    private static bool isPlayerJump = false;
 
     public static bool IsPlayerJump { get { return isPlayerJump;} set { isPlayerJump = value; } }
 
@@ -49,6 +49,7 @@ public class CharacterControl : InputManager,IDamageable
     Hashtable playerProps;
     private bool isLife = false;
     private bool resetSpeed = false;
+    [SerializeField] private float jumpStrength;
     private void Awake() 
     {
         currentHealt = maxHealt;
@@ -137,12 +138,20 @@ public class CharacterControl : InputManager,IDamageable
 
     private void PlayerMoveForce()
     {
+        
         if (!forward && !left && !right && !backward && !leftShift && !ctrl)
         {
-            rb.velocity = Vector3.zero;
+            print("hiz sifirlaniyor");
+            rb.velocity = new Vector3(0,rb.velocity.y,0);
+        }
+        else if(ctrl && (!forward && !left && !right && !backward && !leftShift))
+        {
+            print("hiz sifirlaniyor2");
+            rb.velocity = new Vector3(0,rb.velocity.y,0);
         }
         else
         {
+            print("kuvvet uygulaniyor.");
             rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);
 
         }
@@ -150,15 +159,18 @@ public class CharacterControl : InputManager,IDamageable
 
     private void PlayerJumpMove()
     {
-        if (jump && !isGround)
+        if(!forward && !right && !left && !ctrl && !leftShift)
         {
-            rb.AddForce(Vector3.up * 300);
-            isGround = true;
-            isPlayerJump = true;
-        }
-        else if (!jump && isGround)
-        {
-            isPlayerJump = false;
+            if (jump && !isGround)
+            {
+                rb.AddForce(Vector3.up * jumpStrength);
+                isGround = true;
+                isPlayerJump = true;
+            }
+            else if (!jump && isGround)
+            {
+                isPlayerJump = false;
+            }
         }
     }
 

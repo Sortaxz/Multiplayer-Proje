@@ -3,19 +3,15 @@ ScriptsOnlyBuild:
     Assembly-CSharp:
     - CharacterAnimation
     - CharacterControl
-    - FriendListControl
     - GunInfo
     - SingleShotgun
     Assembly-CSharp.dll:
-    - CharacterAnimation
-    - CharacterControl
     - CheatController
     - FindingMatchControl
     - FriendListControl
     - FriendSystem
     - GameManager
     - GameUI
-    - GunInfo
     - HandleControl
     - HealtBar_Control
     - PlayerListControl
@@ -23,7 +19,6 @@ ScriptsOnlyBuild:
     - PlayerPropImageControl
     - PlayerScriptableObject
     - SettingsController
-    - SingleShotgun
     - SpawnManager
     - SunucuYonetim
     - UIMenager
@@ -48,9 +43,6 @@ ScriptsOnlyBuild:
     PhotonUnityNetworking.Utilities.dll:
     - Photon.Pun.UtilityScripts.CountdownTimer
     PhotonUnityNetworking.dll:
-    - Photon.Pun.PhotonAnimatorView
-    - Photon.Pun.PhotonRigidbodyView
-    - Photon.Pun.PhotonTransformView
     - Photon.Pun.PhotonView
     - Photon.Pun.ServerSettings
     Unity.Rider.Editor.dll:
@@ -60,18 +52,15 @@ ScriptsOnlyBuild:
     - TMPro.TMP_Settings
     - TMPro.TMP_SpriteAsset
     - TMPro.TMP_StyleSheet
-    - TMPro.TextMeshProUGUI
     Unity.TextMeshPro.dll:
     - TMPro.TMP_Dropdown
     - TMPro.TMP_FontAsset
     - TMPro.TMP_InputField
-    - TMPro.TMP_Settings
-    - TMPro.TMP_SpriteAsset
-    - TMPro.TMP_StyleSheet
     - TMPro.TextMeshProUGUI
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
+    - UnityEditor.Graphs.AnimationBlendTree.Node
     - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
@@ -82,7 +71,6 @@ ScriptsOnlyBuild:
     - UnityEditor.TestTools.TestRunner.TestListCacheData
     - UnityEditor.TestTools.TestRunner.TestRun.TestJobDataHolder
     UnityEngine.UI:
-    - UnityEngine.UI.Button
     - UnityEngine.UI.CanvasScaler
     - UnityEngine.UI.GraphicRaycaster
     - UnityEngine.UI.Image
@@ -273,9 +261,6 @@ ScriptsOnlyBuild:
   - assembly: Assembly-CSharp
     fullTypeName: CheatController
     methodName: Send_Message
-  - assembly: Assembly-CSharp
-    fullTypeName: FriendListControl
-    methodName: RemoveFriendButton_Method
   sceneClasses:
     Assets/Scenes/GameScene.unity:
     - Class: 1
@@ -296,15 +281,11 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 48
       Script: {instanceID: 0}
-    - Class: 54
-      Script: {instanceID: 0}
     - Class: 64
       Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
     - Class: 89
-      Script: {instanceID: 0}
-    - Class: 95
       Script: {instanceID: 0}
     - Class: 104
       Script: {instanceID: 0}
@@ -319,13 +300,9 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 17246}
     - Class: 114
-      Script: {instanceID: 17644}
-    - Class: 114
       Script: {instanceID: 17734}
     - Class: 114
       Script: {instanceID: 17784}
-    - Class: 114
-      Script: {instanceID: 17986}
     - Class: 114
       Script: {instanceID: 17998}
     - Class: 114
@@ -340,15 +317,9 @@ ScriptsOnlyBuild:
       Script: {instanceID: 21464}
     - Class: 114
       Script: {instanceID: 22218}
-    - Class: 114
-      Script: {instanceID: 22314}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
-      Script: {instanceID: 0}
-    - Class: 136
-      Script: {instanceID: 0}
-    - Class: 137
       Script: {instanceID: 0}
     - Class: 157
       Script: {instanceID: 0}
@@ -646,12 +617,6 @@ ScriptsOnlyBuild:
     assemblyName: PhotonUnityNetworking.Demos
     namespaceName: Photon.Pun.Demo.Cockpit
     className: GameVersionField
-  - hash:
-      serializedVersion: 2
-      Hash: 5ff1053ebcafd90dbe9d30c980f452ed
-    assemblyName: Assembly-CSharp
-    namespaceName: 
-    className: GunControl
   - hash:
       serializedVersion: 2
       Hash: 00bbd9db8634496d079d17711b2ff7c4
@@ -1320,7 +1285,7 @@ ScriptsOnlyBuild:
     className: VariablesSaver
   - hash:
       serializedVersion: 2
-      Hash: 26cd05a1e3bd10c5b1a38462b2c297e5
+      Hash: f0626befada87eb12e1424bacb4af738
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: CharacterControl
@@ -2410,6 +2375,18 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core
     namespaceName: Unity.VisualScripting
     className: UnityOnSliderValueChangedMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 81e34e924d4ea8ced8bdb99c5d8ed1e1
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: CombatController
+  - hash:
+      serializedVersion: 2
+      Hash: 00b2a902f0ee9500c14e57360c3de60a
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: Weapon_ScriptableObject
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity

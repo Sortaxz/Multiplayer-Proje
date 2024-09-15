@@ -22,9 +22,27 @@ public  class InputManager : MonoBehaviourPunCallbacks
 public class PlayerAnimation : InputManager
 {
     protected bool isWalking => forward ? true : false;
-    protected bool isRightWalking => right ? true : false;
-    protected bool isLeftWalking => left ? true : false; 
+    protected bool isWalkForwardLeft => forward && left ? true : false;
+    protected bool isWalkForwardRight => forward && right ? true : false;
     protected bool isRunning => forward && leftShift ? true : false;
+
+
+    protected bool isBackwardWalk => backward ? true : false;
+    protected bool isWalkBackwardLeft => backward && left ? true : false;
+    protected bool isWalkBacwardRight => backward && right ? true : false;
+
+    protected bool isBackwardRun => backward && leftShift ? true : false;
+
+    protected bool isRightWalking => right ? true : false;
+    protected bool isRightRun => right  && leftShift ? true : false;
+    protected bool isRightForwardRun => right && forward && leftShift ? true : false;
+    protected bool isRightBacwardRun => right && backward && leftShift ? true : false;
+    
+    protected bool isLeftWalking => left ? true : false; 
+    protected bool isLeftRun => left && leftShift ? true : false;
+    protected bool isLeftForwardRun => left && forward && leftShift ? true : false;
+    protected bool isLeftBackwardRun => left && backward && leftShift ? true : false;
+
     protected bool isJumping => CharacterControl.IsPlayerJump ? true : false;
 
     protected bool isCrounchIdle =>ctrl ? true : false;
