@@ -16,7 +16,8 @@ public  class InputManager : MonoBehaviourPunCallbacks
     protected float Horizontal => Input.GetAxis("Horizontal") ;
     protected float Vertical => Input.GetAxis("Vertical") ;
     protected float mouseScrollWhell => Input.GetAxisRaw("Mouse ScrollWheel");
-    protected bool mosueLeftKey => Input.GetMouseButtonDown(0);
+    protected bool mousePressedLeftButton => Input.GetMouseButtonDown(0);
+    protected bool mousePressedLeftLeave => Input.GetMouseButtonUp(0);
 }
 
 public class PlayerAnimation : InputManager

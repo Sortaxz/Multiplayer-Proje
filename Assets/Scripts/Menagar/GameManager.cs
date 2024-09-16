@@ -10,6 +10,19 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
+    private static GameManager instance;
+    public static GameManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<GameManager>();
+            }
+            return instance;
+        }
+    }
+
     [SerializeField] private PlayerScriptableObject playerScriptableObject;
     public PlayerScriptableObject PlayerScriptableObject { get { return playerScriptableObject; } }
     [SerializeField]private CharacterControl[] characterOfPlayers;
@@ -18,7 +31,15 @@ public class GameManager : MonoBehaviourPunCallbacks
     private bool findCharacterOfPlayers = false;
     public bool FindCharacterOfPlayers { get { return findCharacterOfPlayers;} set { findCharacterOfPlayers = value;}}
     private PhotonView PV;
-    GameObject character;
+    private GameObject character;
+    [SerializeField] private GameObject bulletsParent;
+
+    private List<GameObject> scanner = new List<GameObject>();
+    public List<GameObject> Scanner { get { return scanner;} set { scanner = value; } }
+    private List<GameObject> mp5 = new List<GameObject>();
+    public List<GameObject> Mp5 { get { return mp5;} set { mp5 = value; } }
+
+
 
     public override void OnEnable()
     {
@@ -207,7 +228,6 @@ public class GameManager : MonoBehaviourPunCallbacks
                         string userId = characterOfPlayers[i].GetComponent<PhotonView>().Owner.UserId;
                         if(PhotonNetwork.LocalPlayer.UserId != userId)
                         {
-                            print(userId);
                             if(characterOfPlayers[i].OtherPlayerHealtBar.fillAmount <= 0)
                             {
                                 characterOfPlayers[i].OtherPlayerHealtBar.fillAmount = 1f;

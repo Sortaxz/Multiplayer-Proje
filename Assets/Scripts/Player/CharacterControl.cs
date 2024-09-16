@@ -16,7 +16,6 @@ public class CharacterControl : InputManager,IDamageable
     [SerializeField] private float mouseSensitivity, sprintSpeed , walkSpeed, jumpForce , smothTime;
     private Vector3 smoothMoveVelocity;
     private Vector3 moveAmount;
-    private bool playerStop = false;
     private static bool isGround = false;
     
     private float verticalLookRotation;
@@ -48,7 +47,6 @@ public class CharacterControl : InputManager,IDamageable
     GameManager gameManager;
     Hashtable playerProps;
     private bool isLife = false;
-    private bool resetSpeed = false;
     [SerializeField] private float jumpStrength;
     private void Awake() 
     {
@@ -141,17 +139,14 @@ public class CharacterControl : InputManager,IDamageable
         
         if (!forward && !left && !right && !backward && !leftShift && !ctrl)
         {
-            print("hiz sifirlaniyor");
             rb.velocity = new Vector3(0,rb.velocity.y,0);
         }
         else if(ctrl && (!forward && !left && !right && !backward && !leftShift))
         {
-            print("hiz sifirlaniyor2");
             rb.velocity = new Vector3(0,rb.velocity.y,0);
         }
         else
         {
-            print("kuvvet uygulaniyor.");
             rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);
 
         }
@@ -192,6 +187,7 @@ public class CharacterControl : InputManager,IDamageable
 
         if(mouseScrollWhell>0f)
         {
+
             if(gunItemIndex >= gunItems.Length -1)
             {
                 EquipGunItem(0);
@@ -203,6 +199,7 @@ public class CharacterControl : InputManager,IDamageable
         }
         else if(mouseScrollWhell < 0f)
         {
+
             if(gunItemIndex <= 0)
             {
                 EquipGunItem(gunItems.Length-1);
@@ -213,10 +210,12 @@ public class CharacterControl : InputManager,IDamageable
             }
         }
 
-        if(mosueLeftKey)
+        /*
+        if(mousePressedLeftButton)
         {
             gunItems[gunItemIndex].Use();
         }
+        */
     }
 
     private void EquipGunItem(int gunItemIndex)
@@ -266,7 +265,6 @@ public class CharacterControl : InputManager,IDamageable
             characterMSHRenderer.materials[1].color = gameManager.PlayerScriptableObject.PlayerColors[(int)colorIndex];
 
             targetPlayer.CustomProperties.TryGetValue("healt",out object healt);
-            print(targetPlayer.UserId + "-" +healt);
         }
 
         if(targetPlayer.CustomProperties.TryGetValue("life",out object life))

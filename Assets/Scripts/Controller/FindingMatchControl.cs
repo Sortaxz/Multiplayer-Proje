@@ -28,10 +28,8 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] private Button startMatchFinding_Button;
     [SerializeField] private Button cancelMatchFinding_Button;
     private ExitGames.Client.Photon.Hashtable playerProps;
-    private bool IsPlayerReady = true;
     private bool gameStarted = false; 
     private bool readyCallMatch = false;
-    private bool counterStart = false;
     private float deger = 0;
     PhotonView PV;
     

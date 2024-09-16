@@ -1,18 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public class Weapon_ScriptableObject : MonoBehaviour
+[CreateAssetMenu(fileName = "Weapon_SO", menuName = "Create Weapons So", order = 1)]
+public class Weapon_ScriptableObject : ScriptableObject
 {
-    // Start is called before the first frame update
-    void Start()
+    private static Weapon_ScriptableObject instance;
+    public static Weapon_ScriptableObject Instance
     {
-        
+        get
+        {
+            if(instance == null)
+            {
+                instance = Resources.Load<Weapon_ScriptableObject>("ScriptableObjects/Weapons");
+            }
+            return instance;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public WeaponInfos[] weapons;
+
+}
+
+[Serializable]
+public class WeaponInfos
+{
+    public int weaponIndex;
+    public string weaponName;
+    public int damage;
+    public int magazineCapacity;
+    public float weaponRange;
 }

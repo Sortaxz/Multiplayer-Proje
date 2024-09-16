@@ -65,7 +65,6 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
     public override void OnConnectedToMaster()
     {
-        print("server'a bağlandi");
         StopCoroutine(uIMenager.ConnetingAnimation());
         
         if(SaveSystem.PlayerPrefsDataQuery("icon") && SaveSystem.PlayerPrefsDataQuery("color") && SaveSystem.PlayerPrefsDataQuery("playerName"))
@@ -110,7 +109,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
             RoomOptions roomOptions = new RoomOptions()
             {
-                MaxPlayers = 1,
+                MaxPlayers = 2,
                 CustomRoomProperties = roomProps,
                 CustomRoomPropertiesForLobby = roomPropsString,
                 PublishUserId = true
@@ -134,7 +133,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
             {
                 {"gameMode",gameMode}
             };
-            PhotonNetwork.JoinRandomRoom(roomProps, 1);
+            PhotonNetwork.JoinRandomRoom(roomProps, 2);
         }
     }
 
@@ -176,7 +175,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
             };
             RoomOptions roomOptions = new RoomOptions()
             {
-                MaxPlayers = 1,
+                MaxPlayers = 2,
                 CustomRoomProperties = roomProps,
                 CustomRoomPropertiesForLobby = roomPropStrings,
                 PublishUserId = true

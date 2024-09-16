@@ -3,8 +3,11 @@ ScriptsOnlyBuild:
     Assembly-CSharp:
     - CharacterAnimation
     - CharacterControl
+    - CombatController
     - GunInfo
     - SingleShotgun
+    - WeaponController
+    - Weapon_ScriptableObject
     Assembly-CSharp.dll:
     - CheatController
     - FindingMatchControl
@@ -56,15 +59,15 @@ ScriptsOnlyBuild:
     - TMPro.TMP_Dropdown
     - TMPro.TMP_FontAsset
     - TMPro.TMP_InputField
+    - TMPro.TMP_Settings
+    - TMPro.TMP_SpriteAsset
+    - TMPro.TMP_StyleSheet
     - TMPro.TextMeshProUGUI
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
-    - UnityEditor.Graphs.AnimationBlendTree.Node
-    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -96,6 +99,8 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.ToggleGroup
     - UnityEngine.UI.VerticalLayoutGroup
   serializedClasses:
+    Assembly-CSharp:
+    - WeaponInfos
     PhotonRealtime:
     - Photon.Realtime.AppSettings
     PhotonUnityNetworking:
@@ -298,25 +303,25 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 16688}
     - Class: 114
-      Script: {instanceID: 17246}
+      Script: {instanceID: 17244}
     - Class: 114
-      Script: {instanceID: 17734}
+      Script: {instanceID: 17732}
     - Class: 114
-      Script: {instanceID: 17784}
+      Script: {instanceID: 17782}
     - Class: 114
-      Script: {instanceID: 17998}
+      Script: {instanceID: 17996}
     - Class: 114
-      Script: {instanceID: 18218}
+      Script: {instanceID: 18216}
     - Class: 114
-      Script: {instanceID: 19092}
+      Script: {instanceID: 19090}
     - Class: 114
-      Script: {instanceID: 20534}
+      Script: {instanceID: 20536}
     - Class: 114
-      Script: {instanceID: 21026}
+      Script: {instanceID: 21028}
     - Class: 114
-      Script: {instanceID: 21464}
+      Script: {instanceID: 21466}
     - Class: 114
-      Script: {instanceID: 22218}
+      Script: {instanceID: 22220}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -395,39 +400,41 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 16790}
     - Class: 114
-      Script: {instanceID: 16890}
+      Script: {instanceID: 16888}
     - Class: 114
-      Script: {instanceID: 17312}
+      Script: {instanceID: 17310}
     - Class: 114
-      Script: {instanceID: 17360}
+      Script: {instanceID: 17358}
     - Class: 114
-      Script: {instanceID: 17564}
+      Script: {instanceID: 17562}
     - Class: 114
-      Script: {instanceID: 17644}
+      Script: {instanceID: 17642}
     - Class: 114
-      Script: {instanceID: 17718}
+      Script: {instanceID: 17716}
     - Class: 114
-      Script: {instanceID: 17784}
+      Script: {instanceID: 17782}
     - Class: 114
-      Script: {instanceID: 17790}
+      Script: {instanceID: 17788}
     - Class: 114
-      Script: {instanceID: 17986}
+      Script: {instanceID: 17984}
     - Class: 114
-      Script: {instanceID: 17998}
+      Script: {instanceID: 17996}
     - Class: 114
-      Script: {instanceID: 18218}
+      Script: {instanceID: 18216}
     - Class: 114
-      Script: {instanceID: 18298}
+      Script: {instanceID: 18296}
     - Class: 114
-      Script: {instanceID: 18698}
+      Script: {instanceID: 18696}
     - Class: 114
-      Script: {instanceID: 19054}
+      Script: {instanceID: 19052}
     - Class: 114
-      Script: {instanceID: 19058}
+      Script: {instanceID: 19056}
     - Class: 114
-      Script: {instanceID: 19110}
+      Script: {instanceID: 19108}
     - Class: 114
-      Script: {instanceID: 19134}
+      Script: {instanceID: 19132}
+    - Class: 114
+      Script: {instanceID: 19222}
     - Class: 114
       Script: {instanceID: 19224}
     - Class: 114
@@ -439,55 +446,59 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 19626}
     - Class: 114
-      Script: {instanceID: 20038}
+      Script: {instanceID: 19818}
     - Class: 114
-      Script: {instanceID: 20186}
+      Script: {instanceID: 20040}
     - Class: 114
-      Script: {instanceID: 20254}
+      Script: {instanceID: 20188}
     - Class: 114
-      Script: {instanceID: 20308}
+      Script: {instanceID: 20256}
     - Class: 114
-      Script: {instanceID: 20324}
+      Script: {instanceID: 20310}
     - Class: 114
-      Script: {instanceID: 20380}
+      Script: {instanceID: 20326}
     - Class: 114
-      Script: {instanceID: 20730}
+      Script: {instanceID: 20382}
     - Class: 114
-      Script: {instanceID: 20772}
+      Script: {instanceID: 20732}
     - Class: 114
-      Script: {instanceID: 21026}
+      Script: {instanceID: 20774}
     - Class: 114
-      Script: {instanceID: 21126}
+      Script: {instanceID: 21028}
     - Class: 114
-      Script: {instanceID: 21218}
+      Script: {instanceID: 21128}
     - Class: 114
-      Script: {instanceID: 21448}
+      Script: {instanceID: 21220}
     - Class: 114
-      Script: {instanceID: 21464}
+      Script: {instanceID: 21450}
     - Class: 114
-      Script: {instanceID: 21472}
+      Script: {instanceID: 21466}
     - Class: 114
       Script: {instanceID: 21474}
     - Class: 114
-      Script: {instanceID: 21480}
+      Script: {instanceID: 21476}
     - Class: 114
-      Script: {instanceID: 21586}
+      Script: {instanceID: 21482}
     - Class: 114
-      Script: {instanceID: 21902}
+      Script: {instanceID: 21588}
     - Class: 114
-      Script: {instanceID: 22070}
+      Script: {instanceID: 21904}
     - Class: 114
-      Script: {instanceID: 22314}
+      Script: {instanceID: 22072}
     - Class: 114
-      Script: {instanceID: 22594}
+      Script: {instanceID: 22316}
     - Class: 114
-      Script: {instanceID: 22948}
+      Script: {instanceID: 22596}
     - Class: 114
-      Script: {instanceID: 23076}
+      Script: {instanceID: 22898}
     - Class: 114
-      Script: {instanceID: 23244}
+      Script: {instanceID: 22952}
     - Class: 114
-      Script: {instanceID: 23384}
+      Script: {instanceID: 23080}
+    - Class: 114
+      Script: {instanceID: 23248}
+    - Class: 114
+      Script: {instanceID: 23390}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -697,7 +708,7 @@ ScriptsOnlyBuild:
     className: RoomListCell
   - hash:
       serializedVersion: 2
-      Hash: f747ff1b3fad7494cc6e3f367d34ed29
+      Hash: 8de7c1cf2ad5762751953591ba3b98e7
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: GameManager
@@ -1231,6 +1242,12 @@ ScriptsOnlyBuild:
     className: PlayerManager
   - hash:
       serializedVersion: 2
+      Hash: 6580f67c90088df94ea085019d3084f8
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: WeaponController
+  - hash:
+      serializedVersion: 2
       Hash: efccf8e799ea5b992a17cfa3dfdda891
     assemblyName: PhotonUnityNetworking.Demos
     namespaceName: Photon.Pun.Demo.Cockpit
@@ -1391,6 +1408,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core
     namespaceName: Unity.VisualScripting
     className: UnityOnPointerClickMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 391492a688e4078beaed8cbfd1278570
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: CombatController
   - hash:
       serializedVersion: 2
       Hash: d8b9eb7acd51779211f14744f934ddad
@@ -2215,6 +2238,12 @@ ScriptsOnlyBuild:
     className: LobbyTopPanel
   - hash:
       serializedVersion: 2
+      Hash: 518bf0694e3bbde909a641d432f0cfa1
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: Weapon_ScriptableObject
+  - hash:
+      serializedVersion: 2
       Hash: 203b319722c18f871bf32b60c01bd4ce
     assemblyName: PhotonUnityNetworking.Demos
     namespaceName: Photon.Pun.Demo.Procedural
@@ -2375,18 +2404,6 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core
     namespaceName: Unity.VisualScripting
     className: UnityOnSliderValueChangedMessageListener
-  - hash:
-      serializedVersion: 2
-      Hash: 81e34e924d4ea8ced8bdb99c5d8ed1e1
-    assemblyName: Assembly-CSharp
-    namespaceName: 
-    className: CombatController
-  - hash:
-      serializedVersion: 2
-      Hash: 00b2a902f0ee9500c14e57360c3de60a
-    assemblyName: Assembly-CSharp
-    namespaceName: 
-    className: Weapon_ScriptableObject
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity

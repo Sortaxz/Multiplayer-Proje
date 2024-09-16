@@ -10,7 +10,7 @@ public class SingleShotgun : Gun
 
     public override void Use()
     {
-        Shoot();
+        //Shoot();
     }
 
     private void Shoot()
