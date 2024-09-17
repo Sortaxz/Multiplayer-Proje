@@ -38,7 +38,12 @@ public class CharacterAnimation : PlayerAnimation
 
 
         CharacterMovementAnimation();
+        //Reloading Firing_Rifle
+
+        
+
     }
+
 
     private void CharacterMovementAnimation()
     {

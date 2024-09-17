@@ -131,7 +131,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 }
                 else
                 {
-                    if(newCharacterOfPlayers[i].PlayerActorNumber-1 < newCharacterOfPlayers.Length)
+                    if(newCharacterOfPlayers[i].PlayerActorNumber-1 < characterOfPlayers.Length)
                     {
                         characterOfPlayers[newCharacterOfPlayers[i].PlayerActorNumber-1] = newCharacterOfPlayers[i];
                     }

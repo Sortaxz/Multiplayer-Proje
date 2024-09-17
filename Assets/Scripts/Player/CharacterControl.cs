@@ -32,6 +32,9 @@ public class CharacterControl : InputManager,IDamageable
     [SerializeField] private Image otherPlayerHealtBar;
     public Image OtherPlayerHealtBar { get {return otherPlayerHealtBar;}}
     public Material CharacterMainMaterial { get { return characterMainMaterial;} set { characterMainMaterial = value; } }
+    GameManager gameManager;
+    [SerializeField] private CombatController combatController;
+    Hashtable playerProps;
     private int gunItemIndex;
     private int previousGunItemIndex = -1;
 
@@ -44,10 +47,11 @@ public class CharacterControl : InputManager,IDamageable
 
     const float maxHealt= 100f;
     float currentHealt  = maxHealt;
-    GameManager gameManager;
-    Hashtable playerProps;
+
     private bool isLife = false;
     [SerializeField] private float jumpStrength;
+
+
     private void Awake() 
     {
         currentHealt = maxHealt;
@@ -57,13 +61,15 @@ public class CharacterControl : InputManager,IDamageable
 
         gameManager = PhotonView.Find((int)pw.InstantiationData[0]).GetComponent<GameManager>();
 
+        combatController = GetComponent<CombatController>();
+
         playerNickName = pw.Owner.NickName;
         playerActorNumber = pw.Owner.ActorNumber;
         transform.name = playerNickName;
 
         if(pw.IsMine)
         {
-            EquipGunItem(0);
+            //EquipGunItem(0);
 
         }
         else
@@ -82,7 +88,9 @@ public class CharacterControl : InputManager,IDamageable
         GameUI.Instance.OtherPlayerHealtBar = otherPlayerHealtBar.GetComponentInChildren<Image>();
     }
 
-    
+    private void Start() 
+    {
+    }
 
     private void Update()
     {
@@ -92,14 +100,8 @@ public class CharacterControl : InputManager,IDamageable
         Look();
         Move();
         
-        WeaponSelection();
-
-        if(Input.GetKeyDown(KeyCode.P))
-        {
-            
-            PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("healt",out object healt);
-            print(healt);
-        }
+        //WeaponSelection();
+        
     }
     
     private void FixedUpdate()
@@ -174,91 +176,17 @@ public class CharacterControl : InputManager,IDamageable
         isGround = false;    
     }
 
-    private void WeaponSelection()
-    {
-        for (int i = 0; i < gunItems.Length; i++)
-        {
-            if(Input.GetKeyDown((i+1).ToString()))
-            {
-                EquipGunItem(i);
-                break;
-            }
-        }
-
-        if(mouseScrollWhell>0f)
-        {
-
-            if(gunItemIndex >= gunItems.Length -1)
-            {
-                EquipGunItem(0);
-            }
-            else
-            {
-                EquipGunItem(gunItemIndex + 1);
-            }
-        }
-        else if(mouseScrollWhell < 0f)
-        {
-
-            if(gunItemIndex <= 0)
-            {
-                EquipGunItem(gunItems.Length-1);
-            }
-            else
-            {
-                EquipGunItem(gunItemIndex - 1);
-            }
-        }
-
-        /*
-        if(mousePressedLeftButton)
-        {
-            gunItems[gunItemIndex].Use();
-        }
-        */
-    }
-
-    private void EquipGunItem(int gunItemIndex)
-    {
-        if(gunItemIndex == previousGunItemIndex)
-            return;
-
-        this.gunItemIndex = gunItemIndex;
-
-        gunItems[gunItemIndex].GunItemGameObject.SetActive(true);
-
-        if(previousGunItemIndex != -1)
-        {
-            gunItems[previousGunItemIndex].GunItemGameObject.SetActive(false);
-        }
-
-        previousGunItemIndex = gunItemIndex;
-
-        if(pw.IsMine)
-        {
-           
-            if(playerProps == null)
-            {
-                playerProps = new Hashtable();
-                playerProps.Add("gunItemIndex",gunItemIndex);
-                PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
-            }
-            else
-            {
-                playerProps["gunItemIndex"] = gunItemIndex;
-                PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
-            }
-
-        }
-
-    }
+   
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
         if(!pw.IsMine && targetPlayer == pw.Owner)
         {
             targetPlayer.CustomProperties.TryGetValue("gunItemIndex",out object itemIndex);
-            EquipGunItem((int)itemIndex);
+            if(itemIndex != null)
+            {
+                combatController.EquipGunItem((int)itemIndex);
+            }
 
             targetPlayer.CustomProperties.TryGetValue("color",out object colorIndex);
 
@@ -273,6 +201,10 @@ public class CharacterControl : InputManager,IDamageable
             if((bool)life)
             {
                 StartCoroutine(gameManager.FindCharacter());
+            }
+            else
+            {
+                StopCoroutine(gameManager.FindCharacter());
             }
         }
 

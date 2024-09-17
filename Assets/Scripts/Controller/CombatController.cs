@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class CombatController : InputManager
 {
+    private GameManager gameManager;
     private Weapon weapon;
     [SerializeField] private WeaponController[] weapons;
     [SerializeField] private Transform gunItemHolder;
@@ -12,26 +13,60 @@ public class CombatController : InputManager
     [SerializeField]private Camera cam;
     private bool fire;
     [SerializeField] private float timingFiring =0f;
+    private int weaponIndex;
+    private int previousWeaponIndex = -1;
+    private int scannerMaximumLead = 120;
+    private int scannerCurrentLead = 0;
+    private int scannerBulletIndex = 0;
     
+    private int mp5MaximumLead = 120;
+    private int mp5CurrentLead = 0;
+    private int mp5BulletIndex = 0;
+
     private void Awake() 
     {
         pw = GetComponent<PhotonView>();
-        cam = GameObject.FindWithTag("CharacterCamera").GetComponent<Camera>();
+        gameManager = GameManager.Instance;
 
-        for (int i = 0; i < weapons.Length; i++)
+        EquipGunItem(weaponIndex);
+        
+        if(pw.IsMine)
         {
-            if(weapons[i].gameObject.activeSelf)
+            cam = GameObject.FindWithTag("CharacterCamera").GetComponent<Camera>();
+            for (int i = 0; i < weapons.Length; i++)
             {
-                weapon = new Weapon(i);
-                weapons[i].CreateBullet(weapon.magazineCapacity,weapon.weaponName,transform.forward);
+                if(weapons[i].gameObject.activeSelf)
+                {
+                    weapon = new Weapon(weapons[i].gameObject.transform.GetSiblingIndex());
+                    print(weapon.weaponName);
+                    weaponIndex = weapon.weopanIndex;
+                    if(weapon.weaponName == "Scanner")
+                    {
+                        scannerCurrentLead = weapon.magazineCapacity;
+                    }
+                    else if(weapon.weaponName == "Mp5")
+                    {
+                        mp5CurrentLead = weapon.magazineCapacity;
+                    }
+                }
+                else
+                {
+                    if(weapon.weaponName == "Scanner")
+                    {
+                        scannerCurrentLead = weapon.magazineCapacity;
+                    }
+                    else if(weapon.weaponName == "Mp5")
+                    {
+                        mp5CurrentLead = weapon.magazineCapacity;
+                    } 
+                }
             }
         }
-
+        
     }
 
     void Start()
     {
-        
     }
 
     void Update()
@@ -39,17 +74,9 @@ public class CombatController : InputManager
         if (!pw.IsMine)
             return;
 
-        if(Input.GetKeyDown(KeyCode.F))
-        {
-            if(weapons[1].gameObject.activeSelf)
-            {
-                weapon = new Weapon(1);
-                weapons[1].CreateBullet(weapon.magazineCapacity,weapon.weaponName,transform.forward);
-            }
-            
-                
-        }
         
+        
+        WeaponSelection();
 
         ShootControl();
 
@@ -59,47 +86,125 @@ public class CombatController : InputManager
     {
         if (mousePressedLeftButton)
         {
-            fire = true;
+            Shoot();
 
         }
-        if (mousePressedLeftLeave)
-        {
-            fire = false;
-        }
-
-
-
-        Shoot();
-    }
-
-    private void FixedUpdate()
-    {
        
+
+
+
     }
 
+    
     private void Shoot()
     {
-        if (fire && timingFiring > .8f)
+        for (int i = 0; i < gunItemHolder.childCount; i++)
         {
-            for (int i = 0; i < gunItemHolder.childCount; i++)
+            if (gunItemHolder.GetChild(i).gameObject.activeSelf)
             {
-                if (gunItemHolder.GetChild(i).gameObject.activeSelf)
-                {
-                    weapon = new Weapon(i);
-                    WeaponController weaponController = weapons[i];
-                    print(weapon.weaponName + "-" + weapon.magazineCapacity);
 
+                weapon = new Weapon(i);
+                print(weapon.weaponName);
+                if (weapon.weaponName == "Scanner")
+                {
+                    if (scannerCurrentLead > 0)
+                    {
+                        gameManager.Scanner[i].gameObject.SetActive(true);
+                        scannerBulletIndex++;
+                        scannerCurrentLead--;
+                        CharacterGunFire(i);
+                    }
                 }
+                if (weapon.weaponName == "Mp5")
+                {
+                    if (mp5CurrentLead > 0)
+                    {
+                        gameManager.Scanner[i].gameObject.SetActive(true);
+                        mp5BulletIndex++;
+                        mp5CurrentLead--;
+                        CharacterGunFire(i);
+                    }
+                }
+
+
             }
-            WeaponController.ToFire(cam, weapon.damage, weapon.magazineCapacity);
-            timingFiring = 0f;
-        }
-        else
-        {
-            timingFiring += Time.deltaTime;
         }
     }
 
+    private void CharacterGunFire(int i)
+    {
+        WeaponController weaponController = weapons[i];
+        weaponController.ToFire(cam, weapon.damage, weapon.magazineCapacity, weapon.weaponName);
+    }
 
+    private void WeaponSelection()
+    {
+        for (int i = 0; i < weapons.Length; i++)
+        {
+            if(Input.GetKeyDown((i+1).ToString()))
+            {
+                EquipGunItem(i);
+                break;
+            }
+        }
 
+        if(mouseScrollWhell>0f)
+        {
+
+            if(weaponIndex >= weapons.Length -1)
+            {
+                EquipGunItem(0);
+            }
+            else
+            {
+                EquipGunItem(weaponIndex + 1);
+            }
+        }
+        else if(mouseScrollWhell < 0f)
+        {
+
+            if(weaponIndex <= 0)
+            {
+                EquipGunItem(weapons.Length-1);
+            }
+            else
+            {
+                EquipGunItem(weaponIndex - 1);
+            }
+        }
+
+       
+        
+    }
+
+    public void EquipGunItem(int gunItemIndex)
+    {
+        if(gunItemIndex == previousWeaponIndex)
+            return;
+
+        weaponIndex = gunItemIndex;
+
+        weapons[gunItemIndex].gameObject.SetActive(true);
+
+        if(previousWeaponIndex != -1)
+        {
+            weapons[previousWeaponIndex].gameObject.SetActive(false);
+        }
+
+        previousWeaponIndex = gunItemIndex;
+
+        if(pw.IsMine)
+        {
+            ExitGames.Client.Photon.Hashtable playerProps = new ExitGames.Client.Photon.Hashtable();
+            playerProps.Add("gunItemIndex",gunItemIndex);
+            PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
+        }
+
+        if(weapons[weaponIndex].gameObject.activeSelf)
+        {
+            weapon = new Weapon(weaponIndex);
+            weapons[weaponIndex].CreateBullet(weapon.magazineCapacity,weapon.weaponName,transform.forward);
+        }
+
+    }
 }

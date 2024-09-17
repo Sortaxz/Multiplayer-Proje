@@ -109,7 +109,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
             RoomOptions roomOptions = new RoomOptions()
             {
-                MaxPlayers = 2,
+                MaxPlayers = 1,
                 CustomRoomProperties = roomProps,
                 CustomRoomPropertiesForLobby = roomPropsString,
                 PublishUserId = true
@@ -133,7 +133,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
             {
                 {"gameMode",gameMode}
             };
-            PhotonNetwork.JoinRandomRoom(roomProps, 2);
+            PhotonNetwork.JoinRandomRoom(roomProps, 1);
         }
     }
 
@@ -164,29 +164,28 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        print("OnJoinRandomFailed");
-            string randomRoomName = "Oda-" + Random.Range(1,100);
+        string randomRoomName = "Oda-" + Random.Range(1, 100);
 
-            string[] roomPropStrings = new string[]{"gameMode"};
+        string[] roomPropStrings = new string[] { "gameMode" };
 
-            ExitGames.Client.Photon.Hashtable roomProps = new ExitGames.Client.Photon.Hashtable()
-            {
-                {"gameMode",gameMode}
-            };
-            RoomOptions roomOptions = new RoomOptions()
-            {
-                MaxPlayers = 2,
-                CustomRoomProperties = roomProps,
-                CustomRoomPropertiesForLobby = roomPropStrings,
-                PublishUserId = true
-            };
+        ExitGames.Client.Photon.Hashtable roomProps = new ExitGames.Client.Photon.Hashtable()
+        {
+            {"gameMode",gameMode}
+        };
+        RoomOptions roomOptions = new RoomOptions()
+        {
+            MaxPlayers = 1,
+            CustomRoomProperties = roomProps,
+            CustomRoomPropertiesForLobby = roomPropStrings,
+            PublishUserId = true
+        };
 
-            PhotonNetwork.JoinOrCreateRoom(randomRoomName,roomOptions,TypedLobby.Default,null);
+        PhotonNetwork.JoinOrCreateRoom(randomRoomName, roomOptions, TypedLobby.Default, null);
 
-            string randomOdaPanelName = uIMenager.RandomOda_Panel.name;
-            uIMenager.SetActiveUIObject(randomOdaPanelName);
-       
-        
+        string randomOdaPanelName = uIMenager.RandomOda_Panel.name;
+        uIMenager.SetActiveUIObject(randomOdaPanelName);
+
+
     }
 
     

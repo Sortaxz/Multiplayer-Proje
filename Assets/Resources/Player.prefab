@@ -451,7 +451,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -468,10 +468,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -2708,6 +2708,7 @@ MonoBehaviour:
   characterMSHRenderer: {fileID: 5205519504396789008}
   characterMainMaterial: {fileID: 2100000, guid: 6909d0b7f740a6b4286eb83cd8c83874, type: 2}
   otherPlayerHealtBar: {fileID: 1267678621487461123}
+  combatController: {fileID: 1466733116464809823}
   jumpStrength: 200
 --- !u!114 &6625527033403511447
 MonoBehaviour:
@@ -2777,21 +2778,6 @@ MonoBehaviour:
   ShowLayerWeightsInspector: 1
   ShowParameterInspector: 0
   m_SynchronizeParameters:
-  - Type: 4
-    SynchronizeType: 2
-    Name: isWalking
-  - Type: 4
-    SynchronizeType: 2
-    Name: isRunning
-  - Type: 4
-    SynchronizeType: 2
-    Name: isRightWalking
-  - Type: 4
-    SynchronizeType: 2
-    Name: isLeftWalking
-  - Type: 4
-    SynchronizeType: 2
-    Name: isWalkingBack
   - Type: 4
     SynchronizeType: 2
     Name: isJumping

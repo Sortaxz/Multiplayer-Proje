@@ -10,28 +10,30 @@ public class WeaponController : MonoBehaviour
     [SerializeField] private Transform BulletExitPosition;
     [SerializeField] private Transform BulletsParent;
     private GameManager gameManager;
+    [SerializeField] private ParticleSystem[] weaponEffects;
+    [SerializeField] private AudioClip[] weaponAudioClips;
+    [SerializeField] private AudioSource[] audioSource;
+    private PhotonView weopanPw;
     private void Awake() 
     {
         gameManager = GameManager.Instance;
         BulletsParent = GameObject.FindWithTag("BulletsParent").transform;
+        
     }
-
-    void Start()
-    {
-    }
-
-    void Update()
+    private void Start() 
     {
         
-       
     }
 
-    private void FixedUpdate() 
+    private void Update() 
     {
+           
     }
     
-    public static void ToFire(Camera characterCamera,float damage,int magazineCapacity)
+    public void ToFire(Camera characterCamera,float damage,int magazineCapacity,string weopenName)
     {
+        weaponEffects[0].Play();
+        audioSource[0].Play();
         Ray ray = characterCamera.ViewportPointToRay(new Vector3(.5f, .5f, 0));
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
@@ -43,31 +45,47 @@ public class WeaponController : MonoBehaviour
         }
     }
     
+    
+
     public void CreateBullet(int bulletCount,string gunName,Vector3 direction)
     {
         if(transform.name == gunName)
         {
-            for (int i = 0; i < bulletCount; i++)
+            if(gunName == "Scanner")
             {
-                GameObject spawnBullet =  Instantiate(bullet,BulletExitPosition.position,Quaternion.identity,BulletsParent);
-                spawnBullet.transform.forward = direction;
-                spawnBullet.gameObject.SetActive(false);
-                if(gunName == "Scanner")
+                if(gameManager.Scanner.Count != bulletCount)
                 {
-                    if(!gameManager.Scanner.Contains(spawnBullet))
+                    for (int i = 0; i < bulletCount; i++)
                     {
-                        gameManager.Scanner.Add(spawnBullet);
-                    }
-                }
-                if(gunName == "Mp5")
-                {
-                    print("Mp5");
-                    if(!gameManager.Mp5.Contains(spawnBullet))
-                    {
-                        gameManager.Mp5.Add(spawnBullet);
+                        GameObject spawnBullet =  Instantiate(bullet,BulletExitPosition.position,Quaternion.identity,BulletExitPosition);
+                        spawnBullet.transform.forward = direction;
+                        spawnBullet.gameObject.SetActive(false);
+
+                        if (!gameManager.Scanner.Contains(spawnBullet))
+                        {
+                            gameManager.Scanner.Add(spawnBullet);
+                        }
                     }
                 }
             }
+            else if(gunName == "Mp5")
+            {
+                if(gameManager.Mp5.Count != bulletCount)
+                {
+                    for (int i = 0; i < bulletCount; i++)
+                    {
+                        GameObject spawnBullet =  Instantiate(bullet,BulletExitPosition.position,Quaternion.identity,BulletExitPosition);
+                        spawnBullet.transform.forward = direction;
+                        spawnBullet.gameObject.SetActive(false);
+
+                        if (!gameManager.Mp5.Contains(spawnBullet))
+                        {
+                            gameManager.Mp5.Add(spawnBullet);
+                        }
+                    }
+                }
+            }
+            
         }
     }
    
