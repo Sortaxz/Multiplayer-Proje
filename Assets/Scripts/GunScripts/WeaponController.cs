@@ -13,11 +13,12 @@ public class WeaponController : MonoBehaviour
     [SerializeField] private ParticleSystem[] weaponEffects;
     [SerializeField] private AudioClip[] weaponAudioClips;
     [SerializeField] private AudioSource[] audioSource;
-    private PhotonView weopanPw;
+    private int BulletCount = -1;
+    private int bullerIndex = -1;
     private void Awake() 
     {
         gameManager = GameManager.Instance;
-        BulletsParent = GameObject.FindWithTag("BulletsParent").transform;
+        //BulletsParent = GameObject.FindWithTag("BulletsParent").transform;
         
     }
     private void Start() 
@@ -30,18 +31,25 @@ public class WeaponController : MonoBehaviour
            
     }
     
-    public void ToFire(Camera characterCamera,float damage,int magazineCapacity,string weopenName)
+    public void ToFire(Camera characterCamera,float damage,int magazineCapacity,string weopenName,int bulletCount,int bulletMaxCount)
     {
-        weaponEffects[0].Play();
-        audioSource[0].Play();
-        Ray ray = characterCamera.ViewportPointToRay(new Vector3(.5f, .5f, 0));
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
+        if(bulletMaxCount > bulletCount)
         {
-            if(hit.collider.GetComponent<PhotonView>()?.IsMine == false)
+            weaponEffects[0].Play();
+            audioSource[0].Play();
+            print(weopenName + "-" + bullerIndex);
+            WeopenLeadActivated(weopenName,bullerIndex);
+
+            Ray ray = characterCamera.ViewportPointToRay(new Vector3(.5f, .5f, 0));
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
             {
-                hit.collider.GetComponent<IDamageable>()?.TakeDamage(damage);
+                if(hit.collider.GetComponent<PhotonView>()?.IsMine == false)
+                {
+                    hit.collider.GetComponent<IDamageable>()?.TakeDamage(damage);
+                }
             }
+
         }
     }
     
@@ -58,6 +66,7 @@ public class WeaponController : MonoBehaviour
                     for (int i = 0; i < bulletCount; i++)
                     {
                         GameObject spawnBullet =  Instantiate(bullet,BulletExitPosition.position,Quaternion.identity,BulletExitPosition);
+                        spawnBullet.transform.name = $"scanner-bullet-{i}";
                         spawnBullet.transform.forward = direction;
                         spawnBullet.gameObject.SetActive(false);
 
@@ -75,6 +84,7 @@ public class WeaponController : MonoBehaviour
                     for (int i = 0; i < bulletCount; i++)
                     {
                         GameObject spawnBullet =  Instantiate(bullet,BulletExitPosition.position,Quaternion.identity,BulletExitPosition);
+                        spawnBullet.transform.name = $"mp5-bullet-{i}";
                         spawnBullet.transform.forward = direction;
                         spawnBullet.gameObject.SetActive(false);
 
@@ -89,5 +99,42 @@ public class WeaponController : MonoBehaviour
         }
     }
    
+    public int LeadReduction(int bulletCount,int maxBulletCount)
+    {
+        if(bulletCount > 0)
+        {
+            bulletCount--;
 
+            bullerIndex ++;
+            
+            return bulletCount;
+        
+        }
+        else
+        {
+            BulletCount = bulletCount;
+            return bulletCount;
+
+        }
+    }
+
+    private void WeopenLeadActivated(string weopanName,int bulletIndex)
+    {
+        if(weopanName == "Scanner")
+        {
+            if(gameManager.Scanner.Count >bullerIndex)
+            {
+                gameManager.Scanner[bulletIndex].gameObject.SetActive(true);
+            }
+        }
+        else if(weopanName == "Mp5")
+        {
+            if(gameManager.Mp5.Count >bullerIndex)
+            {
+                gameManager.Mp5[bulletIndex].gameObject.SetActive(true);
+
+            }
+
+        }
+    }
 }

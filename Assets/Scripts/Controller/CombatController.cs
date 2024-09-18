@@ -23,6 +23,7 @@ public class CombatController : InputManager
     private int mp5CurrentLead = 0;
     private int mp5BulletIndex = 0;
 
+    private int bulletCount = -1;
     private void Awake() 
     {
         pw = GetComponent<PhotonView>();
@@ -51,6 +52,7 @@ public class CombatController : InputManager
                 }
                 else
                 {
+                    weapon = new Weapon(weapons[i].gameObject.transform.GetSiblingIndex());
                     if(weapon.weaponName == "Scanner")
                     {
                         scannerCurrentLead = weapon.magazineCapacity;
@@ -84,6 +86,9 @@ public class CombatController : InputManager
     
     private void ShootControl()
     {
+        if(!pw.IsMine)
+            return;
+
         if (mousePressedLeftButton)
         {
             Shoot();
@@ -104,37 +109,27 @@ public class CombatController : InputManager
             {
 
                 weapon = new Weapon(i);
-                print(weapon.weaponName);
+                WeaponController weaponController = weapons[i];
                 if (weapon.weaponName == "Scanner")
                 {
-                    if (scannerCurrentLead > 0)
-                    {
-                        gameManager.Scanner[i].gameObject.SetActive(true);
-                        scannerBulletIndex++;
-                        scannerCurrentLead--;
-                        CharacterGunFire(i);
-                    }
+                    scannerCurrentLead = weaponController.LeadReduction(scannerCurrentLead,weapon.magazineCapacity);
+                    bulletCount = scannerCurrentLead;
                 }
-                if (weapon.weaponName == "Mp5")
+                else if (weapon.weaponName == "Mp5")
                 {
-                    if (mp5CurrentLead > 0)
-                    {
-                        gameManager.Scanner[i].gameObject.SetActive(true);
-                        mp5BulletIndex++;
-                        mp5CurrentLead--;
-                        CharacterGunFire(i);
-                    }
+                    mp5CurrentLead = weaponController.LeadReduction(mp5CurrentLead,weapon.magazineCapacity);
+                    bulletCount = mp5CurrentLead;
                 }
 
+                CharacterGunFire(weaponController,bulletCount);
 
             }
         }
     }
 
-    private void CharacterGunFire(int i)
+    private void CharacterGunFire(WeaponController weaponController,int bulletCount)
     {
-        WeaponController weaponController = weapons[i];
-        weaponController.ToFire(cam, weapon.damage, weapon.magazineCapacity, weapon.weaponName);
+        weaponController.ToFire(cam, weapon.damage, weapon.magazineCapacity, weapon.weaponName,bulletCount,weapon.magazineCapacity);
     }
 
     private void WeaponSelection()

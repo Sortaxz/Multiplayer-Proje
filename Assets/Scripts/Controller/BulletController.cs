@@ -12,11 +12,12 @@ public class BulletController : MonoBehaviour
     
     void Start()
     {
-        bulletRb.AddForce(Vector3.forward * 100);
     }
 
     void Update()
     {
         
     }
+
+   
 }
