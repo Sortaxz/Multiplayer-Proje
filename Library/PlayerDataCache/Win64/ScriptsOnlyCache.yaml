@@ -2,10 +2,12 @@ ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp:
     - BulletController
+    - CameraController
     - CharacterAnimation
     - CharacterControl
     - CombatController
     - GunInfo
+    - HealtBar_Control
     - SingleShotgun
     - WeaponController
     - Weapon_ScriptableObject
@@ -64,10 +66,8 @@ ScriptsOnlyBuild:
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -321,7 +321,7 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 21670}
     - Class: 114
-      Script: {instanceID: 22436}
+      Script: {instanceID: 22438}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -436,6 +436,8 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 19200}
     - Class: 114
+      Script: {instanceID: 19234}
+    - Class: 114
       Script: {instanceID: 19252}
     - Class: 114
       Script: {instanceID: 19278}
@@ -492,19 +494,21 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 22284}
     - Class: 114
-      Script: {instanceID: 22532}
+      Script: {instanceID: 22328}
     - Class: 114
-      Script: {instanceID: 22826}
+      Script: {instanceID: 22534}
     - Class: 114
-      Script: {instanceID: 23140}
+      Script: {instanceID: 22828}
     - Class: 114
-      Script: {instanceID: 23196}
+      Script: {instanceID: 23142}
     - Class: 114
-      Script: {instanceID: 23326}
+      Script: {instanceID: 23198}
     - Class: 114
-      Script: {instanceID: 23496}
+      Script: {instanceID: 23328}
     - Class: 114
-      Script: {instanceID: 23640}
+      Script: {instanceID: 23498}
+    - Class: 114
+      Script: {instanceID: 23642}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -1236,7 +1240,7 @@ ScriptsOnlyBuild:
     className: PlayerAnimatorManager
   - hash:
       serializedVersion: 2
-      Hash: 8f080fcace9b165e5f56dae2baef8f95
+      Hash: 7402647b4e65755335c162e8b745a451
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: HealtBar_Control
@@ -2092,6 +2096,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI
     namespaceName: UnityEngine.UI
     className: PositionAsUV1
+  - hash:
+      serializedVersion: 2
+      Hash: d9cbade689ac93084250b3fc912a73f9
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: CameraController
   - hash:
       serializedVersion: 2
       Hash: 4dae2fb79bde536f257529d9c8bf0bc1

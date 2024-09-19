@@ -30,7 +30,7 @@ public class CharacterControl : InputManager,IDamageable
     public SkinnedMeshRenderer CharacterMSHRenderer {get { return characterMSHRenderer;}}
     [SerializeField] private Material characterMainMaterial;
     [SerializeField] private Image otherPlayerHealtBar;
-    public Image OtherPlayerHealtBar { get {return otherPlayerHealtBar;}}
+    public Image OtherPlayerHealtBar { get {return otherPlayerHealtBar;} set { otherPlayerHealtBar = value;}}
     public Material CharacterMainMaterial { get { return characterMainMaterial;} set { characterMainMaterial = value; } }
     GameManager gameManager;
     [SerializeField] private CombatController combatController;
@@ -70,7 +70,7 @@ public class CharacterControl : InputManager,IDamageable
         if(pw.IsMine)
         {
             //EquipGunItem(0);
-
+            transform.GetChild(0).GetComponent<CameraController>().character = gameObject;
         }
         else
         {
@@ -97,7 +97,7 @@ public class CharacterControl : InputManager,IDamageable
         if(!pw.IsMine)
             return;
 
-        Look();
+        //Look();
         Move();
         
         //WeaponSelection();
@@ -192,8 +192,11 @@ public class CharacterControl : InputManager,IDamageable
 
             characterMSHRenderer.materials[1].color = gameManager.PlayerScriptableObject.PlayerColors[(int)colorIndex];
 
-            targetPlayer.CustomProperties.TryGetValue("healt",out object healt);
+            
+            
         }
+        
+        
 
         if(targetPlayer.CustomProperties.TryGetValue("life",out object life))
         {
@@ -222,15 +225,14 @@ public class CharacterControl : InputManager,IDamageable
     {
         if(!pw.IsMine)
             return;
-        float deger = damage / 100; 
+
+        float deger = damage / 100;
         currentHealt -= damage;
         GameUI.Instance.PlayerHealtBar(deger);
-        otherPlayerHealtBar.fillAmount -= deger;
-
         playerProps["healt"] = currentHealt;
         PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
-
-        if(currentHealt < 0)
+        pw.RPC("RPC_OtherPlayerHealtBar",RpcTarget.All,currentHealt);
+        if (currentHealt < 0)
         {
             Die();
             otherPlayerHealtBar.fillAmount = 1;
@@ -247,5 +249,10 @@ public class CharacterControl : InputManager,IDamageable
 
         gameManager.Die();
        
+    }
+    [PunRPC]
+    public void RPC_OtherPlayerHealtBar(float healt)
+    {
+        otherPlayerHealtBar.transform.parent.GetComponent<HealtBar_Control>().OtherHealtBar(healt);
     }
 }

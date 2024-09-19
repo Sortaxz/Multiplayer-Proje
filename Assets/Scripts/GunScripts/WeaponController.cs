@@ -31,17 +31,19 @@ public class WeaponController : MonoBehaviour
            
     }
     
-    public void ToFire(Camera characterCamera,float damage,int magazineCapacity,string weopenName,int bulletCount,int bulletMaxCount)
+    public void ToFire(Camera characterCamera,float damage,int magazineCapacity,string weopenName,int bulletCount,int bulletMaxCount,Vector3 direction)
     {
         if(bulletMaxCount > bulletCount)
         {
             weaponEffects[0].Play();
             audioSource[0].Play();
             print(weopenName + "-" + bullerIndex);
-            WeopenLeadActivated(weopenName,bullerIndex);
 
-            Ray ray = characterCamera.ViewportPointToRay(new Vector3(.5f, .5f, 0));
+            Ray ray = new Ray(characterCamera.transform.position,characterCamera.transform.forward);
             RaycastHit hit;
+
+            WeopenLeadActivated(weopenName,bullerIndex,direction);
+            
             if (Physics.Raycast(ray, out hit))
             {
                 if(hit.collider.GetComponent<PhotonView>()?.IsMine == false)
@@ -118,20 +120,30 @@ public class WeaponController : MonoBehaviour
         }
     }
 
-    private void WeopenLeadActivated(string weopanName,int bulletIndex)
+    private void WeopenLeadActivated(string weopanName,int bulletIndex,Vector3 direction)
     {
         if(weopanName == "Scanner")
         {
             if(gameManager.Scanner.Count >bullerIndex)
             {
-                gameManager.Scanner[bulletIndex].gameObject.SetActive(true);
+                if(!gameManager.Scanner[bulletIndex].gameObject.activeSelf && gameManager.Scanner[bulletIndex] != null)
+                {
+                    gameManager.Scanner[bulletIndex].gameObject.SetActive(true);
+                    gameManager.Scanner[bulletIndex].gameObject.transform.SetParent(null);
+                    gameManager.Scanner[bulletIndex].GetComponent<BulletController>().BulletMove(direction);
+                }
             }
         }
         else if(weopanName == "Mp5")
         {
             if(gameManager.Mp5.Count >bullerIndex)
             {
-                gameManager.Mp5[bulletIndex].gameObject.SetActive(true);
+                if(!gameManager.Mp5[bulletIndex].gameObject.activeSelf && gameManager.Mp5[bulletIndex] != null)
+                {
+                    gameManager.Mp5[bulletIndex].gameObject.SetActive(true);
+                    gameManager.Mp5[bulletIndex].gameObject.transform.SetParent(null);
+                    gameManager.Mp5[bulletIndex].GetComponent<BulletController>().BulletMove(direction);
+                }
 
             }
 

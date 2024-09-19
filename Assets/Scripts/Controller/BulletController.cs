@@ -18,6 +18,10 @@ public class BulletController : MonoBehaviour
     {
         
     }
+    public void BulletMove(Vector3 direction)
+    {
+        bulletRb.AddForce(direction * 30);
+    }
 
    
 }

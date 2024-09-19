@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] private PlayerScriptableObject playerScriptableObject;
     public PlayerScriptableObject PlayerScriptableObject { get { return playerScriptableObject; } }
     [SerializeField]private CharacterControl[] characterOfPlayers;
+    public CharacterControl[] CharacterOfPlayers { get { return characterOfPlayers; } set { characterOfPlayers = value; } }
     [SerializeField] private GameObject loadingScren;
     [SerializeField] private Text infoText;
     private bool findCharacterOfPlayers = false;
@@ -194,7 +195,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void Die()
     {
+        scanner.Clear();
+        mp5.Clear();
         PhotonNetwork.Destroy(character);
+
 
         character = SpawnManager.Instance.CharacterSpawn(PV);
 
@@ -240,7 +244,9 @@ public class GameManager : MonoBehaviourPunCallbacks
                         }
 
                     }
+                    
                 }
+
                 StopCoroutine(FindOtherPlayerCharacter());
             }
 

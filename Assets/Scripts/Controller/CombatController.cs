@@ -29,6 +29,7 @@ public class CombatController : InputManager
         pw = GetComponent<PhotonView>();
         gameManager = GameManager.Instance;
 
+        print("başladi");
         EquipGunItem(weaponIndex);
         
         if(pw.IsMine)
@@ -129,7 +130,7 @@ public class CombatController : InputManager
 
     private void CharacterGunFire(WeaponController weaponController,int bulletCount)
     {
-        weaponController.ToFire(cam, weapon.damage, weapon.magazineCapacity, weapon.weaponName,bulletCount,weapon.magazineCapacity);
+        weaponController.ToFire(cam, weapon.damage, weapon.magazineCapacity, weapon.weaponName,bulletCount,weapon.magazineCapacity,cam.transform.forward);
     }
 
     private void WeaponSelection()
