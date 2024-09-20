@@ -41,7 +41,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     public List<GameObject> Mp5 { get { return mp5;} set { mp5 = value; } }
 
 
-
     public override void OnEnable()
     {
         CountdownTimer.OnCountdownTimerHasExpired += OnCountDownTimerIsExpired;
@@ -121,7 +120,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         while(true && !findCharacterOfPlayers)
         {
-            //yield return new WaitForSeconds(10);
             CharacterControl[] newCharacterOfPlayers = FindObjectsOfType<CharacterControl>();
             characterOfPlayers = new CharacterControl[newCharacterOfPlayers.Length];
             for (int i = 0; i < newCharacterOfPlayers.Length; i++)
@@ -137,7 +135,11 @@ public class GameManager : MonoBehaviourPunCallbacks
                         characterOfPlayers[newCharacterOfPlayers[i].PlayerActorNumber-1] = newCharacterOfPlayers[i];
                     }
                 }
+                
+               
             }
+
+            
 
             if(newCharacterOfPlayers.Length == PhotonNetwork.CurrentRoom.PlayerCount)
             {
@@ -241,8 +243,13 @@ public class GameManager : MonoBehaviourPunCallbacks
                             {
                                 characterOfPlayers[i].OtherPlayerHealtBar.gameObject.SetActive(true);
                             }
+                            characterOfPlayers[i].Weapon_Info_Image.SetActive(false);
                         }
-
+                        else
+                        {
+                            characterOfPlayers[i].Weapon_Info_Image.SetActive(true);
+                            GameUI.Instance.WeapomInfoImage = characterOfPlayers[i].Weapon_Info_Image;
+                        }
                     }
                     
                 }

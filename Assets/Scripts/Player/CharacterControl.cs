@@ -25,7 +25,6 @@ public class CharacterControl : InputManager,IDamageable
 
     #endregion
 
-    [SerializeField] private Item[] gunItems;
     [SerializeField] private SkinnedMeshRenderer characterMSHRenderer;
     public SkinnedMeshRenderer CharacterMSHRenderer {get { return characterMSHRenderer;}}
     [SerializeField] private Material characterMainMaterial;
@@ -35,9 +34,9 @@ public class CharacterControl : InputManager,IDamageable
     GameManager gameManager;
     [SerializeField] private CombatController combatController;
     Hashtable playerProps;
-    private int gunItemIndex;
-    private int previousGunItemIndex = -1;
 
+    [SerializeField] private GameObject weapon_Info_Image;
+    public GameObject Weapon_Info_Image { get {return weapon_Info_Image;} set {weapon_Info_Image = value;}}
 
     private string playerNickName;
     public string PlayerNickName { get { return playerNickName;}}
@@ -250,9 +249,5 @@ public class CharacterControl : InputManager,IDamageable
         gameManager.Die();
        
     }
-    [PunRPC]
-    public void RPC_OtherPlayerHealtBar(float healt)
-    {
-        otherPlayerHealtBar.transform.parent.GetComponent<HealtBar_Control>().OtherHealtBar(healt);
-    }
+   
 }

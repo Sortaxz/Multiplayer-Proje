@@ -13,12 +13,18 @@ public class WeaponController : MonoBehaviour
     [SerializeField] private ParticleSystem[] weaponEffects;
     [SerializeField] private AudioClip[] weaponAudioClips;
     [SerializeField] private AudioSource[] audioSource;
-    private int BulletCount = -1;
+    private int bulletCount = -1;
     private int bullerIndex = -1;
+    private int weopanIndex;
+    private string weaponName;
+    private int damage;
+    private int magazineCapacity;
+    private float weaponRange;
+    private int maxCapacity;
+
     private void Awake() 
     {
         gameManager = GameManager.Instance;
-        //BulletsParent = GameObject.FindWithTag("BulletsParent").transform;
         
     }
     private void Start() 
@@ -31,31 +37,60 @@ public class WeaponController : MonoBehaviour
            
     }
     
-    public void ToFire(Camera characterCamera,float damage,int magazineCapacity,string weopenName,int bulletCount,int bulletMaxCount,Vector3 direction)
+    public void SetWeaponInfo(int _weopnIndex,string _weaponName,int _damage,int _magazineCapacity,float _weaponRange,int _weaponMaxCapacity)
     {
-        if(bulletMaxCount > bulletCount)
-        {
-            weaponEffects[0].Play();
-            audioSource[0].Play();
-            print(weopenName + "-" + bullerIndex);
-
-            Ray ray = new Ray(characterCamera.transform.position,characterCamera.transform.forward);
-            RaycastHit hit;
-
-            WeopenLeadActivated(weopenName,bullerIndex,direction);
-            
-            if (Physics.Raycast(ray, out hit))
-            {
-                if(hit.collider.GetComponent<PhotonView>()?.IsMine == false)
-                {
-                    hit.collider.GetComponent<IDamageable>()?.TakeDamage(damage);
-                }
-            }
-
-        }
+        weopanIndex = _weopnIndex;
+        damage = _damage;
+        magazineCapacity = _magazineCapacity;
+        weaponRange = _weaponRange;
+        bulletCount = _magazineCapacity;
+        maxCapacity = _weaponMaxCapacity;
+        weaponName = _weaponName;
     }
-    
-    
+
+    /*
+    public void ToFire(Camera characterCamera,float damage,int magazineCapacity,int maxCapacity,string weopenName,int bulletCount,Vector3 direction)
+    {
+        if(maxCapacity > 0)
+        {
+            if(bulletCount > 0) //(magazineCapacity > bulletCount
+            {
+                weaponEffects[0].Play();
+                audioSource[0].Play();
+                print(weopenName + "-" + bullerIndex);
+
+                Ray ray = new Ray(characterCamera.transform.position,characterCamera.transform.forward);
+
+                WeopenLeadActivated(weopenName,bullerIndex,direction,damage);
+                
+            }
+            
+        }
+
+    }
+    */
+    public void ToFire(Camera characterCamera,Vector3 direction)
+    {
+        if(maxCapacity > 0)
+        {
+            if(bulletCount > 0) //(magazineCapacity > bulletCount
+            {
+                weaponEffects[0].Play();
+                audioSource[0].Play();
+                
+                print(weaponName + bullerIndex );
+
+                Ray ray = new Ray(characterCamera.transform.position,characterCamera.transform.forward);
+
+                //WeopenLeadActivated(weaponName,bullerIndex,direction,damage);
+                WeopenLeadActivated(direction);
+                
+            }
+            
+        }
+
+    }
+
 
     public void CreateBullet(int bulletCount,string gunName,Vector3 direction)
     {
@@ -100,8 +135,9 @@ public class WeaponController : MonoBehaviour
             
         }
     }
-   
-    public int LeadReduction(int bulletCount,int maxBulletCount)
+    
+    /*
+    public int LeadReduction(int bulletCount,int maxBulletCount,int maxCapacity)
     {
         if(bulletCount > 0)
         {
@@ -118,9 +154,25 @@ public class WeaponController : MonoBehaviour
             return bulletCount;
 
         }
+
+    }
+    */
+
+    public void LeadReduction()
+    {
+        if(bulletCount > 0)
+        {
+            bulletCount--;
+
+            bullerIndex++;
+            GameUI.Instance.WeaponInformationUi(bulletCount,maxCapacity);
+        }
+        
+
     }
 
-    private void WeopenLeadActivated(string weopanName,int bulletIndex,Vector3 direction)
+    /*
+    private void WeopenLeadActivated(string weopanName,int bulletIndex,Vector3 direction,float bulletDamage)
     {
         if(weopanName == "Scanner")
         {
@@ -130,7 +182,8 @@ public class WeaponController : MonoBehaviour
                 {
                     gameManager.Scanner[bulletIndex].gameObject.SetActive(true);
                     gameManager.Scanner[bulletIndex].gameObject.transform.SetParent(null);
-                    gameManager.Scanner[bulletIndex].GetComponent<BulletController>().BulletMove(direction);
+                    gameManager.Scanner[bulletIndex].GetComponent<BulletController>().BulletMove(direction,bulletDamage);
+
                 }
             }
         }
@@ -142,11 +195,71 @@ public class WeaponController : MonoBehaviour
                 {
                     gameManager.Mp5[bulletIndex].gameObject.SetActive(true);
                     gameManager.Mp5[bulletIndex].gameObject.transform.SetParent(null);
-                    gameManager.Mp5[bulletIndex].GetComponent<BulletController>().BulletMove(direction);
+                    gameManager.Mp5[bulletIndex].GetComponent<BulletController>().BulletMove(direction,bulletDamage);
                 }
 
             }
 
         }
+    }
+    */
+
+    private void WeopenLeadActivated(Vector3 direction)
+    {
+        if(weaponName == "Scanner")
+        {
+            if(gameManager.Scanner.Count >bullerIndex)
+            {
+                if(!gameManager.Scanner[bullerIndex].gameObject.activeSelf && gameManager.Scanner[bullerIndex] != null)
+                {
+                    gameManager.Scanner[bullerIndex].gameObject.SetActive(true);
+                    gameManager.Scanner[bullerIndex].gameObject.transform.SetParent(null);
+                    gameManager.Scanner[bullerIndex].GetComponent<BulletController>().BulletMove(direction,damage);
+
+                }
+            }
+        }
+        else if(weaponName == "Mp5")
+        {
+            if(gameManager.Mp5.Count >bullerIndex)
+            {
+                if(!gameManager.Mp5[bullerIndex].gameObject.activeSelf && gameManager.Mp5[bullerIndex] != null)
+                {
+                    gameManager.Mp5[bullerIndex].gameObject.SetActive(true);
+                    gameManager.Mp5[bullerIndex].gameObject.transform.SetParent(null);
+                    gameManager.Mp5[bullerIndex].GetComponent<BulletController>().BulletMove(direction,damage);
+                }
+
+            }
+
+        }
+        
+    }
+
+    public void MagazineControl()
+    {
+        if(maxCapacity > 0)
+        {
+            if(bulletCount < magazineCapacity)
+            {
+                int courseAdd = magazineCapacity - bulletCount;
+
+
+                bulletCount += courseAdd;
+                maxCapacity -= courseAdd;
+
+                
+                print($"{weaponName}'un kurşun sayisi : {bulletCount} ve Toplam kalan kurşun sayisi : {maxCapacity}");
+            }
+            else if(bulletCount <= 0)
+            {
+                bulletCount = magazineCapacity;
+                maxCapacity -= magazineCapacity;
+            }
+            GameUI.Instance.WeaponInformationUi(bulletCount,maxCapacity);
+
+        }
+       
+
     }
 }

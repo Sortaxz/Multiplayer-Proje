@@ -30,5 +30,6 @@ public class WeaponInfos
     public string weaponName;
     public int damage;
     public int magazineCapacity;
+    public int maxCapacity;
     public float weaponRange;
 }

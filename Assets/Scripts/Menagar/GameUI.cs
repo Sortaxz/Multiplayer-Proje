@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,10 +24,22 @@ public class GameUI : MonoBehaviour
     [SerializeField] private Image playerHealtBar;
     [SerializeField] private Image otherPlayerHealtBar;
     public Image OtherPlayerHealtBar { get { return otherPlayerHealtBar;} set { otherPlayerHealtBar = value;}}
+
+
+    [Header("Character's Weapon related  with Ui")]
+    [SerializeField] private GameObject weapomInfo_Image;
+    public GameObject WeapomInfoImage { get { return weapomInfo_Image; } set { weapomInfo_Image = value;}}
+
+
     private void Awake() 
     {
         pw = GetComponent<PhotonView>();
-        playerHealtBar = playerHealtBarBackground.transform.GetChild(0).GetComponent<Image>();    
+        playerHealtBar = playerHealtBarBackground.transform.GetChild(0).GetComponent<Image>();  
+    }
+    
+    private void Update() 
+    {
+        
     }
 
     public void Active()
@@ -50,15 +63,12 @@ public class GameUI : MonoBehaviour
         }
     }
     
-    public void OtherPlayerHealtBar_Method(float healt)
+   
+    public void WeaponInformationUi(int bulletCount,int maxBulletCount)
     {
-        pw.RPC("RPC_OtherPlayerHealtBar",RpcTarget.AllBufferedViaServer,healt);
+        weapomInfo_Image.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = bulletCount.ToString();
+        weapomInfo_Image.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = maxBulletCount.ToString();
     }
-
-    [PunRPC]
-    private void RPC_OtherPlayerHealtBar(float healt)
-    {
-        otherPlayerHealtBar.fillAmount = healt / 100;
-    }
+   
 }
  
