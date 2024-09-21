@@ -20,27 +20,10 @@ public class CharacterAnimation : PlayerAnimation
     
     void Update()
     {
-
-
         if (!pw.IsMine)
             return;
-
-        /*
-        PlayPlayerMoveAnimation("isWalking", isWalking, "bool");
-        PlayPlayerMoveAnimation("isRightWalking", isRightWalking, "bool");
-        PlayPlayerMoveAnimation("isLeftWalking", isLeftWalking, "bool");
-        PlayPlayerMoveAnimation("isRunning", isRunning, "bool", forward);
-        PlayPlayerMoveAnimation("isWalkingBack", backward, "bool");
-        */
-
-        //forward_Speed left_Speed right_Speed backward_Speed movement
-
-
-
+       
         CharacterMovementAnimation();
-        //Reloading Firing_Rifle
-
-        
 
     }
 

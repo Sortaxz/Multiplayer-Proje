@@ -14,14 +14,16 @@ public class WeaponController : MonoBehaviour
     [SerializeField] private AudioClip[] weaponAudioClips;
     [SerializeField] private AudioSource[] audioSource;
     private int bulletCount = -1;
+    public int BulletCount { get { return bulletCount; }}
     private int bullerIndex = -1;
+
     private int weopanIndex;
     private string weaponName;
     private int damage;
     private int magazineCapacity;
     private float weaponRange;
     private int maxCapacity;
-
+    public int MaxCapacity { get { return maxCapacity;}}
     private void Awake() 
     {
         gameManager = GameManager.Instance;
@@ -46,34 +48,15 @@ public class WeaponController : MonoBehaviour
         bulletCount = _magazineCapacity;
         maxCapacity = _weaponMaxCapacity;
         weaponName = _weaponName;
+        GameUI.Instance.WeaponInformationUi(BulletCount,maxCapacity);
+        
     }
 
-    /*
-    public void ToFire(Camera characterCamera,float damage,int magazineCapacity,int maxCapacity,string weopenName,int bulletCount,Vector3 direction)
-    {
-        if(maxCapacity > 0)
-        {
-            if(bulletCount > 0) //(magazineCapacity > bulletCount
-            {
-                weaponEffects[0].Play();
-                audioSource[0].Play();
-                print(weopenName + "-" + bullerIndex);
-
-                Ray ray = new Ray(characterCamera.transform.position,characterCamera.transform.forward);
-
-                WeopenLeadActivated(weopenName,bullerIndex,direction,damage);
-                
-            }
-            
-        }
-
-    }
-    */
     public void ToFire(Camera characterCamera,Vector3 direction)
     {
-        if(maxCapacity > 0)
+        if(bulletCount > 0)
         {
-            if(bulletCount > 0) //(magazineCapacity > bulletCount
+            if(bulletCount > 0) 
             {
                 weaponEffects[0].Play();
                 audioSource[0].Play();
@@ -82,7 +65,6 @@ public class WeaponController : MonoBehaviour
 
                 Ray ray = new Ray(characterCamera.transform.position,characterCamera.transform.forward);
 
-                //WeopenLeadActivated(weaponName,bullerIndex,direction,damage);
                 WeopenLeadActivated(direction);
                 
             }
@@ -136,27 +118,7 @@ public class WeaponController : MonoBehaviour
         }
     }
     
-    /*
-    public int LeadReduction(int bulletCount,int maxBulletCount,int maxCapacity)
-    {
-        if(bulletCount > 0)
-        {
-            bulletCount--;
-
-            bullerIndex ++;
-            
-            return bulletCount;
-        
-        }
-        else
-        {
-            BulletCount = bulletCount;
-            return bulletCount;
-
-        }
-
-    }
-    */
+    
 
     public void LeadReduction()
     {
@@ -171,38 +133,7 @@ public class WeaponController : MonoBehaviour
 
     }
 
-    /*
-    private void WeopenLeadActivated(string weopanName,int bulletIndex,Vector3 direction,float bulletDamage)
-    {
-        if(weopanName == "Scanner")
-        {
-            if(gameManager.Scanner.Count >bullerIndex)
-            {
-                if(!gameManager.Scanner[bulletIndex].gameObject.activeSelf && gameManager.Scanner[bulletIndex] != null)
-                {
-                    gameManager.Scanner[bulletIndex].gameObject.SetActive(true);
-                    gameManager.Scanner[bulletIndex].gameObject.transform.SetParent(null);
-                    gameManager.Scanner[bulletIndex].GetComponent<BulletController>().BulletMove(direction,bulletDamage);
-
-                }
-            }
-        }
-        else if(weopanName == "Mp5")
-        {
-            if(gameManager.Mp5.Count >bullerIndex)
-            {
-                if(!gameManager.Mp5[bulletIndex].gameObject.activeSelf && gameManager.Mp5[bulletIndex] != null)
-                {
-                    gameManager.Mp5[bulletIndex].gameObject.SetActive(true);
-                    gameManager.Mp5[bulletIndex].gameObject.transform.SetParent(null);
-                    gameManager.Mp5[bulletIndex].GetComponent<BulletController>().BulletMove(direction,bulletDamage);
-                }
-
-            }
-
-        }
-    }
-    */
+   
 
     private void WeopenLeadActivated(Vector3 direction)
     {
@@ -238,23 +169,67 @@ public class WeaponController : MonoBehaviour
 
     public void MagazineControl()
     {
+        bullerIndex = -1;
+        if(weaponName == "Scanner")
+        {
+            for (int i = 0; i < gameManager.Scanner.Count; i++)
+            {
+                if(gameManager.Scanner[i].transform.parent == null)
+                {
+                    gameManager.Scanner[i].transform.SetParent(BulletExitPosition);
+                    gameManager.Scanner[i].SetActive(false);
+                    gameManager.Scanner[i].transform.SetSiblingIndex(i);
+                }
+            }
+        }
+        else if(weaponName == "Mp5")
+        {
+            for (int i = 0; i < gameManager.Mp5.Count; i++)
+            {
+                if(gameManager.Mp5[i].transform.parent == null)
+                {
+                    gameManager.Mp5[i].transform.SetParent(BulletExitPosition);
+                    gameManager.Mp5[i].SetActive(false);
+                    gameManager.Mp5[i].transform.SetSiblingIndex(i);
+                }
+            }
+        }
+
         if(maxCapacity > 0)
         {
             if(bulletCount < magazineCapacity)
             {
                 int courseAdd = magazineCapacity - bulletCount;
+                int a = maxCapacity - courseAdd;
 
-
-                bulletCount += courseAdd;
-                maxCapacity -= courseAdd;
+                if(a > 0)
+                {
+                    bulletCount += courseAdd;
+                    maxCapacity -= courseAdd;
+                }
+                else
+                {
+                    bulletCount += maxCapacity;
+                    maxCapacity = 0;
+                }
 
                 
                 print($"{weaponName}'un kurşun sayisi : {bulletCount} ve Toplam kalan kurşun sayisi : {maxCapacity}");
             }
             else if(bulletCount <= 0)
             {
-                bulletCount = magazineCapacity;
-                maxCapacity -= magazineCapacity;
+                int a = maxCapacity - magazineCapacity;
+                
+                if( a > 0)
+                {
+                    bulletCount = magazineCapacity;
+                    maxCapacity -= magazineCapacity;
+                }
+                else
+                {
+                    bulletCount = maxCapacity;
+                    maxCapacity = 0;
+                }
             }
             GameUI.Instance.WeaponInformationUi(bulletCount,maxCapacity);
 

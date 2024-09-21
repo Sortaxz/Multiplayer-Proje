@@ -243,12 +243,14 @@ public class GameManager : MonoBehaviourPunCallbacks
                             {
                                 characterOfPlayers[i].OtherPlayerHealtBar.gameObject.SetActive(true);
                             }
-                            characterOfPlayers[i].Weapon_Info_Image.SetActive(false);
+                            //characterOfPlayers[i].Weapon_Info_Image.SetActive(false);
                         }
                         else
                         {
-                            characterOfPlayers[i].Weapon_Info_Image.SetActive(true);
-                            GameUI.Instance.WeapomInfoImage = characterOfPlayers[i].Weapon_Info_Image;
+                            GameUI.Instance.WeapomInfoImage.SetActive(true);
+                            //characterOfPlayers[i].Weapon_Info_Image.SetActive(true);
+                            //GameUI.Instance.WeapomInfoImage = characterOfPlayers[i].Weapon_Info_Image;
+                            //GameUI.Instance.SetWeopanInfoUi(characterOfPlayers[i].Weapon_Info_Image);
                         }
                     }
                     

@@ -63,15 +63,14 @@ ScriptsOnlyBuild:
     - TMPro.TMP_Dropdown
     - TMPro.TMP_FontAsset
     - TMPro.TMP_InputField
-    - TMPro.TMP_Settings
-    - TMPro.TMP_SpriteAsset
-    - TMPro.TMP_StyleSheet
     - TMPro.TextMeshProUGUI
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -319,9 +318,13 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 19234}
     - Class: 114
+      Script: {instanceID: 20564}
+    - Class: 114
       Script: {instanceID: 20726}
     - Class: 114
       Script: {instanceID: 21228}
+    - Class: 114
+      Script: {instanceID: 21330}
     - Class: 114
       Script: {instanceID: 21670}
     - Class: 114
@@ -1478,7 +1481,7 @@ ScriptsOnlyBuild:
     className: UnityOnPointerClickMessageListener
   - hash:
       serializedVersion: 2
-      Hash: 391492a688e4078beaed8cbfd1278570
+      Hash: d50cbe216d3aed26a88f1e6eb75c7c4c
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: CombatController
@@ -2150,7 +2153,7 @@ ScriptsOnlyBuild:
     className: CountOfRoomsProperty
   - hash:
       serializedVersion: 2
-      Hash: 3cfdc0bfc79f85efd2d242c8167a4b20
+      Hash: b5c1131c4fdb92ae7018eb01dd654ae7
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: GameUI

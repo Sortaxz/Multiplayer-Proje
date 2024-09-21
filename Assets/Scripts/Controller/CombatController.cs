@@ -11,8 +11,6 @@ public class CombatController : InputManager
     [SerializeField] private Transform gunItemHolder;
     private PhotonView pw;
     [SerializeField]private Camera cam;
-    private bool fire;
-    [SerializeField] private float timingFiring =0f;
     private int weaponIndex;
 
     private int previousWeaponIndex = -1;
@@ -23,50 +21,17 @@ public class CombatController : InputManager
         pw = GetComponent<PhotonView>();
         gameManager = GameManager.Instance;
 
+        
+        
+    }
+
+    void Start()
+    {
         EquipGunItem(weaponIndex);
         
         if(pw.IsMine)
         {
             cam = GameObject.FindWithTag("CharacterCamera").GetComponent<Camera>();
-            /*
-            for (int i = 0; i < weapons.Length; i++)
-            {
-                if(weapons[i].gameObject.activeSelf)
-                {
-                    weapon = new Weapon(weapons[i].gameObject.transform.GetSiblingIndex());
-                    print(weapon.weaponName);
-                    weaponIndex = weapon.weopanIndex;
-                    if(weapon.weaponName == "Scanner")
-                    {
-                        scannerCurrentLead = weapon.magazineCapacity;
-                        scannerMaximumLead = weapon.maxCapacity;
-                        scannerMagazineCapacity = weapon.magazineCapacity;
-                    }
-                    else if(weapon.weaponName == "Mp5")
-                    {
-                        mp5CurrentLead = weapon.magazineCapacity;
-                        mp5MaximumLead = weapon.maxCapacity;
-                        mp5MagazineCapacity = weapon.magazineCapacity;
-                    }
-                }
-                else
-                {
-                    weapon = new Weapon(weapons[i].gameObject.transform.GetSiblingIndex());
-                    if(weapon.weaponName == "Scanner")
-                    {
-                        scannerCurrentLead = weapon.magazineCapacity;
-                        scannerMaximumLead = weapon.maxCapacity;
-                        scannerMagazineCapacity = weapon.magazineCapacity;
-                    }
-                    else if(weapon.weaponName == "Mp5")
-                    {
-                        mp5CurrentLead = weapon.magazineCapacity;
-                        mp5MaximumLead = weapon.maxCapacity;
-                        mp5MagazineCapacity = weapon.magazineCapacity;
-                    } 
-                }
-            }
-            */
             
             for (int i = 0; i < weapons.Length; i++)
             {
@@ -83,11 +48,6 @@ public class CombatController : InputManager
                 }
             }
         }
-        
-    }
-
-    void Start()
-    {
     }
 
     void Update()
@@ -127,30 +87,7 @@ public class CombatController : InputManager
     
     private void Shoot()
     {
-        /*
-        for (int i = 0; i < gunItemHolder.childCount; i++)
-        {
-            if (gunItemHolder.GetChild(i).gameObject.activeSelf)
-            {
-
-                weapon = new Weapon(i);
-                WeaponController weaponController = weapons[i];
-                if (weapon.weaponName == "Scanner")
-                {
-                    scannerCurrentLead = weaponController.LeadReduction(scannerCurrentLead,weapon.magazineCapacity,weapon.maxCapacity);
-                    bulletCount = scannerCurrentLead;
-                }
-                else if (weapon.weaponName == "Mp5")
-                {
-                    mp5CurrentLead = weaponController.LeadReduction(mp5CurrentLead,weapon.magazineCapacity,weapon.maxCapacity);
-                    bulletCount = mp5CurrentLead;
-                }
-
-                CharacterGunFire(weaponController,bulletCount,weapon.maxCapacity);
-
-            }
-        }
-        */
+        
         for (int i = 0; i < gunItemHolder.childCount; i++)
         {
             if (gunItemHolder.GetChild(i).gameObject.activeSelf)
@@ -175,7 +112,6 @@ public class CombatController : InputManager
 
     private void CharacterGunFire(WeaponController weaponController)
     {
-        //weaponController.ToFire(cam, weapon.damage, weapon.magazineCapacity,maxCapacity, weapon.weaponName,bulletCount,cam.transform.forward);
         weaponController.ToFire(cam,cam.transform.forward);
     }
 
@@ -185,7 +121,8 @@ public class CombatController : InputManager
         {
             if(Input.GetKeyDown((i+1).ToString()))
             {
-                EquipGunItem(i);
+                weaponIndex = i;
+                EquipGunItem(weaponIndex);
                 break;
             }
         }
@@ -195,11 +132,13 @@ public class CombatController : InputManager
 
             if(weaponIndex >= weapons.Length -1)
             {
-                EquipGunItem(0);
+                weaponIndex = 0;
+                EquipGunItem(weaponIndex);
             }
             else
             {
-                EquipGunItem(weaponIndex + 1);
+                weaponIndex+=1;
+                EquipGunItem(weaponIndex);
             }
         }
         else if(mouseScrollWhell < 0f)
@@ -207,15 +146,17 @@ public class CombatController : InputManager
 
             if(weaponIndex <= 0)
             {
-                EquipGunItem(weapons.Length-1);
+                weaponIndex = weapons.Length-1;
+                EquipGunItem(weaponIndex);
             }
             else
             {
-                EquipGunItem(weaponIndex - 1);
+                weaponIndex-=1;
+                EquipGunItem(weaponIndex);
             }
         }
 
-       
+        GameUI.Instance.WeaponInformationUi(weapons[weaponIndex].BulletCount,weapons[weaponIndex].MaxCapacity);
         
     }
 
@@ -246,8 +187,6 @@ public class CombatController : InputManager
         {
             weapon = new Weapon(weaponIndex);
             weapons[weaponIndex].CreateBullet(weapon.magazineCapacity,weapon.weaponName,transform.forward);
-        
-        
         }
 
     }

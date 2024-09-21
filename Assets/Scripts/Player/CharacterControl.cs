@@ -68,7 +68,6 @@ public class CharacterControl : InputManager,IDamageable
 
         if(pw.IsMine)
         {
-            //EquipGunItem(0);
             transform.GetChild(0).GetComponent<CameraController>().character = gameObject;
         }
         else
@@ -249,5 +248,9 @@ public class CharacterControl : InputManager,IDamageable
         gameManager.Die();
        
     }
-   
+    [PunRPC]
+    public void RPC_OtherPlayerHealtBar(float healt)
+    {
+        otherPlayerHealtBar.transform.parent.GetComponent<HealtBar_Control>().OtherHealtBar(healt);
+    }
 }

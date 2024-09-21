@@ -29,7 +29,9 @@ public class GameUI : MonoBehaviour
     [Header("Character's Weapon related  with Ui")]
     [SerializeField] private GameObject weapomInfo_Image;
     public GameObject WeapomInfoImage { get { return weapomInfo_Image; } set { weapomInfo_Image = value;}}
-
+    [SerializeField] private TextMeshProUGUI currentBulletCount_Text;
+    public TextMeshProUGUI CurrentBulletCount_Text { get { return currentBulletCount_Text;}}
+    [SerializeField] private TextMeshProUGUI maxBulletCount_Text;
 
     private void Awake() 
     {
@@ -64,10 +66,11 @@ public class GameUI : MonoBehaviour
     }
     
    
+    
     public void WeaponInformationUi(int bulletCount,int maxBulletCount)
     {
-        weapomInfo_Image.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = bulletCount.ToString();
-        weapomInfo_Image.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = maxBulletCount.ToString();
+        currentBulletCount_Text.text = bulletCount.ToString();
+        maxBulletCount_Text.text = maxBulletCount.ToString();
     }
    
 }
