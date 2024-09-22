@@ -6,6 +6,8 @@ public class BulletController : MonoBehaviour
 {
     private Rigidbody bulletRb;
     private Transform bulletParent;
+    private Vector3 bulletPosition ;
+    private Vector3 bulletRotation;
     private float bulletDamge;
     public float BulletDamage { get {return bulletDamge;}set {bulletDamge = value;} }
     private int bulletGetSiblingIndex=-1;
@@ -23,28 +25,42 @@ public class BulletController : MonoBehaviour
 
     public void BulletMove(Vector3 direction,float damage)
     {
-        bulletRb.AddForce(direction * 200);
+        bulletRb.AddForce(direction * 1000);
         bulletDamge = damage;
     }
 
-    private void OnCollisionEnter(Collision other) 
+    private void OnTriggerEnter(Collider other) 
     {
-        if(other.collider.CompareTag("Player"))
+        if(other.CompareTag("Player"))
         {
-            print($"{other.collider.transform.name} oyuncusuna çarpti.");
+            transform.position = Vector3.zero;
+    
             gameObject.SetActive(false);
             transform.SetParent(bulletParent);
+
+            
             transform.SetSiblingIndex(bulletGetSiblingIndex);
-            other.collider.GetComponent<IDamageable>()?.TakeDamage(bulletDamge);
+            other.GetComponent<IDamageable>()?.TakeDamage(bulletDamge);
         }   
     }
 
+   
+
     private IEnumerator BulletDestroy()
     {
-        yield return new WaitForSeconds(10);
+        yield return new WaitForSeconds(10f);
+        
+        transform.localPosition = Vector3.zero;
+
         transform.SetParent(bulletParent);
         gameObject.SetActive(false);
+
+
         transform.SetSiblingIndex(bulletGetSiblingIndex);
     }
-   
+    
+    public void SetBulletTransformRotation(Vector3 position)
+    {
+        transform.localPosition = Vector3.zero;
+    }
 }

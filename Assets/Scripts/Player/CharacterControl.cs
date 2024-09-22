@@ -44,9 +44,8 @@ public class CharacterControl : InputManager,IDamageable
     private int playerActorNumber;
     public  int PlayerActorNumber { get { return playerActorNumber;}}
 
-    const float maxHealt= 100f;
-    float currentHealt  = maxHealt;
-
+    private const float maxHealt= 100f;
+    public float currentHealt  = maxHealt;
     private bool isLife = false;
     [SerializeField] private float jumpStrength;
 
@@ -55,10 +54,12 @@ public class CharacterControl : InputManager,IDamageable
     {
         currentHealt = maxHealt;
 
+        
         pw = GetComponent<PhotonView>();
         rb = GetComponent<Rigidbody>();
 
         gameManager = PhotonView.Find((int)pw.InstantiationData[0]).GetComponent<GameManager>();
+
 
         combatController = GetComponent<CombatController>();
 
@@ -86,20 +87,15 @@ public class CharacterControl : InputManager,IDamageable
         GameUI.Instance.OtherPlayerHealtBar = otherPlayerHealtBar.GetComponentInChildren<Image>();
     }
 
-    private void Start() 
-    {
-    }
-
+    
     private void Update()
     {
         if(!pw.IsMine)
             return;
 
-        //Look();
         Move();
         
-        //WeaponSelection();
-        
+       
     }
     
     private void FixedUpdate()
@@ -116,15 +112,6 @@ public class CharacterControl : InputManager,IDamageable
     {
         Vector3 moveDir = new Vector3(Horizontal,0,Vertical).normalized;
         moveAmount = Vector3.SmoothDamp(moveAmount, moveDir * (Input.GetKey(KeyCode.LeftShift) ?  sprintSpeed : walkSpeed) , ref smoothMoveVelocity,smothTime);
-    }
-
-    private void Look()
-    {
-        transform.Rotate(Vector3.up * Input.GetAxisRaw("Mouse X") * mouseSensitivity);
-        verticalLookRotation += Input.GetAxisRaw("Mouse Y") * mouseSensitivity;
-        verticalLookRotation = Mathf.Clamp(verticalLookRotation, -20f, 20f);
-
-        characterCamera.transform.localEulerAngles = Vector3.left * verticalLookRotation;
     }
 
 
@@ -230,15 +217,23 @@ public class CharacterControl : InputManager,IDamageable
         playerProps["healt"] = currentHealt;
         PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
         pw.RPC("RPC_OtherPlayerHealtBar",RpcTarget.All,currentHealt);
+        /*
         if (currentHealt < 0)
         {
             Die();
-            otherPlayerHealtBar.fillAmount = 1;
+        }
+        */
+        if (currentHealt < 0)
+        {
+            currentHealt = 0;
+            GameUI.Instance.PlayerHealtBar(1f);
+            GameManager.deatDelegate();
         }
     }
 
     private void Die()
     {
+        otherPlayerHealtBar.fillAmount = 1;
         isLife = false;
         playerProps["life"] = false;
         currentHealt = 100;
@@ -248,9 +243,32 @@ public class CharacterControl : InputManager,IDamageable
         gameManager.Die();
        
     }
+    /*
+
+    private void Die()
+    {
+        pw.RPC("RPC_Die",RpcTarget.All,null);
+    }
+    
+    */
+    [PunRPC]
+    private void RPC_Die()
+    {
+        otherPlayerHealtBar.fillAmount = 1;
+        isLife = false;
+        playerProps["life"] = false;
+        currentHealt = 100;
+        PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
+
+
+        gameManager.Die();
+    }
+
     [PunRPC]
     public void RPC_OtherPlayerHealtBar(float healt)
     {
         otherPlayerHealtBar.transform.parent.GetComponent<HealtBar_Control>().OtherHealtBar(healt);
     }
+
+   
 }

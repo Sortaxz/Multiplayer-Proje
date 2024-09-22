@@ -61,7 +61,6 @@ public class WeaponController : MonoBehaviour
                 weaponEffects[0].Play();
                 audioSource[0].Play();
                 
-                print(weaponName + bullerIndex );
 
                 Ray ray = new Ray(characterCamera.transform.position,characterCamera.transform.forward);
 
@@ -70,7 +69,7 @@ public class WeaponController : MonoBehaviour
             }
             
         }
-
+        
     }
 
 
@@ -179,6 +178,7 @@ public class WeaponController : MonoBehaviour
                     gameManager.Scanner[i].transform.SetParent(BulletExitPosition);
                     gameManager.Scanner[i].SetActive(false);
                     gameManager.Scanner[i].transform.SetSiblingIndex(i);
+                    gameManager.Scanner[i].GetComponent<BulletController>().SetBulletTransformRotation(BulletExitPosition.transform.position);
                 }
             }
         }
@@ -191,6 +191,7 @@ public class WeaponController : MonoBehaviour
                     gameManager.Mp5[i].transform.SetParent(BulletExitPosition);
                     gameManager.Mp5[i].SetActive(false);
                     gameManager.Mp5[i].transform.SetSiblingIndex(i);
+                    gameManager.Mp5[i].GetComponent<BulletController>().SetBulletTransformRotation(BulletExitPosition.transform.position);
                 }
             }
         }

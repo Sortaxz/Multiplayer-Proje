@@ -53,4 +53,5 @@ public class PlayerAnimation : InputManager
     protected bool isCrounchWalkBackward => ctrl && backward ? true : false;
 
     protected bool isReload => rewenal ? true : false;
+    protected bool isFire => mousePressedLeftButton ? true : false;
 }

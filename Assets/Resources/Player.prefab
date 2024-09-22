@@ -3248,6 +3248,7 @@ MonoBehaviour:
   otherPlayerHealtBar: {fileID: 1267678621487461123}
   combatController: {fileID: 1466733116464809823}
   weapon_Info_Image: {fileID: 6391707365486592888}
+  currentHealt: 100
   jumpStrength: 200
 --- !u!114 &6625527033403511447
 MonoBehaviour:
@@ -3299,7 +3300,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 0
+  m_SynchronizeAngularVelocity: 1
   m_TeleportEnabled: 0
   m_TeleportIfDistanceGreaterThan: 3
 --- !u!114 &8337053524298288049
@@ -3315,7 +3316,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowLayerWeightsInspector: 1
-  ShowParameterInspector: 0
+  ShowParameterInspector: 1
   m_SynchronizeParameters:
   - Type: 4
     SynchronizeType: 2
@@ -3347,6 +3348,12 @@ MonoBehaviour:
   - Type: 1
     SynchronizeType: 2
     Name: backward
+  - Type: 4
+    SynchronizeType: 2
+    Name: isDeath
+  - Type: 4
+    SynchronizeType: 2
+    Name: isHitReaction
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0

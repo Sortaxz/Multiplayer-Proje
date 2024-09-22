@@ -37,6 +37,7 @@ public class GameUI : MonoBehaviour
     {
         pw = GetComponent<PhotonView>();
         playerHealtBar = playerHealtBarBackground.transform.GetChild(0).GetComponent<Image>();  
+        GameManager.deatDelegate += Close;
     }
     
     private void Update() 
@@ -48,6 +49,11 @@ public class GameUI : MonoBehaviour
     {
         playerHealtBarBackground.gameObject.SetActive(true);
     
+    }
+    public void Close()
+    {
+        playerHealtBarBackground.gameObject.SetActive(false);
+        otherPlayerHealtBar.gameObject.SetActive(false);
     }
 
     public float PlayerHealtBar(float damage)

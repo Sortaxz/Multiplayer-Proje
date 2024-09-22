@@ -23,6 +23,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
+    public delegate void DeatDelegate();
+    public static DeatDelegate deatDelegate;
+
     [SerializeField] private PlayerScriptableObject playerScriptableObject;
     public PlayerScriptableObject PlayerScriptableObject { get { return playerScriptableObject; } }
     [SerializeField]private CharacterControl[] characterOfPlayers;
@@ -40,7 +43,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     private List<GameObject> mp5 = new List<GameObject>();
     public List<GameObject> Mp5 { get { return mp5;} set { mp5 = value; } }
 
-
+    private bool characterDead = false;
+    public bool CharacterDead { get { return characterDead;} set { characterDead = value; } }
     public override void OnEnable()
     {
         CountdownTimer.OnCountdownTimerHasExpired += OnCountDownTimerIsExpired;
@@ -165,7 +169,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         character.GetComponent<CharacterControl>().CharacterMSHRenderer.materials[1].color = playerScriptableObject.PlayerColors[playerColorIndex];
 
-        Camera.main.gameObject.SetActive(false);
+        if(Camera.main.gameObject.activeSelf)
+        {
+            Camera.main.gameObject.SetActive(false);
+        }
 
         GameUI.Instance.Active();
     }
@@ -201,14 +208,17 @@ public class GameManager : MonoBehaviourPunCallbacks
         mp5.Clear();
         PhotonNetwork.Destroy(character);
 
-
         character = SpawnManager.Instance.CharacterSpawn(PV);
 
         PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("color",out object color);
         int playerColorIndex = (int)color;
 
         character.GetComponent<CharacterControl>().CharacterMSHRenderer.materials[1].color = playerScriptableObject.PlayerColors[playerColorIndex];
+
+        GameUI.Instance.Active();
+       
         StartCoroutine(FindOtherPlayerCharacter());
+
     }
 
     public bool IsStartGame()

@@ -7,10 +7,16 @@ public class CharacterAnimation : PlayerAnimation
 {
     private Animator animator;
     private PhotonView pw;
+    private bool playedDeathAnimation = false;
+    private PhotonAnimatorView photonAnimator;
+    private bool hitReactionAnimation;
+    public bool HitReactionAnimation {get {return hitReactionAnimation;} set {hitReactionAnimation = value;} }
     private void Awake() 
     {
         animator = GetComponent<Animator>();    
         pw = GetComponent<PhotonView>();
+        GameManager.deatDelegate += Deat_Method;
+        photonAnimator = GetComponent<PhotonAnimatorView>();
     }
 
     void Start()
@@ -20,14 +26,26 @@ public class CharacterAnimation : PlayerAnimation
     
     void Update()
     {
+       
         if (!pw.IsMine)
             return;
        
         CharacterMovementAnimation();
 
+        if(isFire)
+        {
+            animator.Play("Firing_Rifle");
+        }
+
+        
     }
 
+    public void HitReactionAnimation_Method(bool value,Animator animator)
+    {
+        print(transform.name);
+            animator.SetBool("isHitReaction",true);
 
+    }
     private void CharacterMovementAnimation()
     {
         if (forward || left || right || backward || leftShift)
@@ -301,4 +319,13 @@ public class CharacterAnimation : PlayerAnimation
         }
         
     }
+
+    public void Deat_Method()
+    {
+        print("Karakter ölme animasyonu başladi");
+        animator.SetBool("isDeath",true); 
+    }
+
+    
+
 }
