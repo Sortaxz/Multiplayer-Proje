@@ -6,6 +6,7 @@ using UnityEngine;
 public class CombatController : InputManager
 {
     private GameManager gameManager;
+    private CharacterAnimation characterAnimation;
     private Weapon weapon;
     [SerializeField] private WeaponController[] weapons;
     [SerializeField] private Transform gunItemHolder;
@@ -20,17 +21,17 @@ public class CombatController : InputManager
     {
         pw = GetComponent<PhotonView>();
         gameManager = GameManager.Instance;
-
         
         
     }
 
     void Start()
     {
-        EquipGunItem(weaponIndex);
         
         if(pw.IsMine)
         {
+            characterAnimation = GetComponent<CharacterAnimation>();
+            EquipGunItem(weaponIndex);
             cam = GameObject.FindWithTag("CharacterCamera").GetComponent<Camera>();
             
             for (int i = 0; i < weapons.Length; i++)
@@ -58,7 +59,13 @@ public class CombatController : InputManager
         if(rewenal)
         {
             weapons[weaponIndex].MagazineControl();
-            
+            characterAnimation.reloading = weapons[weaponIndex].CharacterReloading;
+
+        }
+        else
+        {
+            characterAnimation.reloading = false;
+
         }
         
         

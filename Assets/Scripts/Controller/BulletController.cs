@@ -6,7 +6,7 @@ public class BulletController : MonoBehaviour
 {
     private Rigidbody bulletRb;
     private Transform bulletParent;
-    private Vector3 bulletPosition ;
+    public Vector3 bulletPosition ;
     private Vector3 bulletRotation;
     private float bulletDamge;
     public float BulletDamage { get {return bulletDamge;}set {bulletDamge = value;} }
@@ -15,6 +15,7 @@ public class BulletController : MonoBehaviour
     {
         bulletRb = GetComponent<Rigidbody>();    
         bulletParent = transform.parent;
+        print(bulletParent.transform.name);
         bulletGetSiblingIndex = transform.GetSiblingIndex();
     }
     
@@ -22,45 +23,61 @@ public class BulletController : MonoBehaviour
     {
         StartCoroutine(BulletDestroy());
     }
-
-    public void BulletMove(Vector3 direction,float damage)
+    
+    public void BulletMove(Vector3 direction,Transform target,float damage)
     {
-        bulletRb.AddForce(direction * 1000);
+        if(target != null)
+        {
+            StartCoroutine(Move(target));
+        }
+        else
+        {
+            bulletRb.AddForce(direction * 1000);
+        }
+        
         bulletDamge = damage;
     }
-
+    private IEnumerator Move(Transform target)
+    {
+        while(transform.position != target.position)
+        {
+            transform.position = Vector3.MoveTowards(transform.position,target.position, Time.deltaTime * 200);
+            yield return null;
+        }
+    }
     private void OnTriggerEnter(Collider other) 
     {
         if(other.CompareTag("Player"))
         {
-            transform.position = Vector3.zero;
     
             gameObject.SetActive(false);
             transform.SetParent(bulletParent);
-
+            transform.position = bulletPosition;
             
             transform.SetSiblingIndex(bulletGetSiblingIndex);
+            
             other.GetComponent<IDamageable>()?.TakeDamage(bulletDamge);
+        
         }   
     }
 
    
 
-    private IEnumerator BulletDestroy()
+    public IEnumerator BulletDestroy()
     {
         yield return new WaitForSeconds(10f);
         
-        transform.localPosition = Vector3.zero;
 
-        transform.SetParent(bulletParent);
         gameObject.SetActive(false);
+        transform.SetParent(bulletParent);
+        transform.localPosition = bulletPosition;
 
 
         transform.SetSiblingIndex(bulletGetSiblingIndex);
     }
     
-    public void SetBulletTransformRotation(Vector3 position)
+    public void SetBulletTransformRotation()
     {
-        transform.localPosition = Vector3.zero;
+        transform.position = bulletPosition;
     }
 }

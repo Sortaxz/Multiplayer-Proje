@@ -12,12 +12,18 @@ ScriptsOnlyBuild:
     - WeaponController
     - Weapon_ScriptableObject
     Assembly-CSharp.dll:
+    - BulletController
+    - CameraController
+    - CharacterAnimation
+    - CharacterControl
     - CheatController
+    - CombatController
     - FindingMatchControl
     - FriendListControl
     - FriendSystem
     - GameManager
     - GameUI
+    - GunInfo
     - HandleControl
     - HealtBar_Control
     - PlayerListControl
@@ -25,9 +31,12 @@ ScriptsOnlyBuild:
     - PlayerPropImageControl
     - PlayerScriptableObject
     - SettingsController
+    - SingleShotgun
     - SpawnManager
     - SunucuYonetim
     - UIMenager
+    - WeaponController
+    - Weapon_ScriptableObject
     PhotonUnityNetworking:
     - Photon.Pun.PhotonAnimatorView
     - Photon.Pun.PhotonRigidbodyView
@@ -49,6 +58,9 @@ ScriptsOnlyBuild:
     PhotonUnityNetworking.Utilities.dll:
     - Photon.Pun.UtilityScripts.CountdownTimer
     PhotonUnityNetworking.dll:
+    - Photon.Pun.PhotonAnimatorView
+    - Photon.Pun.PhotonRigidbodyView
+    - Photon.Pun.PhotonTransformView
     - Photon.Pun.PhotonView
     - Photon.Pun.ServerSettings
     Unity.Rider.Editor.dll:
@@ -63,6 +75,9 @@ ScriptsOnlyBuild:
     - TMPro.TMP_Dropdown
     - TMPro.TMP_FontAsset
     - TMPro.TMP_InputField
+    - TMPro.TMP_Settings
+    - TMPro.TMP_SpriteAsset
+    - TMPro.TMP_StyleSheet
     - TMPro.TextMeshProUGUI
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
@@ -1163,7 +1178,7 @@ ScriptsOnlyBuild:
     className: CheatController
   - hash:
       serializedVersion: 2
-      Hash: 0a398c2b228bed7edc8c40d2cf441912
+      Hash: bf213534c854d2568eaeb30bd038abce
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: BulletController
@@ -1307,7 +1322,7 @@ ScriptsOnlyBuild:
     className: PlayerManager
   - hash:
       serializedVersion: 2
-      Hash: f66f4c8f4396d984caf61937f65525e4
+      Hash: d2a8d1e1a2ad6d8d2deb03e2315a0dfc
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: WeaponController
@@ -2201,7 +2216,7 @@ ScriptsOnlyBuild:
     className: Dropdown
   - hash:
       serializedVersion: 2
-      Hash: 8fe834dd7e44d518679ffe2db1f105e0
+      Hash: c4e03e98fa17fcb5eb3d634938092f16
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: CharacterAnimation

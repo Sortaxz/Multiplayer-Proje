@@ -24,6 +24,9 @@ public class WeaponController : MonoBehaviour
     private float weaponRange;
     private int maxCapacity;
     public int MaxCapacity { get { return maxCapacity;}}
+    [SerializeField] private Transform hedef;
+    private bool characterReloading = false;
+    public bool CharacterReloading { get { return characterReloading;}}
     private void Awake() 
     {
         gameManager = GameManager.Instance;
@@ -63,8 +66,22 @@ public class WeaponController : MonoBehaviour
                 
 
                 Ray ray = new Ray(characterCamera.transform.position,characterCamera.transform.forward);
+                RaycastHit hit;
 
-                WeopenLeadActivated(direction);
+                if(Physics.Raycast(ray,out hit,50))
+                {
+                    if(hit.collider.CompareTag("Player") && !hit.collider.GetComponent<PhotonView>().IsMine)
+                    {
+                        hedef = hit.collider.transform;
+                    }
+                    else
+                    {
+                        hedef = hit.collider.transform;
+                    }
+                }
+
+                
+                WeopenLeadActivated(characterCamera.transform.forward,hedef);
                 
             }
             
@@ -84,6 +101,7 @@ public class WeaponController : MonoBehaviour
                     for (int i = 0; i < bulletCount; i++)
                     {
                         GameObject spawnBullet =  Instantiate(bullet,BulletExitPosition.position,Quaternion.identity,BulletExitPosition);
+                        spawnBullet.GetComponent<BulletController>().bulletPosition = spawnBullet.transform.position;
                         spawnBullet.transform.name = $"scanner-bullet-{i}";
                         spawnBullet.transform.forward = direction;
                         spawnBullet.gameObject.SetActive(false);
@@ -102,6 +120,7 @@ public class WeaponController : MonoBehaviour
                     for (int i = 0; i < bulletCount; i++)
                     {
                         GameObject spawnBullet =  Instantiate(bullet,BulletExitPosition.position,Quaternion.identity,BulletExitPosition);
+                        spawnBullet.GetComponent<BulletController>().bulletPosition = spawnBullet.transform.localPosition;
                         spawnBullet.transform.name = $"mp5-bullet-{i}";
                         spawnBullet.transform.forward = direction;
                         spawnBullet.gameObject.SetActive(false);
@@ -134,7 +153,7 @@ public class WeaponController : MonoBehaviour
 
    
 
-    private void WeopenLeadActivated(Vector3 direction)
+    private void WeopenLeadActivated(Vector3 direction,Transform target)
     {
         if(weaponName == "Scanner")
         {
@@ -144,7 +163,7 @@ public class WeaponController : MonoBehaviour
                 {
                     gameManager.Scanner[bullerIndex].gameObject.SetActive(true);
                     gameManager.Scanner[bullerIndex].gameObject.transform.SetParent(null);
-                    gameManager.Scanner[bullerIndex].GetComponent<BulletController>().BulletMove(direction,damage);
+                    gameManager.Scanner[bullerIndex].GetComponent<BulletController>().BulletMove(direction,target,damage);
 
                 }
             }
@@ -157,7 +176,7 @@ public class WeaponController : MonoBehaviour
                 {
                     gameManager.Mp5[bullerIndex].gameObject.SetActive(true);
                     gameManager.Mp5[bullerIndex].gameObject.transform.SetParent(null);
-                    gameManager.Mp5[bullerIndex].GetComponent<BulletController>().BulletMove(direction,damage);
+                    gameManager.Mp5[bullerIndex].GetComponent<BulletController>().BulletMove(direction,target,damage);
                 }
 
             }
@@ -175,10 +194,14 @@ public class WeaponController : MonoBehaviour
             {
                 if(gameManager.Scanner[i].transform.parent == null)
                 {
-                    gameManager.Scanner[i].transform.SetParent(BulletExitPosition);
                     gameManager.Scanner[i].SetActive(false);
+                    gameManager.Scanner[i].transform.SetParent(BulletExitPosition);
+
+                    gameManager.Scanner[i].transform.localPosition = BulletExitPosition.transform.position;
+                    gameManager.Scanner[i].transform.localRotation = BulletExitPosition.transform.rotation;
+
                     gameManager.Scanner[i].transform.SetSiblingIndex(i);
-                    gameManager.Scanner[i].GetComponent<BulletController>().SetBulletTransformRotation(BulletExitPosition.transform.position);
+                    
                 }
             }
         }
@@ -188,10 +211,9 @@ public class WeaponController : MonoBehaviour
             {
                 if(gameManager.Mp5[i].transform.parent == null)
                 {
-                    gameManager.Mp5[i].transform.SetParent(BulletExitPosition);
                     gameManager.Mp5[i].SetActive(false);
+                    gameManager.Mp5[i].transform.SetParent(BulletExitPosition);
                     gameManager.Mp5[i].transform.SetSiblingIndex(i);
-                    gameManager.Mp5[i].GetComponent<BulletController>().SetBulletTransformRotation(BulletExitPosition.transform.position);
                 }
             }
         }
@@ -214,8 +236,7 @@ public class WeaponController : MonoBehaviour
                     maxCapacity = 0;
                 }
 
-                
-                print($"{weaponName}'un kurşun sayisi : {bulletCount} ve Toplam kalan kurşun sayisi : {maxCapacity}");
+                characterReloading = true;
             }
             else if(bulletCount <= 0)
             {
@@ -231,11 +252,15 @@ public class WeaponController : MonoBehaviour
                     bulletCount = maxCapacity;
                     maxCapacity = 0;
                 }
+                characterReloading = true;
+            }
+            else
+            {
+                characterReloading = false;
             }
             GameUI.Instance.WeaponInformationUi(bulletCount,maxCapacity);
-
         }
-       
+
 
     }
 }

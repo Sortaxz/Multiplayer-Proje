@@ -204,6 +204,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void Die()
     {
+        
         scanner.Clear();
         mp5.Clear();
         PhotonNetwork.Destroy(character);

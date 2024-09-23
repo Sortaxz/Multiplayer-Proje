@@ -11,6 +11,7 @@ public class CharacterAnimation : PlayerAnimation
     private PhotonAnimatorView photonAnimator;
     private bool hitReactionAnimation;
     public bool HitReactionAnimation {get {return hitReactionAnimation;} set {hitReactionAnimation = value;} }
+    public bool reloading = false;
     private void Awake() 
     {
         animator = GetComponent<Animator>();    
@@ -27,17 +28,30 @@ public class CharacterAnimation : PlayerAnimation
     void Update()
     {
        
-        if (!pw.IsMine)
-            return;
-       
-        CharacterMovementAnimation();
-
-        if(isFire)
+        if (pw.IsMine)
         {
-            animator.Play("Firing_Rifle");
-        }
+            CharacterMovementAnimation();
 
-        
+            if(isFire)
+            {
+                animator.Play("Firing_Rifle");
+            }
+
+            //isReloading
+
+            if(reloading )
+            {
+                animator.SetBool("isReloading",true);
+            }
+            if(!reloading)
+            {
+
+                animator.SetBool("isReloading",false);
+            }
+            
+
+        }       
+
     }
 
     public void HitReactionAnimation_Method(bool value,Animator animator)
@@ -322,8 +336,10 @@ public class CharacterAnimation : PlayerAnimation
 
     public void Deat_Method()
     {
-        print("Karakter ölme animasyonu başladi");
-        animator.SetBool("isDeath",true); 
+        if(animator != null)
+        {
+            animator.SetBool("isDeath",true); 
+        }
     }
 
     

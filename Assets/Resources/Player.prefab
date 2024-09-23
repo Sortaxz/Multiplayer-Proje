@@ -3262,6 +3262,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36c2055be2405604899a396cf4b6570d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  reloading: 0
 --- !u!114 &2122869864031343028
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3300,7 +3301,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 1
+  m_SynchronizeAngularVelocity: 0
   m_TeleportEnabled: 0
   m_TeleportIfDistanceGreaterThan: 3
 --- !u!114 &8337053524298288049
@@ -3354,6 +3355,9 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 2
     Name: isHitReaction
+  - Type: 4
+    SynchronizeType: 2
+    Name: isReloading
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
