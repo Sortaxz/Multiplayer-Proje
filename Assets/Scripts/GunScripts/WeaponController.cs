@@ -27,6 +27,9 @@ public class WeaponController : MonoBehaviour
     [SerializeField] private Transform hedef;
     private bool characterReloading = false;
     public bool CharacterReloading { get { return characterReloading;}}
+    private bool characterFire = false;
+    public bool CharacterFire { get { return characterFire;}}
+
     private void Awake() 
     {
         gameManager = GameManager.Instance;
@@ -59,32 +62,33 @@ public class WeaponController : MonoBehaviour
     {
         if(bulletCount > 0)
         {
-            if(bulletCount > 0) 
+            characterFire = true;
+            
+            weaponEffects[0].Play();
+            audioSource[0].Play();
+
+            Ray ray = new Ray(characterCamera.transform.position, characterCamera.transform.forward);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, 50))
             {
-                weaponEffects[0].Play();
-                audioSource[0].Play();
-                
-
-                Ray ray = new Ray(characterCamera.transform.position,characterCamera.transform.forward);
-                RaycastHit hit;
-
-                if(Physics.Raycast(ray,out hit,50))
+                if (!hit.collider.GetComponent<PhotonView>().IsMine)
                 {
-                    if(hit.collider.CompareTag("Player") && !hit.collider.GetComponent<PhotonView>().IsMine)
+                    WeopenLeadActivated(characterCamera.transform.forward, hit.collider.transform);
+                }
+                else
+                {
+                    if (!hit.collider.CompareTag("Player"))
                     {
-                        hedef = hit.collider.transform;
-                    }
-                    else
-                    {
-                        hedef = hit.collider.transform;
+                        WeopenLeadActivated(characterCamera.transform.forward, hit.collider.transform);
                     }
                 }
-
-                
-                WeopenLeadActivated(characterCamera.transform.forward,hedef);
-                
             }
-            
+
+        }
+        else
+        {
+            characterFire = false;
         }
         
     }
@@ -155,6 +159,7 @@ public class WeaponController : MonoBehaviour
 
     private void WeopenLeadActivated(Vector3 direction,Transform target)
     {
+        
         if(weaponName == "Scanner")
         {
             if(gameManager.Scanner.Count >bullerIndex)

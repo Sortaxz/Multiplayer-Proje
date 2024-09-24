@@ -67,6 +67,15 @@ public class CombatController : InputManager
             characterAnimation.reloading = false;
 
         }
+
+        if(mousePressedLeftButton)
+        {
+            characterAnimation.fire = weapons[weaponIndex].CharacterFire;
+        }
+        else
+        {
+            characterAnimation.fire = false;
+        }
         
         
         WeaponSelection();

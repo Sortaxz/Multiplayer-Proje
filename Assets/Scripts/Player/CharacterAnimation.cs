@@ -12,6 +12,10 @@ public class CharacterAnimation : PlayerAnimation
     private bool hitReactionAnimation;
     public bool HitReactionAnimation {get {return hitReactionAnimation;} set {hitReactionAnimation = value;} }
     public bool reloading = false;
+    public bool fire = false;
+    private bool jumpAnimation = false;
+    public bool  JumpAnimation {get {return jumpAnimation;} set {jumpAnimation = value;} }
+    private bool isReloading = false;
     private void Awake() 
     {
         animator = GetComponent<Animator>();    
@@ -37,18 +41,22 @@ public class CharacterAnimation : PlayerAnimation
                 animator.Play("Firing_Rifle");
             }
 
-            //isReloading
 
             if(reloading )
             {
-                animator.SetBool("isReloading",true);
+                animator.Play("Reloading");
             }
             if(!reloading)
             {
-
-                animator.SetBool("isReloading",false);
             }
             
+            
+            if(isJumping && !jumpAnimation)
+            {
+                jumpAnimation = true;
+            }
+            
+            print(GameManager.Instance.IsCharacterDead());
 
         }       
 
@@ -177,82 +185,12 @@ public class CharacterAnimation : PlayerAnimation
             animator.SetFloat("speed", 0f);
             if (!ctrl)
             {
-                PlayPlayerMoveAnimation("isJumping", isJumping, "bool");
+                PlayPlayerMoveAnimation("isJumping", jumpAnimation, "bool");
             }
         }
         PlayPlayerCrounchMoveAnimation();
     }
 
-    private void MovementAnimation()
-    {
-        if(forward || left || right || backward || leftShift)
-        {
-            animator.SetBool("isMovement",true);
-
-            if(isBackwardWalk)
-            {
-                animator.SetFloat("movement",.2f);
-            }
-            if(isBackwardRun)
-            {
-                animator.SetFloat("movement",1.4f);
-            }
-
-            if(isWalking)
-            {
-                animator.SetFloat("movement",.5f);
-            }
-            if(isRunning)
-            {
-                animator.SetFloat("movement",1.7f);
-            }
-
-            if(isLeftWalking)
-            {
-                animator.SetFloat("movement",.8f);
-            }
-            if(isLeftRun)
-            {
-                animator.SetFloat("movement",2f);
-            }
-            if(isLeftForwardRun)
-            {
-                animator.SetFloat("movement",3.2f);
-            }
-            if(isLeftBackwardRun)
-            {
-                animator.SetFloat("movement",2.6f);
-            }
-
-
-            if(isRightWalking)
-            {
-                animator.SetFloat("movement",1.1f);
-            }
-            if(isRightRun)
-            {
-                animator.SetFloat("movement",2.3f);
-            }
-            if(isRightForwardRun)
-            {
-                animator.SetFloat("movement",2.9f);
-            }
-            if(isRightBacwardRun)
-            {
-                animator.SetFloat("movement",3.5f);
-            }
-
-        }
-        if(!forward && !left && !right && !backward && !leftShift)
-        {
-            animator.SetBool("isMovement",false);
-            animator.SetFloat("movement",0f);
-            if(!ctrl)
-            {
-                PlayPlayerMoveAnimation("isJumping", isJumping, "bool");
-            }
-        }
-    }
 
     private void PlayPlayerCrounchMoveAnimation()
     {

@@ -33,6 +33,7 @@ public class CharacterControl : InputManager,IDamageable
     public Material CharacterMainMaterial { get { return characterMainMaterial;} set { characterMainMaterial = value; } }
     GameManager gameManager;
     [SerializeField] private CombatController combatController;
+    [SerializeField] private CharacterAnimation characterAnimation;
     Hashtable playerProps;
 
     [SerializeField] private GameObject weapon_Info_Image;
@@ -92,8 +93,12 @@ public class CharacterControl : InputManager,IDamageable
     {
         if(!pw.IsMine)
             return;
+        
+        if(gameManager.IsCharacterDead())
+        {
+            Move();
 
-        Move();
+        }
         
        
     }
@@ -102,8 +107,11 @@ public class CharacterControl : InputManager,IDamageable
     {
         if(!pw.IsMine)
             return;
-    
-        PlayerMovement();
+        if(gameManager.IsCharacterDead())
+        {
+            PlayerMovement();
+
+        }
        
         
     }
@@ -119,6 +127,7 @@ public class CharacterControl : InputManager,IDamageable
     {
         PlayerJumpMove();
         PlayerMoveForce();
+
     }
 
     private void PlayerMoveForce()
@@ -158,7 +167,8 @@ public class CharacterControl : InputManager,IDamageable
 
     private void OnCollisionEnter(Collision other) 
     {
-        isGround = false;    
+        isGround = false;   
+        characterAnimation.JumpAnimation = false;  
     }
 
    

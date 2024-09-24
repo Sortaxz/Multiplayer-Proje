@@ -204,9 +204,13 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void Die()
     {
-        
+        /*
         scanner.Clear();
         mp5.Clear();
+        */
+        WeaponBulletClear(scanner);
+        WeaponBulletClear(mp5);
+
         PhotonNetwork.Destroy(character);
 
         character = SpawnManager.Instance.CharacterSpawn(PV);
@@ -220,6 +224,14 @@ public class GameManager : MonoBehaviourPunCallbacks
        
         StartCoroutine(FindOtherPlayerCharacter());
 
+    }
+    private void WeaponBulletClear(List<GameObject> weapon)
+    {
+        for (int i = 0; i < weapon.Count; i++)
+        {
+            Destroy(weapon[i].gameObject);
+            weapon.Clear();
+        }
     }
 
     public bool IsStartGame()
@@ -272,5 +284,15 @@ public class GameManager : MonoBehaviourPunCallbacks
 
             yield return new WaitForSeconds(.1f);
         }
+    }
+
+    public bool IsCharacterDead()
+    {
+        if(PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("life",out object life))
+        {
+            return (bool)life;
+
+        }
+        return false;
     }
 }

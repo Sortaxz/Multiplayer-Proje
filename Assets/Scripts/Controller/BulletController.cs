@@ -15,7 +15,6 @@ public class BulletController : MonoBehaviour
     {
         bulletRb = GetComponent<Rigidbody>();    
         bulletParent = transform.parent;
-        print(bulletParent.transform.name);
         bulletGetSiblingIndex = transform.GetSiblingIndex();
     }
     
