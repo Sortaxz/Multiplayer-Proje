@@ -43,8 +43,13 @@ public class GameManager : MonoBehaviourPunCallbacks
     private List<GameObject> mp5 = new List<GameObject>();
     public List<GameObject> Mp5 { get { return mp5;} set { mp5 = value; } }
 
+    private List<string> playerName = new List<string>();
+
     private bool characterDead = false;
     public bool CharacterDead { get { return characterDead;} set { characterDead = value; } }
+
+    [SerializeField] private CountdownTimer countdownTimer;
+
     public override void OnEnable()
     {
         CountdownTimer.OnCountdownTimerHasExpired += OnCountDownTimerIsExpired;
@@ -65,6 +70,11 @@ public class GameManager : MonoBehaviourPunCallbacks
         };
         PhotonNetwork.LocalPlayer.SetCustomProperties(props);    
         PV = GetComponent<PhotonView>();
+
+        if(!countdownTimer.isActiveAndEnabled)
+        {
+            OnCountDownTimerIsExpired();
+        }
     }
     
     void Start()
@@ -85,10 +95,23 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public override void OnLeftRoom()
     {
+
+    }
+
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
+        ExitGames.Client.Photon.Hashtable props =  new ExitGames.Client.Photon.Hashtable()
+        {
+            {"inGame",false}
+        };
+        otherPlayer.SetCustomProperties(props);
+
+    
     }
     
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
@@ -115,6 +138,8 @@ public class GameManager : MonoBehaviourPunCallbacks
                 infoText.text = "Diğer oyuncular bekleniyor...";
             }
         }
+
+       
     }
 
     #endregion
@@ -162,6 +187,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         ExitGames.Client.Photon.Hashtable playerProps = new ExitGames.Client.Photon.Hashtable();
 
         playerProps.Add("life",true);
+        playerProps.Add("inGame",true);
         PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
 
         PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("color",out object color);
@@ -175,6 +201,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
 
         GameUI.Instance.Active();
+        characterDead = false;
     }
 
     private bool CheckAllPlayerLoadedLevel()
@@ -204,10 +231,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void Die()
     {
-        /*
-        scanner.Clear();
-        mp5.Clear();
-        */
+        characterDead = false;
+        
         WeaponBulletClear(scanner);
         WeaponBulletClear(mp5);
 
@@ -288,11 +313,20 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public bool IsCharacterDead()
     {
-        if(PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("life",out object life))
+        PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("life",out object life);
+        if(life != null)
         {
-            return (bool)life;
+            if((bool)life)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
 
+            }
         }
         return false;
     }
+    
 }

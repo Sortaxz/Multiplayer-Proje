@@ -94,7 +94,7 @@ public class CharacterControl : InputManager,IDamageable
         if(!pw.IsMine)
             return;
         
-        if(gameManager.IsCharacterDead())
+        if(!gameManager.CharacterDead)
         {
             Move();
 
@@ -107,7 +107,7 @@ public class CharacterControl : InputManager,IDamageable
     {
         if(!pw.IsMine)
             return;
-        if(gameManager.IsCharacterDead())
+        if(!gameManager.CharacterDead)
         {
             PlayerMovement();
 
@@ -158,10 +158,7 @@ public class CharacterControl : InputManager,IDamageable
                 isGround = true;
                 isPlayerJump = true;
             }
-            else if (!jump && isGround)
-            {
-                isPlayerJump = false;
-            }
+            
         }
     }
 
@@ -171,6 +168,12 @@ public class CharacterControl : InputManager,IDamageable
         characterAnimation.JumpAnimation = false;  
     }
 
+    
+
+    private void OnCollisionExit(Collision other) 
+    {
+        characterAnimation.JumpAnimation = false;    
+    }
    
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
@@ -238,6 +241,7 @@ public class CharacterControl : InputManager,IDamageable
             currentHealt = 0;
             GameUI.Instance.PlayerHealtBar(1f);
             GameManager.deatDelegate();
+            gameManager.CharacterDead = true;
         }
     }
 

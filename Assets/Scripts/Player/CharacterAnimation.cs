@@ -31,34 +31,37 @@ public class CharacterAnimation : PlayerAnimation
     
     void Update()
     {
-       
-        if (pw.IsMine)
+        
+        if(!GameManager.Instance.CharacterDead)
         {
-            CharacterMovementAnimation();
-
-            if(isFire)
+            if (pw.IsMine)
             {
-                animator.Play("Firing_Rifle");
-            }
+                CharacterMovementAnimation();
+
+                if(isFire)
+                {
+                    animator.Play("Firing_Rifle");
+                }
 
 
-            if(reloading )
-            {
-                animator.Play("Reloading");
-            }
-            if(!reloading)
-            {
-            }
-            
-            
-            if(isJumping && !jumpAnimation)
-            {
-                jumpAnimation = true;
-            }
-            
-            print(GameManager.Instance.IsCharacterDead());
+                if(reloading )
+                {
+                    animator.Play("Reloading");
+                }
+                if(!reloading)
+                {
+                }
+                
+                
+                if(isJumping && !jumpAnimation)
+                {
+                    jumpAnimation = true;
+                }
+                
 
-        }       
+
+            }   
+        }    
 
     }
 

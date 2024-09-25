@@ -29,6 +29,8 @@ public class WeaponController : MonoBehaviour
     public bool CharacterReloading { get { return characterReloading;}}
     private bool characterFire = false;
     public bool CharacterFire { get { return characterFire;}}
+    
+    [SerializeField] private GameObject mermiEffect;
 
     private void Awake() 
     {
@@ -72,15 +74,19 @@ public class WeaponController : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, 50))
             {
-                if (!hit.collider.GetComponent<PhotonView>().IsMine)
+                //Instantiate(mermiEffect,hit.point,Quaternion.LookRotation(hit.normal));
+                if (hit.collider.GetComponent<PhotonView>()?.IsMine == false)
                 {
-                    WeopenLeadActivated(characterCamera.transform.forward, hit.collider.transform);
+                    WeopenLeadActivated(characterCamera.transform.forward, hit.point);
                 }
                 else
                 {
                     if (!hit.collider.CompareTag("Player"))
                     {
-                        WeopenLeadActivated(characterCamera.transform.forward, hit.collider.transform);
+                        hedef = hit.collider.transform;
+                        print(hedef.transform.position.y);
+                        WeopenLeadActivated(characterCamera.transform.forward, hit.point);
+
                     }
                 }
             }
@@ -157,7 +163,7 @@ public class WeaponController : MonoBehaviour
 
    
 
-    private void WeopenLeadActivated(Vector3 direction,Transform target)
+    private void WeopenLeadActivated(Vector3 direction,Vector3 target)
     {
         
         if(weaponName == "Scanner")
@@ -265,7 +271,10 @@ public class WeaponController : MonoBehaviour
             }
             GameUI.Instance.WeaponInformationUi(bulletCount,maxCapacity);
         }
-
+        else
+        {
+            characterReloading = false;
+        }
 
     }
 }

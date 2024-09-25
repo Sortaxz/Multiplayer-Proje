@@ -54,7 +54,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     public bool RandomOdaKurdu { get { return randomOdaKurdu;} set { randomOdaKurdu = value;}}
 
 
-
+    private bool playersReady = false;
     private void Awake()
     {
         uIMenager = UIMenager.Instance;
@@ -140,26 +140,47 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        if(playerList == null)
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
-            playerList = new Dictionary<string, GameObject>();
+            if(PhotonNetwork.PlayerList[i].CustomProperties.TryGetValue("inGame",out object inGame))
+            {
+                if((bool)inGame)
+                {
+                    playersReady = true;
+                }
+            }
         }
-
-        string randomOdaPanelName = uIMenager.RandomOda_Panel.name;
-        uIMenager.SetActiveUIObject(randomOdaPanelName);
-
-        foreach (Player player in PhotonNetwork.PlayerList)
+        print(playersReady);
+        if(playersReady)
         {
-           
-            GameObject playerListObje = PlayerListOlustur(player.ActorNumber,player.NickName,player);
+            print("Oyun sahnesinde bir oyuncu var");
+            PhotonNetwork.LoadLevel(1);
+        }
+        else
+        {
+            if(playerList == null)
+            {
+                playerList = new Dictionary<string, GameObject>();
+            }
+
+            string randomOdaPanelName = uIMenager.RandomOda_Panel.name;
+            uIMenager.SetActiveUIObject(randomOdaPanelName);
+
+            foreach (Player player in PhotonNetwork.PlayerList)
+            {
             
-            playerList.Add(player.NickName,playerListObje);
-                    
-            string findingMatchPanelName = uIMenager.FindingMatch_Panel.name;
-                    
-            uIMenager.SetActiveUIObject(findingMatchPanelName); 
-                    
+                GameObject playerListObje = PlayerListOlustur(player.ActorNumber,player.NickName,player);
+                
+                playerList.Add(player.NickName,playerListObje);
+                        
+                string findingMatchPanelName = uIMenager.FindingMatch_Panel.name;
+                        
+                uIMenager.SetActiveUIObject(findingMatchPanelName); 
+                        
+            }
+
         }
+
     }
     
     public override void OnJoinRandomFailed(short returnCode, string message)
@@ -196,6 +217,11 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         GameObject playerListObje =  PlayerListOlustur(newPlayer.ActorNumber,newPlayer.NickName,newPlayer);
 
         playerList.Add(newPlayer.NickName,playerListObje);
+
+        if(playersReady)
+        {
+            PhotonNetwork.LoadLevel(1);
+        }
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -210,6 +236,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         {
             FindingMatchControl.Instance.UpdateButtons();
         }
+
     }
 
     public override void OnLeftRoom()
@@ -218,6 +245,9 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         {
             Destroy(entry);
         }
+
+        
+
         playerList.Clear();
         playerList = null;
         
@@ -244,7 +274,8 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
                 {
                     ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable()
                     {
-                        {"isPlayerReady",false}
+                        {"isPlayerReady",false},
+                        {"inGame",true}
                     };
 
                     PhotonNetwork.CurrentRoom.Players[i+1].SetCustomProperties(props);

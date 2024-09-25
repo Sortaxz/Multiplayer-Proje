@@ -44,7 +44,7 @@ public class PlayerAnimation : InputManager
     protected bool isLeftForwardRun => left && forward && leftShift ? true : false;
     protected bool isLeftBackwardRun => left && backward && leftShift ? true : false;
 
-    protected bool isJumping => CharacterControl.IsPlayerJump ? true : false;
+    protected bool isJumping => jump ? true : false;
 
     protected bool isCrounchIdle =>ctrl ? true : false;
     protected bool isCrounchLeft =>ctrl && left ? true : false;
