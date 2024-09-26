@@ -224,6 +224,7 @@ public class CharacterControl : InputManager,IDamageable
         if(!pw.IsMine)
             return;
 
+        characterAnimation.HitAnimation = true;
         float deger = damage / 100;
         currentHealt -= damage;
         GameUI.Instance.PlayerHealtBar(deger);

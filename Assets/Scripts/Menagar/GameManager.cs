@@ -26,6 +26,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     public delegate void DeatDelegate();
     public static DeatDelegate deatDelegate;
 
+    public delegate void AnimationDelegate();
+    public static AnimationDelegate animationDelegate;
+
     [SerializeField] private PlayerScriptableObject playerScriptableObject;
     public PlayerScriptableObject PlayerScriptableObject { get { return playerScriptableObject; } }
     [SerializeField]private CharacterControl[] characterOfPlayers;

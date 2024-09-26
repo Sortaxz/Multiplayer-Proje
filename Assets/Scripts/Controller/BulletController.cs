@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public class BulletController : MonoBehaviour
@@ -46,7 +47,8 @@ public class BulletController : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
-    
+            
+            
             gameObject.SetActive(false);
             transform.SetParent(bulletParent);
             transform.position = bulletPosition;
@@ -69,7 +71,7 @@ public class BulletController : MonoBehaviour
         }   
     }
 
-   
+    
 
     public IEnumerator BulletDestroy(float time)
     {
