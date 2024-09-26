@@ -15,8 +15,7 @@ public class CharacterAnimation : PlayerAnimation
     public bool fire = false;
     private bool jumpAnimation = false;
     public bool  JumpAnimation {get {return jumpAnimation;} set {jumpAnimation = value;} }
-    private bool hitAnimation = false;
-    public bool HitAnimation {get {return hitAnimation;} set {hitAnimation = value;}}
+    private bool isReloading = false;
     private void Awake() 
     {
         animator = GetComponent<Animator>();    
@@ -27,8 +26,7 @@ public class CharacterAnimation : PlayerAnimation
 
     void Start()
     {
-        //GameManager.animationDelegate += HitAnimation;
-
+        
     }
     
     void Update()
@@ -50,7 +48,9 @@ public class CharacterAnimation : PlayerAnimation
                 {
                     animator.Play("Reloading");
                 }
-               
+                if(!reloading)
+                {
+                }
                 
                 
                 if(isJumping && !jumpAnimation)
@@ -58,11 +58,7 @@ public class CharacterAnimation : PlayerAnimation
                     jumpAnimation = true;
                 }
                 
-                if(hitAnimation)
-                {
-                    animator.Play("Hit Reaction");
-                    hitAnimation = false;
-                }
+
 
             }   
         }    
@@ -190,12 +186,11 @@ public class CharacterAnimation : PlayerAnimation
         {
             animator.SetBool("isMovement", false);
             animator.SetFloat("speed", 0f);
+            if (!ctrl)
+            {
+                PlayPlayerMoveAnimation("isJumping", jumpAnimation, "bool");
+            }
         }
-        if (!ctrl)
-        {
-            PlayPlayerAnimation("isJumping", jumpAnimation, "bool");
-        }
-
         PlayPlayerCrounchMoveAnimation();
     }
 
@@ -235,8 +230,7 @@ public class CharacterAnimation : PlayerAnimation
         }
     }
 
-
-    public void SetAnimation(string animationBoolName,object animationBoolValue,string saveAnimationType)
+    private void SetAnimation(string animationBoolName,object animationBoolValue,string saveAnimationType)
     {
         switch (saveAnimationType)
         {
@@ -254,7 +248,7 @@ public class CharacterAnimation : PlayerAnimation
         }
     }
 
-    public void PlayPlayerAnimation(string animationBoolName,bool animationDirection,string setValueType, bool  additionalAnimationDirection =false)
+    public void PlayPlayerMoveAnimation(string animationBoolName,bool animationDirection,string setValueType, bool  additionalAnimationDirection =false)
     {
         if(animationBoolName == "isRunning" )
         {

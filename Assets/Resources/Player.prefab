@@ -1669,7 +1669,7 @@ Transform:
   m_GameObject: {fileID: 5374857951275071550}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -2.6146293, y: 3.5912507, z: -0.74828476}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1940,7 +1940,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3471925932545980805}
   - component: {fileID: 5205519504396789008}
-  - component: {fileID: 2536114898401532270}
   m_Layer: 0
   m_Name: Ch15
   m_TagString: Untagged
@@ -2082,28 +2081,6 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.049581677, y: -0.10142243, z: 0.08405802}
     m_Extent: {x: 0.52674985, y: 0.9411179, z: 0.6300608}
   m_DirtyAABB: 0
---- !u!64 &2536114898401532270
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6089262219741012796}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 8341161198671653776, guid: 13bc7cd10a8c9a14b885b15139fc6ac8, type: 3}
 --- !u!1 &6177153822589449024
 GameObject:
   m_ObjectHideFlags: 0
@@ -3215,7 +3192,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
   m_Height: 1.8
