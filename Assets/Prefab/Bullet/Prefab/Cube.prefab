@@ -13,9 +13,7 @@ GameObject:
   - component: {fileID: 1335397818266556753}
   - component: {fileID: 7164698480595423990}
   - component: {fileID: 8955350691962243293}
-  - component: {fileID: 4184459926165655327}
   - component: {fileID: 7040517977687117137}
-  - component: {fileID: 2440072064378124718}
   - component: {fileID: 7673231327280115546}
   m_Layer: 0
   m_Name: Cube
@@ -125,34 +123,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletPosition: {x: 0, y: 0, z: 0}
-  mermiIzi: {fileID: 4328118970581390638, guid: d0f3fa5ad0b689040befc904452590d5, type: 3}
---- !u!54 &4184459926165655327
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4869964799185633112}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 2
 --- !u!114 &7040517977687117137
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,22 +139,6 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
---- !u!114 &2440072064378124718
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4869964799185633112}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 0
-  m_TeleportEnabled: 0
-  m_TeleportIfDistanceGreaterThan: 3
 --- !u!114 &7673231327280115546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -205,7 +159,6 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 7040517977687117137}
-  - {fileID: 2440072064378124718}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0

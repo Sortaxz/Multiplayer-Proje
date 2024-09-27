@@ -33,6 +33,20 @@ public class GameUI : MonoBehaviour
     public TextMeshProUGUI CurrentBulletCount_Text { get { return currentBulletCount_Text;}}
     [SerializeField] private TextMeshProUGUI maxBulletCount_Text;
 
+    [Header("Timer Related Operations ")]
+    [SerializeField] private GameObject timerPanel;
+    public GameObject TimerPanel { get { return timerPanel;}}
+    [SerializeField] private TextMeshProUGUI timerText;
+    public TextMeshProUGUI TimerText { get { return timerText; }}
+
+    [Header("in-game interaction panels")]
+    [SerializeField] private GameObject finishPanel;
+    [SerializeField] private Button returnMainMenu_Button;
+
+    [SerializeField] private GameObject pausePanel;
+    [SerializeField] private Button exitGame_Button;
+    [SerializeField] private Button returnGame_Button;
+
     private void Awake() 
     {
         pw = GetComponent<PhotonView>();
@@ -40,11 +54,7 @@ public class GameUI : MonoBehaviour
         GameManager.deatDelegate += Close;
     }
     
-    private void Update() 
-    {
-        
-    }
-
+   
     public void Active()
     {
         playerHealtBarBackground.gameObject.SetActive(true);
@@ -78,6 +88,7 @@ public class GameUI : MonoBehaviour
         currentBulletCount_Text.text = bulletCount.ToString();
         maxBulletCount_Text.text = maxBulletCount.ToString();
     }
-   
+    
+
 }
  

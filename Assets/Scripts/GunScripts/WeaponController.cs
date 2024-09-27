@@ -72,9 +72,9 @@ public class WeaponController : MonoBehaviour
             Ray ray = new Ray(characterCamera.transform.position, characterCamera.transform.forward);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, 50))
+            if (Physics.Raycast(ray, out hit, weaponRange))
             {
-                //Instantiate(mermiEffect,hit.point,Quaternion.LookRotation(hit.normal));
+                print(hit.collider.name);
                 if (hit.collider.GetComponent<PhotonView>()?.IsMine == false)
                 {
                     WeopenLeadActivated(characterCamera.transform.forward, hit.point);
@@ -83,8 +83,6 @@ public class WeaponController : MonoBehaviour
                 {
                     if (!hit.collider.CompareTag("Player"))
                     {
-                        hedef = hit.collider.transform;
-                        print(hedef.transform.position.y);
                         WeopenLeadActivated(characterCamera.transform.forward, hit.point);
 
                     }

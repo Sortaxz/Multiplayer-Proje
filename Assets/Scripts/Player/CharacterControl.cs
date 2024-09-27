@@ -100,6 +100,7 @@ public class CharacterControl : InputManager,IDamageable
 
         }
         
+        
        
     }
     
@@ -215,7 +216,7 @@ public class CharacterControl : InputManager,IDamageable
 
     public void TakeDamage(float damage)
     {
-        pw.RPC("RPC_TakeDamage",RpcTarget.All,damage);
+        pw.RPC("RPC_TakeDamage",RpcTarget.AllBufferedViaServer,damage);
     }
 
     [PunRPC]
@@ -241,22 +242,26 @@ public class CharacterControl : InputManager,IDamageable
             currentHealt = 0;
             GameUI.Instance.PlayerHealtBar(1f);
             GameManager.deatDelegate();
-            gameManager.CharacterDead = true;
+            //gameManager.CharacterDead = true;
         }
     }
 
     private void Die()
     {
-        otherPlayerHealtBar.fillAmount = 1;
-        isLife = false;
-        playerProps["life"] = false;
-        currentHealt = 100;
-        PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
+        if(pw.IsMine)
+        {
+            otherPlayerHealtBar.fillAmount = 1;
+            isLife = false;
+            playerProps["life"] = false;
+            currentHealt = 100;
+            PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
 
 
-        gameManager.Die();
+            gameManager.Die();
+        }
        
     }
+
     /*
 
     private void Die()
@@ -265,6 +270,7 @@ public class CharacterControl : InputManager,IDamageable
     }
     
     */
+
     [PunRPC]
     private void RPC_Die()
     {

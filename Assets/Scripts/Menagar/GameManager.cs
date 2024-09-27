@@ -1,10 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -50,6 +51,9 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     [SerializeField] private CountdownTimer countdownTimer;
 
+    private float time;
+    private int sayi = 5;
+
     public override void OnEnable()
     {
         CountdownTimer.OnCountdownTimerHasExpired += OnCountDownTimerIsExpired;
@@ -64,12 +68,12 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Awake() 
     {
+        PV = GetComponent<PhotonView>();
         ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable()
         {
             {"PlayerLoadedLevel",true},
         };
         PhotonNetwork.LocalPlayer.SetCustomProperties(props);    
-        PV = GetComponent<PhotonView>();
 
         if(!countdownTimer.isActiveAndEnabled)
         {
@@ -84,7 +88,14 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Update() 
     {
-        
+        if(PV.IsMine)
+        {
+            if(Input.GetKeyDown(KeyCode.P))
+            {
+                print("p");
+                sayi++;
+            }
+        }
     }
 
     #region  Pun Callbacks
@@ -227,15 +238,26 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         loadingScren.gameObject.SetActive(false);
         StartGame();
+        //GameUI.Instance.RunTimer_Method();
+
+        if(PhotonNetwork.IsMasterClient)
+        {
+            StartCoroutine(TimerInumerator(time));
+        }
+        else
+        {
+            GameUI.Instance.TimerPanel.SetActive(true);
+        }
+        
     }
 
     public void Die()
     {
         characterDead = false;
-        
+        /*
         WeaponBulletClear(scanner);
         WeaponBulletClear(mp5);
-
+        */
         PhotonNetwork.Destroy(character);
 
         character = SpawnManager.Instance.CharacterSpawn(PV);
@@ -255,7 +277,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         for (int i = 0; i < weapon.Count; i++)
         {
             Destroy(weapon[i].gameObject);
-            weapon.Clear();
+            weapon.Remove(weapon[i].gameObject);
         }
     }
 
@@ -292,6 +314,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                                 characterOfPlayers[i].OtherPlayerHealtBar.gameObject.SetActive(true);
                             }
                             //characterOfPlayers[i].Weapon_Info_Image.SetActive(false);
+            
                         }
                         else
                         {
@@ -311,22 +334,48 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public bool IsCharacterDead()
-    {
-        PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("life",out object life);
-        if(life != null)
-        {
-            if((bool)life)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
+   
 
-            }
+    private IEnumerator TimerInumerator(float time)
+    {
+        if(!GameUI.Instance.TimerPanel.activeSelf)
+        {
+            GameUI.Instance.TimerPanel.SetActive(true);
         }
-        return false;
+
+        int totalSeconds = Mathf.FloorToInt(time);
+
+        while(time < 15)
+        {
+
+            totalSeconds += 1 ;
+            int minutes = Mathf.FloorToInt(totalSeconds / 60);
+            int seconds = Mathf.FloorToInt(totalSeconds % 60);
+
+            GameUI.Instance.TimerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+            
+            PV.RPC("Timer",RpcTarget.AllBufferedViaServer,totalSeconds);
+            yield return new WaitForSeconds(1);
+            //GameManager.Instance.TimeOfOtherPlayer(time,timerText);
+        }
+
+
     }
-    
+
+
+
+    [PunRPC]
+    private void Timer(int value)
+    {
+        int minutes = Mathf.FloorToInt(value / 60);
+        int seconds = Mathf.FloorToInt(value % 60);
+
+        GameUI.Instance.TimerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+    }
+
+    [PunRPC]
+    private void FinishGame()
+    {
+
+    }
 }

@@ -44,9 +44,10 @@ public class BulletController : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other) 
     {
+        print(other.name);
         if(other.CompareTag("Player"))
         {
-    
+            
             gameObject.SetActive(false);
             transform.SetParent(bulletParent);
             transform.position = bulletPosition;
