@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public bool FindCharacterOfPlayers { get { return findCharacterOfPlayers;} set { findCharacterOfPlayers = value;}}
     private PhotonView PV;
     private GameObject character;
+    [SerializeField] private CountdownTimer countdownTimer;
     [SerializeField] private GameObject bulletsParent;
 
     private List<GameObject> scanner = new List<GameObject>();
@@ -44,15 +45,17 @@ public class GameManager : MonoBehaviourPunCallbacks
     private List<GameObject> mp5 = new List<GameObject>();
     public List<GameObject> Mp5 { get { return mp5;} set { mp5 = value; } }
 
-    private List<string> playerName = new List<string>();
 
     private bool characterDead = false;
     public bool CharacterDead { get { return characterDead;} set { characterDead = value; } }
 
-    [SerializeField] private CountdownTimer countdownTimer;
-
+    private bool gameStopted = false;
+    public bool GameStopted { get { return gameStopted;} set { gameStopted = value; } }
     private float time;
-    private int sayi = 5;
+
+    private int playerKill = 0;
+    private int playerDeath = 0;
+
 
     public override void OnEnable()
     {
@@ -88,15 +91,14 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Update() 
     {
-        if(PV.IsMine)
+        if(Input.GetKeyDown(KeyCode.Delete))
         {
-            if(Input.GetKeyDown(KeyCode.P))
-            {
-                print("p");
-                sayi++;
-            }
-        }
+            PV.RPC("FinishGame",RpcTarget.All,null);
+        } 
+
+       
     }
+  
 
     #region  Pun Callbacks
 
@@ -106,7 +108,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public override void OnLeftRoom()
     {
-
+        
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -121,7 +123,9 @@ public class GameManager : MonoBehaviourPunCallbacks
             {"inGame",false}
         };
         otherPlayer.SetCustomProperties(props);
-
+        
+        
+        
     
     }
     
@@ -149,8 +153,8 @@ public class GameManager : MonoBehaviourPunCallbacks
                 infoText.text = "Diğer oyuncular bekleniyor...";
             }
         }
-
-       
+        
+        
     }
 
     #endregion
@@ -238,7 +242,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         loadingScren.gameObject.SetActive(false);
         StartGame();
-        //GameUI.Instance.RunTimer_Method();
 
         if(PhotonNetwork.IsMasterClient)
         {
@@ -254,10 +257,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void Die()
     {
         characterDead = false;
-        /*
-        WeaponBulletClear(scanner);
-        WeaponBulletClear(mp5);
-        */
+
+
         PhotonNetwork.Destroy(character);
 
         character = SpawnManager.Instance.CharacterSpawn(PV);
@@ -356,7 +357,6 @@ public class GameManager : MonoBehaviourPunCallbacks
             
             PV.RPC("Timer",RpcTarget.AllBufferedViaServer,totalSeconds);
             yield return new WaitForSeconds(1);
-            //GameManager.Instance.TimeOfOtherPlayer(time,timerText);
         }
 
 
@@ -373,9 +373,98 @@ public class GameManager : MonoBehaviourPunCallbacks
         GameUI.Instance.TimerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
+
     [PunRPC]
     private void FinishGame()
     {
-
+        GameUI.Instance.GameOverUi();
     }
+
+    public void StopGameStreaming(bool value)
+    {
+        if(value == false)
+        {
+            if(gameStopted)
+            {
+                StopFlow(false);
+            }
+            else
+            {
+                StopFlow(true);
+            }
+
+        }
+        else
+        {
+            StopFlow(false);
+            StopAllCoroutines();
+        }
+    }
+
+    private void StopFlow(bool closeOrOpen)
+    {
+        for (int i = 0; i < characterOfPlayers.Length; i++)
+        {
+            CharacterControl characterControl = characterOfPlayers[i].GetComponent<CharacterControl>();
+            CombatController combatController = characterOfPlayers[i].GetComponent<CombatController>();
+            CharacterAnimation characterAnimation = characterOfPlayers[i].GetComponent<CharacterAnimation>();
+            CameraController cameraController = characterControl.CharacterCamera.GetComponent<CameraController>();
+
+            characterControl.PlayerCourse_Image.SetActive(closeOrOpen);
+            cameraController.enabled= closeOrOpen;
+            combatController.enabled = closeOrOpen;
+            characterAnimation.enabled = closeOrOpen;
+            characterControl.enabled = closeOrOpen;
+
+        }
+    }
+
+    public void GameOut()
+    {
+        StopAllCoroutines();
+        for (int i = 0; i < characterOfPlayers.Length; i++)
+        {
+            if(PhotonNetwork.LocalPlayer.UserId == characterOfPlayers[i].transform.name)
+            {
+                PhotonNetwork.Destroy(characterOfPlayers[i].gameObject);
+            }
+        }
+        PhotonNetwork.LoadLevel(0);
+        PhotonNetwork.LeaveRoom();
+        UIMenager.Instance.oyunaYenidenGiris = true;
+    }
+
+    public void PlayerKillSkor(int killCount,Player player)
+    {
+        int _kill =0;
+        if(player.CustomProperties.TryGetValue("kill",out object kill))
+        {
+            _kill= (int)kill;
+        }
+
+        _kill+= killCount;
+        
+        ExitGames.Client.Photon.Hashtable playerKillSkor = new ExitGames.Client.Photon.Hashtable()
+        {
+            {"kill",_kill}
+        };
+        player.SetCustomProperties(playerKillSkor);
+    }
+
+    public void PlayerDeathSkor(int deathCount,Player player)
+    {
+        int _death =0;
+        if(player.CustomProperties.TryGetValue("death",out object death))
+        {
+            _death =(int)death;
+            _death += deathCount;
+        }
+
+        ExitGames.Client.Photon.Hashtable playerDeathSkor = new ExitGames.Client.Photon.Hashtable()
+        {
+            {"death",_death}
+        };
+        player.SetCustomProperties(playerDeathSkor);
+    }
+
 }

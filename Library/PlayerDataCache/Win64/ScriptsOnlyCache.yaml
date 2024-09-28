@@ -267,6 +267,9 @@ ScriptsOnlyBuild:
   - assembly: Assembly-CSharp
     fullTypeName: CheatController
     methodName: Send_Message
+  - assembly: Assembly-CSharp
+    fullTypeName: GameUI
+    methodName: ReturnMainMenu
   sceneClasses:
     Assets/Scenes/GameScene.unity:
     - Class: 1
@@ -731,7 +734,7 @@ ScriptsOnlyBuild:
     className: RoomListCell
   - hash:
       serializedVersion: 2
-      Hash: f66b67afe0972cf29c3ced1aa7116089
+      Hash: 35139183511b7cb0c7a074f41b0a0efb
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: GameManager
@@ -1355,7 +1358,7 @@ ScriptsOnlyBuild:
     className: VariablesSaver
   - hash:
       serializedVersion: 2
-      Hash: 325cffb276dac59586e7dfd9c43c9dae
+      Hash: 65776bcf27a40d412afd7d87aa1d2f82
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: CharacterControl
@@ -1883,7 +1886,7 @@ ScriptsOnlyBuild:
     className: UnityOnTriggerStay2DMessageListener
   - hash:
       serializedVersion: 2
-      Hash: 7c439571db4c9d5ffcf756cc56973503
+      Hash: a908ecfa25da31279600eae179ae7d05
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: UIMenager
@@ -2429,10 +2432,10 @@ ScriptsOnlyBuild:
     className: AppVersionProperty
   - hash:
       serializedVersion: 2
-      Hash: 5d6c311315ac44bf76f158223c0ab8fb
+      Hash: b45b38da30c442bea066bf797f978702
     assemblyName: Assembly-CSharp
     namespaceName: 
-    className: InputManager
+    className: PlayerInputManager
   - hash:
       serializedVersion: 2
       Hash: ff76cf6cf52b4db7b95af6ffadca9288

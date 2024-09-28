@@ -59,13 +59,7 @@ public class BulletController : MonoBehaviour
         }
         else
         {
-            /*
-            gameObject.SetActive(false);
-            transform.SetParent(bulletParent);
-            transform.position = bulletPosition;
-            
-            transform.SetSiblingIndex(bulletGetSiblingIndex);
-            */
+           
             BulletDestroy(1);
         }   
     }

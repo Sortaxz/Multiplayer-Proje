@@ -240,17 +240,35 @@ public class UIMenager : MonoBehaviour
 
     #endregion
 
-
+    public bool oyunaYenidenGiris = false;
 
     private void Awake() 
     {
+       
         SetActiveUIObject(oyunaBaglanma_Panel.gameObject.name);
+
+
+        string playerName = (string)SaveSystem.PlayerPrefsDataLoad("playerName","string");
+        int index1 = (int)SaveSystem.PlayerPrefsDataLoad("icon","int");
+        int index2 = (int)SaveSystem.PlayerPrefsDataLoad("color","int");
+        
+        print(playerName + index1 + "-" + index2);
+        print("oyuna yeni giriş : " + oyunaYenidenGiris);
         pv = GetComponent<PhotonView>();
+
+    }
+
+    private void Start() 
+    {
+        
+        
     }
 
     private void Update() 
     {
         CheatActive();
+
+        
     }
 
     public void CheatActive()
@@ -336,7 +354,6 @@ public class UIMenager : MonoBehaviour
         PlayerPrefs.SetInt("icon",(int)iconIndex);
         PlayerPrefs.SetInt("color",(int)colorIndex);
 
-        //menuPlayerIcon_Image.sprite = playerIcons[(int)iconIndex].sprite;
         menuPlayerIcon_Image.sprite =  playerScriptableObject.PlayerIconSprites[(int)iconIndex];
         
         playerPropKaydetButton.gameObject.SetActive(false);
@@ -536,6 +553,7 @@ public class UIMenager : MonoBehaviour
         playerIconBaslatButtonActive = false;
         playerColorBaslatButtonActive = false;
         EventSystem.current.currentSelectedGameObject.SetActive(false);
+
     }
 
     public void PlayerIconButton_Method()

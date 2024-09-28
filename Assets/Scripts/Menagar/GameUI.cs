@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameUI : MonoBehaviour
+public class GameUI : UIInputManager
 {
     private static GameUI instance;
     public static GameUI Instance
@@ -46,15 +46,43 @@ public class GameUI : MonoBehaviour
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private Button exitGame_Button;
     [SerializeField] private Button returnGame_Button;
+        
+    [Header("operations related to the scoreboard")]
+    [SerializeField] private GameObject skorTable_Panel;
+    [SerializeField] private GameObject skorLinePrefab;
 
     private void Awake() 
     {
-        pw = GetComponent<PhotonView>();
         playerHealtBar = playerHealtBarBackground.transform.GetChild(0).GetComponent<Image>();  
         GameManager.deatDelegate += Close;
+
+    }
+    private void Start() 
+    {
+        
     }
     
-   
+    private void Update() 
+    {
+        PauseControl();
+    }
+    
+    private void PauseControl()
+    {
+        if(uiEsc)
+        {   
+            pausePanel.SetActive(!pausePanel.activeSelf);
+            
+            GameManager.Instance.GameStopted = pausePanel.activeSelf;
+            GameManager.Instance.StopGameStreaming(false);
+        }
+        
+    }
+    private void SkorShow()
+    {
+
+    }
+
     public void Active()
     {
         playerHealtBarBackground.gameObject.SetActive(true);
@@ -89,6 +117,16 @@ public class GameUI : MonoBehaviour
         maxBulletCount_Text.text = maxBulletCount.ToString();
     }
     
+    public void GameOverUi()
+    {
+        finishPanel.SetActive(true);
+        GameManager.Instance.StopGameStreaming(true);
+    }
 
+
+    public void ReturnMainMenu()
+    {
+        GameManager.Instance.GameOut();
+    }
 }
  

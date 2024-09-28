@@ -7,7 +7,6 @@ public class CharacterAnimation : PlayerAnimation
 {
     private Animator animator;
     private PhotonView pw;
-    private bool playedDeathAnimation = false;
     private PhotonAnimatorView photonAnimator;
     private bool hitReactionAnimation;
     public bool HitReactionAnimation {get {return hitReactionAnimation;} set {hitReactionAnimation = value;} }
@@ -15,7 +14,6 @@ public class CharacterAnimation : PlayerAnimation
     public bool fire = false;
     private bool jumpAnimation = false;
     public bool  JumpAnimation {get {return jumpAnimation;} set {jumpAnimation = value;} }
-    private bool isReloading = false;
     private void Awake() 
     {
         animator = GetComponent<Animator>();    

@@ -150,7 +150,6 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
                 }
             }
         }
-        print(playersReady);
         if(playersReady)
         {
             print("Oyun sahnesinde bir oyuncu var");
@@ -378,7 +377,11 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     {
         PV.RPC("Method2",RpcTarget.AllViaServer,null);
     }
-
+    
+    public bool ServerControl()
+    {
+        return PhotonNetwork.IsConnectedAndReady;
+    }
    
 }
 

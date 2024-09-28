@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 
 public class WeaponController : MonoBehaviour
@@ -44,7 +45,7 @@ public class WeaponController : MonoBehaviour
 
     private void Update() 
     {
-           
+        
     }
     
     public void SetWeaponInfo(int _weopnIndex,string _weaponName,int _damage,int _magazineCapacity,float _weaponRange,int _weaponMaxCapacity)
@@ -74,10 +75,18 @@ public class WeaponController : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, weaponRange))
             {
-                print(hit.collider.name);
                 if (hit.collider.GetComponent<PhotonView>()?.IsMine == false)
                 {
+                    Player player = hit.collider.GetComponent<PhotonView>()?.Owner;
+                    player.CustomProperties.TryGetValue("healt",out object hitOtherHealt);
                     WeopenLeadActivated(characterCamera.transform.forward, hit.point);
+                    print(hitOtherHealt);
+
+                    if((float)hitOtherHealt <= damage)
+                    {
+                        GameManager.Instance.PlayerKillSkor(1,PhotonNetwork.LocalPlayer);
+                    }
+                    
                 }
                 else
                 {
@@ -87,6 +96,8 @@ public class WeaponController : MonoBehaviour
 
                     }
                 }
+
+                
             }
 
         }
@@ -275,4 +286,42 @@ public class WeaponController : MonoBehaviour
         }
 
     }
+
+    public void ResetWeapons(string weapon)
+    {
+         if(weaponName == "Scanner")
+        {
+            for (int i = 0; i < gameManager.Scanner.Count; i++)
+            {
+                if(gameManager.Scanner[i].transform.parent == null)
+                {
+                    gameManager.Scanner[i].SetActive(false);
+                    gameManager.Scanner[i].transform.SetParent(BulletExitPosition);
+
+                    gameManager.Scanner[i].transform.localPosition =Vector3.zero;
+                    gameManager.Scanner[i].transform.localRotation = Quaternion.identity;
+
+                    gameManager.Scanner[i].transform.SetSiblingIndex(i);
+                    
+                }
+            }
+        }
+        else if(weaponName == "Mp5")
+        {
+            for (int i = 0; i < gameManager.Mp5.Count; i++)
+            {
+                if(gameManager.Mp5[i].transform.parent == null)
+                {
+                    gameManager.Mp5[i].SetActive(false);
+                    gameManager.Mp5[i].transform.SetParent(BulletExitPosition);
+
+                    gameManager.Scanner[i].transform.localPosition =Vector3.zero;
+                    gameManager.Scanner[i].transform.localRotation = Quaternion.identity;
+                    
+                    gameManager.Mp5[i].transform.SetSiblingIndex(i);
+                }
+            }
+        }
+    }
+
 }

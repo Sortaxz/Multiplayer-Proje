@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
-public  class InputManager : MonoBehaviourPunCallbacks
+public  class PlayerInputManager : MonoBehaviourPunCallbacks
 {
     protected bool jump => Input.GetKey(KeyCode.Space);
     protected bool forward => Input.GetKey(KeyCode.W);
@@ -18,9 +18,10 @@ public  class InputManager : MonoBehaviourPunCallbacks
     protected float mouseScrollWhell => Input.GetAxisRaw("Mouse ScrollWheel");
     protected bool mousePressedLeftButton => Input.GetMouseButtonDown(0);
     protected bool mousePressedLeftLeave => Input.GetMouseButtonUp(0);
+    protected bool esc => Input.GetKeyDown(KeyCode.Escape);
 }
 
-public class PlayerAnimation : InputManager
+public class PlayerAnimation : PlayerInputManager
 {
     protected bool isWalking => forward ? true : false;
     protected bool isWalkForwardLeft => forward && left ? true : false;
@@ -54,4 +55,9 @@ public class PlayerAnimation : InputManager
 
     protected bool isReload => rewenal ? true : false;
     protected bool isFire => mousePressedLeftButton ? true : false;
+}
+
+public class UIInputManager  : MonoBehaviour
+{
+    protected bool uiEsc => Input.GetKeyDown(KeyCode.Escape);
 }

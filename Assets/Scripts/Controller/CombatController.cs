@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
-public class CombatController : InputManager
+public class CombatController : PlayerInputManager
 {
     private GameManager gameManager;
     private CharacterAnimation characterAnimation;
+    private CharacterControl characterControl;
     private Weapon weapon;
     [SerializeField] private WeaponController[] weapons;
+    public WeaponController[] Weapons { get { return weapons; } }
     [SerializeField] private Transform gunItemHolder;
     private PhotonView pw;
     [SerializeField]private Camera cam;
@@ -22,7 +24,7 @@ public class CombatController : InputManager
         pw = GetComponent<PhotonView>();
         gameManager = GameManager.Instance;
         
-        
+        characterControl = GetComponent<CharacterControl>();
     }
 
     void Start()
@@ -180,9 +182,10 @@ public class CombatController : InputManager
         GameUI.Instance.WeaponInformationUi(weapons[weaponIndex].BulletCount,weapons[weaponIndex].MaxCapacity);
         
     }
-
+    private bool parenNull =false;
     public void EquipGunItem(int gunItemIndex)
     {
+       
         if(gunItemIndex == previousWeaponIndex)
             return;
 
@@ -208,7 +211,9 @@ public class CombatController : InputManager
         {
             weapon = new Weapon(weaponIndex);
             weapons[weaponIndex].CreateBullet(weapon.magazineCapacity,weapon.weaponName,transform.forward);
+
         }
+       
 
     }
 }

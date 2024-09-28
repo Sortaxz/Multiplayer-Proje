@@ -6,19 +6,21 @@ using UnityEngine;
 using UnityEngine.UI;
 using Hashtable =ExitGames.Client.Photon.Hashtable;
 
-public class CharacterControl : InputManager,IDamageable
+public class CharacterControl : PlayerInputManager,IDamageable
 {
     private PhotonView pw;
     private Rigidbody rb;
+    [SerializeField] private GameObject course_Image;
+    public GameObject PlayerCourse_Image { get { return course_Image; }  set { course_Image = value; } }
 
     #region  Character Move 
     [SerializeField] private GameObject characterCamera;
+    public GameObject CharacterCamera { get { return characterCamera; } }
     [SerializeField] private float mouseSensitivity, sprintSpeed , walkSpeed, jumpForce , smothTime;
     private Vector3 smoothMoveVelocity;
     private Vector3 moveAmount;
     private static bool isGround = false;
     
-    private float verticalLookRotation;
     private static bool isPlayerJump = false;
 
     public static bool IsPlayerJump { get { return isPlayerJump;} set { isPlayerJump = value; } }
@@ -45,15 +47,14 @@ public class CharacterControl : InputManager,IDamageable
     private int playerActorNumber;
     public  int PlayerActorNumber { get { return playerActorNumber;}}
 
-    private const float maxHealt= 100f;
-    public float currentHealt  = maxHealt;
+    public float currentHealt  = 100;
+    public float healt= 100;
     private bool isLife = false;
     [SerializeField] private float jumpStrength;
 
 
     private void Awake() 
     {
-        currentHealt = maxHealt;
 
         
         pw = GetComponent<PhotonView>();
@@ -99,9 +100,6 @@ public class CharacterControl : InputManager,IDamageable
             Move();
 
         }
-        
-        
-       
     }
     
     private void FixedUpdate()
@@ -222,27 +220,23 @@ public class CharacterControl : InputManager,IDamageable
     [PunRPC]
     private void RPC_TakeDamage(float damage)
     {
-        if(!pw.IsMine)
-            return;
+        if(pw.IsMine)
+        {
+            float deger = damage / 100;
+            currentHealt -= damage;
+            GameUI.Instance.PlayerHealtBar(deger);
+            playerProps["healt"] = currentHealt;
+            PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
+            pw.RPC("RPC_OtherPlayerHealtBar",RpcTarget.All,currentHealt);
+        
+            if (currentHealt < 0)
+            {
+                currentHealt = 0;
+                GameUI.Instance.PlayerHealtBar(1f);
+                GameManager.deatDelegate();
+                GameManager.Instance.PlayerDeathSkor(1,PhotonNetwork.LocalPlayer);
+            }
 
-        float deger = damage / 100;
-        currentHealt -= damage;
-        GameUI.Instance.PlayerHealtBar(deger);
-        playerProps["healt"] = currentHealt;
-        PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
-        pw.RPC("RPC_OtherPlayerHealtBar",RpcTarget.All,currentHealt);
-        /*
-        if (currentHealt < 0)
-        {
-            Die();
-        }
-        */
-        if (currentHealt < 0)
-        {
-            currentHealt = 0;
-            GameUI.Instance.PlayerHealtBar(1f);
-            GameManager.deatDelegate();
-            //gameManager.CharacterDead = true;
         }
     }
 
@@ -262,27 +256,7 @@ public class CharacterControl : InputManager,IDamageable
        
     }
 
-    /*
-
-    private void Die()
-    {
-        pw.RPC("RPC_Die",RpcTarget.All,null);
-    }
     
-    */
-
-    [PunRPC]
-    private void RPC_Die()
-    {
-        otherPlayerHealtBar.fillAmount = 1;
-        isLife = false;
-        playerProps["life"] = false;
-        currentHealt = 100;
-        PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
-
-
-        gameManager.Die();
-    }
 
     [PunRPC]
     public void RPC_OtherPlayerHealtBar(float healt)
