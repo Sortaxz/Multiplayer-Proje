@@ -59,8 +59,14 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     {
         uIMenager = UIMenager.Instance;
         PV = GetComponent<PhotonView>();
+        PhotonNetwork.LocalPlayer.CustomProperties["inGame"] = false;
+
     }
 
+    private void Start() 
+    {
+       
+    }
     
 
     public override void OnConnectedToMaster()
@@ -70,7 +76,10 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         if(SaveSystem.PlayerPrefsDataQuery("icon") && SaveSystem.PlayerPrefsDataQuery("color") && SaveSystem.PlayerPrefsDataQuery("playerName"))
         {
             string menuPanelName = uIMenager.Menu_Panel.name;
+            
+            
             uIMenager.SetActiveUIObject(menuPanelName); 
+            uIMenager.PlayerPropsShow();
         }
         else
         {
@@ -100,12 +109,13 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
             roomName = odaAdi;
             
 
-            string[] roomPropsString = new string[] { "gameMode" };
+            string[] roomPropsString = new string[] { "gameMode" ,"roomStatus"};
 
             ExitGames.Client.Photon.Hashtable roomProps = new ExitGames.Client.Photon.Hashtable()
-                {
-                    {"gameMode",gameMode}
-                };
+            {
+                {"gameMode",gameMode},
+                {"roomStatus",true}
+            };
 
             RoomOptions roomOptions = new RoomOptions()
             {
@@ -131,8 +141,10 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
             gameMode = mod;
             ExitGames.Client.Photon.Hashtable roomProps = new ExitGames.Client.Photon.Hashtable()
             {
-                {"gameMode",gameMode}
+                {"gameMode",gameMode},
+                {"roomStatus",true}
             };
+
             PhotonNetwork.JoinRandomRoom(roomProps, 2);
         }
     }
@@ -148,11 +160,14 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
                 {
                     playersReady = true;
                 }
+                else
+                {
+                    playersReady = false;
+                }
             }
         }
         if(playersReady)
         {
-            print("Oyun sahnesinde bir oyuncu var");
             PhotonNetwork.LoadLevel(1);
         }
         else
@@ -186,12 +201,14 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     {
         string randomRoomName = "Oda-" + Random.Range(1, 100);
 
-        string[] roomPropStrings = new string[] { "gameMode" };
+        string[] roomPropStrings = new string[] { "gameMode" ,"roomStatus"};
 
         ExitGames.Client.Photon.Hashtable roomProps = new ExitGames.Client.Photon.Hashtable()
         {
-            {"gameMode",gameMode}
+            {"gameMode",gameMode},
+            {"roomStatus",true}
         };
+
         RoomOptions roomOptions = new RoomOptions()
         {
             MaxPlayers = 2,
@@ -382,6 +399,17 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     {
         return PhotonNetwork.IsConnectedAndReady;
     }
-   
+    
+    public bool GamePlayerControl()
+    {
+        bool value = false;
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        {
+            PhotonNetwork.PlayerList[i].CustomProperties.TryGetValue("inGame",out object inGame);
+            
+            value = inGame != null ?  (bool)inGame == true ? true: false : false;
+        }
+        return value;
+    }
 }
 

@@ -19,6 +19,7 @@ public  class PlayerInputManager : MonoBehaviourPunCallbacks
     protected bool mousePressedLeftButton => Input.GetMouseButtonDown(0);
     protected bool mousePressedLeftLeave => Input.GetMouseButtonUp(0);
     protected bool esc => Input.GetKeyDown(KeyCode.Escape);
+    
 }
 
 public class PlayerAnimation : PlayerInputManager
@@ -60,4 +61,5 @@ public class PlayerAnimation : PlayerInputManager
 public class UIInputManager  : MonoBehaviour
 {
     protected bool uiEsc => Input.GetKeyDown(KeyCode.Escape);
+    protected bool tab => Input.GetKeyDown(KeyCode.Tab);
 }

@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -44,7 +42,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public List<GameObject> Scanner { get { return scanner;} set { scanner = value; } }
     private List<GameObject> mp5 = new List<GameObject>();
     public List<GameObject> Mp5 { get { return mp5;} set { mp5 = value; } }
-
+    private List<GameObject> skorLines = new List<GameObject>(); 
 
     private bool characterDead = false;
     public bool CharacterDead { get { return characterDead;} set { characterDead = value; } }
@@ -91,10 +89,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Update() 
     {
-        if(Input.GetKeyDown(KeyCode.Delete))
-        {
-            PV.RPC("FinishGame",RpcTarget.All,null);
-        } 
+        
 
        
     }
@@ -123,10 +118,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             {"inGame",false}
         };
         otherPlayer.SetCustomProperties(props);
-        
-        
-        
-    
+       
     }
     
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
@@ -194,6 +186,8 @@ public class GameManager : MonoBehaviourPunCallbacks
             yield return new WaitForSeconds(.1f);
         }
         
+
+        //PlayerSkorTable();
     }
 
     private void StartGame()
@@ -245,7 +239,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if(PhotonNetwork.IsMasterClient)
         {
-            StartCoroutine(TimerInumerator(time));
+            StartCoroutine(TimerInumerator());
         }
         else
         {
@@ -314,15 +308,12 @@ public class GameManager : MonoBehaviourPunCallbacks
                             {
                                 characterOfPlayers[i].OtherPlayerHealtBar.gameObject.SetActive(true);
                             }
-                            //characterOfPlayers[i].Weapon_Info_Image.SetActive(false);
             
                         }
                         else
                         {
                             GameUI.Instance.WeapomInfoImage.SetActive(true);
-                            //characterOfPlayers[i].Weapon_Info_Image.SetActive(true);
-                            //GameUI.Instance.WeapomInfoImage = characterOfPlayers[i].Weapon_Info_Image;
-                            //GameUI.Instance.SetWeopanInfoUi(characterOfPlayers[i].Weapon_Info_Image);
+                            
                         }
                     }
                     
@@ -337,47 +328,64 @@ public class GameManager : MonoBehaviourPunCallbacks
 
    
 
-    private IEnumerator TimerInumerator(float time)
+    private IEnumerator TimerInumerator()
     {
         if(!GameUI.Instance.TimerPanel.activeSelf)
         {
             GameUI.Instance.TimerPanel.SetActive(true);
         }
-
         int totalSeconds = Mathf.FloorToInt(time);
 
         while(time < 15)
         {
 
             totalSeconds += 1 ;
-            int minutes = Mathf.FloorToInt(totalSeconds / 60);
-            int seconds = Mathf.FloorToInt(totalSeconds % 60);
 
-            GameUI.Instance.TimerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+            int minutes = Mathf.FloorToInt(time / 60);
+            int seconds = Mathf.FloorToInt(totalSeconds % 60);
             
-            PV.RPC("Timer",RpcTarget.AllBufferedViaServer,totalSeconds);
-            yield return new WaitForSeconds(1);
+
+            if(seconds >= 15 )
+            {
+                totalSeconds = 0;
+                time += 1;
+            }
+            
+            GameUI.Instance.TimerText.text = string.Format("{0:00}:{1:00}", time, seconds);
+            PV.RPC("Timer",RpcTarget.OthersBuffered,time,totalSeconds);
+            yield return new WaitForSeconds(.5f);
         }
 
+
+        PV.RPC("FinishGame",RpcTarget.All,null);
 
     }
 
 
 
     [PunRPC]
-    private void Timer(int value)
+    private void Timer(float totalMinutes,int totalSeconds)
     {
-        int minutes = Mathf.FloorToInt(value / 60);
-        int seconds = Mathf.FloorToInt(value % 60);
+        int minutes = Mathf.FloorToInt(totalMinutes / 60);
+        int seconds = Mathf.FloorToInt(totalSeconds % 60);
 
-        GameUI.Instance.TimerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        GameUI.Instance.TimerText.text = string.Format("{0:00}:{1:00}", totalMinutes, seconds);
     }
 
 
     [PunRPC]
     private void FinishGame()
     {
+        ExitGames.Client.Photon.Hashtable RoomStatus = new ExitGames.Client.Photon.Hashtable()
+        {
+            {"roomStatus",false}
+        };
+        
+
+        PhotonNetwork.CurrentRoom.SetCustomProperties(RoomStatus);
+        
         GameUI.Instance.GameOverUi();
+
     }
 
     public void StopGameStreaming(bool value)
@@ -408,10 +416,20 @@ public class GameManager : MonoBehaviourPunCallbacks
             CharacterControl characterControl = characterOfPlayers[i].GetComponent<CharacterControl>();
             CombatController combatController = characterOfPlayers[i].GetComponent<CombatController>();
             CharacterAnimation characterAnimation = characterOfPlayers[i].GetComponent<CharacterAnimation>();
-            CameraController cameraController = characterControl.CharacterCamera.GetComponent<CameraController>();
 
+            if(characterControl.CharacterCamera != null)
+            {
+                CameraController cameraController = characterControl.CharacterCamera.GetComponent<CameraController>();
+                if(cameraController != null)
+                {
+                    cameraController.enabled= closeOrOpen;
+                }
+
+            }
+
+            
             characterControl.PlayerCourse_Image.SetActive(closeOrOpen);
-            cameraController.enabled= closeOrOpen;
+            
             combatController.enabled = closeOrOpen;
             characterAnimation.enabled = closeOrOpen;
             characterControl.enabled = closeOrOpen;
@@ -421,17 +439,18 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void GameOut()
     {
-        StopAllCoroutines();
-        for (int i = 0; i < characterOfPlayers.Length; i++)
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
-            if(PhotonNetwork.LocalPlayer.UserId == characterOfPlayers[i].transform.name)
+            if(PhotonNetwork.LocalPlayer.UserId == PhotonNetwork.PlayerList[i].UserId)
             {
                 PhotonNetwork.Destroy(characterOfPlayers[i].gameObject);
             }
         }
-        PhotonNetwork.LoadLevel(0);
+
         PhotonNetwork.LeaveRoom();
-        UIMenager.Instance.oyunaYenidenGiris = true;
+        PhotonNetwork.LoadLevel(0);
+
+        StopAllCoroutines();
     }
 
     public void PlayerKillSkor(int killCount,Player player)
@@ -467,4 +486,16 @@ public class GameManager : MonoBehaviourPunCallbacks
         player.SetCustomProperties(playerDeathSkor);
     }
 
+
+    private void PlayerSkorTable()
+    {
+        skorLines = GameUI.Instance.SkorShow(PhotonNetwork.PlayerList.Length);
+        for (int i = 0; i < skorLines.Count; i++)
+        {
+            Player player =  PhotonNetwork.PlayerList[i];
+            player.CustomProperties.TryGetValue("icon",out object playerIconIndex);
+            skorLines[i].GetComponent<SkorLineControl>().PlayerSkorInitialize((int)playerIconIndex,player.UserId,(int)player.CustomProperties["kill"],(int)player.CustomProperties["death"]);
+
+        }
+    }
 }

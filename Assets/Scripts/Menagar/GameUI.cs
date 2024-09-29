@@ -49,6 +49,7 @@ public class GameUI : UIInputManager
         
     [Header("operations related to the scoreboard")]
     [SerializeField] private GameObject skorTable_Panel;
+    [SerializeField] private GameObject skorTableContent;
     [SerializeField] private GameObject skorLinePrefab;
 
     private void Awake() 
@@ -64,10 +65,10 @@ public class GameUI : UIInputManager
     
     private void Update() 
     {
-        PauseControl();
+        InputControl();
     }
     
-    private void PauseControl()
+    private void InputControl()
     {
         if(uiEsc)
         {   
@@ -76,11 +77,25 @@ public class GameUI : UIInputManager
             GameManager.Instance.GameStopted = pausePanel.activeSelf;
             GameManager.Instance.StopGameStreaming(false);
         }
-        
-    }
-    private void SkorShow()
-    {
 
+        if(tab)
+        {
+            skorTable_Panel.SetActive(!skorTable_Panel.activeSelf);
+            GameManager.Instance.GameStopted = skorTable_Panel.activeSelf;
+            GameManager.Instance.StopGameStreaming(false);
+        }
+    }
+    public List<GameObject> SkorShow(int gamePlayerCount)
+    {
+        List<GameObject> skorLines = new List<GameObject>();
+
+        for (int i = 0; i < gamePlayerCount; i++)
+        {
+            GameObject spanwObject = Instantiate(skorLinePrefab,Vector3.one,Quaternion.identity,skorTableContent.transform);
+            skorLines.Add(spanwObject);    
+        }
+
+        return skorLines;
     }
 
     public void Active()
@@ -127,6 +142,19 @@ public class GameUI : UIInputManager
     public void ReturnMainMenu()
     {
         GameManager.Instance.GameOut();
+    }
+
+    public void BackGame()
+    {
+        pausePanel.SetActive(false);
+        GameManager.Instance.GameStopted = false;
+        GameManager.Instance.StopGameStreaming(false);
+    }
+
+
+    private void CreateSkorLine()
+    {
+
     }
 }
  

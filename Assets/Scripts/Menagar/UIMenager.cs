@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
-using Photon.Realtime;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -241,32 +240,88 @@ public class UIMenager : MonoBehaviour
     #endregion
 
     public bool oyunaYenidenGiris = false;
-
+    private bool kayitliButtonClick = false;
+    public bool KayitliButtonClick {get {return kayitliButtonClick;} set {kayitliButtonClick = value;}}
     private void Awake() 
     {
        
-        SetActiveUIObject(oyunaBaglanma_Panel.gameObject.name);
+
+        /*
+        if(PhotonNetwork.IsConnectedAndReady)
+        {
+            FriendSystem.Instance.LoadFriendDate();
+            
+            string playerName = (string)SaveSystem.PlayerPrefsDataLoad("playerName","string");
+            SaveSystem.PlayerPrefsDataSave("playerName",playerName);
 
 
-        string playerName = (string)SaveSystem.PlayerPrefsDataLoad("playerName","string");
-        int index1 = (int)SaveSystem.PlayerPrefsDataLoad("icon","int");
-        int index2 = (int)SaveSystem.PlayerPrefsDataLoad("color","int");
-        
-        print(playerName + index1 + "-" + index2);
-        print("oyuna yeni giriş : " + oyunaYenidenGiris);
+            menuKullaniciAdi_Text.text += PhotonNetwork.LocalPlayer.NickName;
+
+            iconIndex = (int)SaveSystem.PlayerPrefsDataLoad("icon","int");
+            colorIndex = (int)SaveSystem.PlayerPrefsDataLoad("color","int");
+            
+
+            SetPlayerProps();
+
+            menuPlayerIcon_Image.sprite =  playerScriptableObject.PlayerIconSprites[iconIndex];
+            
+
+            SetActiveUIObject(menu_Panel.name);
+            oyunaYenidenGiris = true;
+
+            
+        }
+        else
+        {
+            SetActiveUIObject(oyunaBaglanma_Panel.gameObject.name);
+        }
+        */
+
+        if(!PhotonNetwork.IsConnectedAndReady)
+        {
+            SetActiveUIObject(oyunaBaglanma_Panel.gameObject.name);
+
+        }
+        else
+        {
+            oyunaYenidenGiris = true;
+        }
+
         pv = GetComponent<PhotonView>();
 
     }
 
     private void Start() 
     {
+       
         
-        
+    }
+
+    public void PlayerPropsShow()
+    {
+            FriendSystem.Instance.LoadFriendDate();
+
+            string playerName = (string)SaveSystem.PlayerPrefsDataLoad("playerName", "string");
+            SaveSystem.PlayerPrefsDataSave("playerName", playerName);
+
+
+            menuKullaniciAdi_Text.text += PhotonNetwork.LocalPlayer.NickName;
+
+            iconIndex = (int)SaveSystem.PlayerPrefsDataLoad("icon", "int");
+            colorIndex = (int)SaveSystem.PlayerPrefsDataLoad("color", "int");
+
+
+            SetPlayerProps();
+
+            menuPlayerIcon_Image.sprite = playerScriptableObject.PlayerIconSprites[iconIndex];
+            menuKullaniciAdi_Text.text = playerName;
+
+            SetActiveUIObject(menu_Panel.name);
     }
 
     private void Update() 
     {
-        CheatActive();
+        CheatActive(); // düzeltmem gerekiyor
 
         
     }
@@ -365,6 +420,7 @@ public class UIMenager : MonoBehaviour
     {
         if(SaveSystem.PlayerPrefsDataQuery("icon") && SaveSystem.PlayerPrefsDataQuery("color") && SaveSystem.PlayerPrefsDataQuery("playerName"))
         {
+            kayitliButtonClick = true;
             FriendSystem.Instance.LoadFriendDate();
             
             string playerName = (string)SaveSystem.PlayerPrefsDataLoad("playerName","string");
@@ -459,7 +515,12 @@ public class UIMenager : MonoBehaviour
         SetActiveUIObject(odaIslemleri_Panel.name);
         menuPlayerProfil = true;
         
-
+        /*
+        if(PhotonNetwork.InRoom)
+        {
+            PhotonNetwork.LeaveRoom();
+        }
+        */
         
     }
 
@@ -480,13 +541,16 @@ public class UIMenager : MonoBehaviour
     public void RandomOdaKuButton_Method()
     {
         SetActiveUIObject(randomOdaModSecim_Panel.name);
-        
+        print(SunucuYonetim.Instance.GamePlayerControl());
     }
 
     public void OdaKurmaButton_Method()
     {
-        SetActiveUIObject(odaKurma_Panel.name);
+        PhotonNetwork.LocalPlayer.CustomProperties["inGame"] = false;
 
+
+        SetActiveUIObject(odaKurma_Panel.name);
+       
     }
 
 
@@ -859,13 +923,13 @@ public class UIMenager : MonoBehaviour
     
     public void OdaKur()
     {
-
-
+        
         roomName = odaAdi_InputField.text;
 
         SunucuYonetim.Instance.CreateRoom(gameMode,roomName);
         
         SetActiveUIObject(odaKurmaYüklemeEkran_Panel.name);
+
         StartCoroutine(PlayerTipTextAnimation());
     }
 

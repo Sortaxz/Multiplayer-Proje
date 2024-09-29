@@ -23,6 +23,7 @@ ScriptsOnlyBuild:
     - PlayerPropImageControl
     - PlayerScriptableObject
     - SettingsController
+    - SkorLineControl
     - SpawnManager
     - SunucuYonetim
     - UIMenager
@@ -65,10 +66,8 @@ ScriptsOnlyBuild:
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -269,6 +268,12 @@ ScriptsOnlyBuild:
     methodName: Send_Message
   - assembly: Assembly-CSharp
     fullTypeName: GameUI
+    methodName: BackGame
+  - assembly: Assembly-CSharp
+    fullTypeName: GameUI
+    methodName: ReturnMainMenu
+  - assembly: Assembly-CSharp
+    fullTypeName: GameUI
     methodName: ReturnMainMenu
   sceneClasses:
     Assets/Scenes/GameScene.unity:
@@ -307,6 +312,8 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 16688}
     - Class: 114
+      Script: {instanceID: 16694}
+    - Class: 114
       Script: {instanceID: 16696}
     - Class: 114
       Script: {instanceID: 16744}
@@ -323,6 +330,10 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 19232}
     - Class: 114
+      Script: {instanceID: 19250}
+    - Class: 114
+      Script: {instanceID: 20206}
+    - Class: 114
       Script: {instanceID: 20560}
     - Class: 114
       Script: {instanceID: 20722}
@@ -333,7 +344,11 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 21660}
     - Class: 114
+      Script: {instanceID: 21672}
+    - Class: 114
       Script: {instanceID: 22428}
+    - Class: 114
+      Script: {instanceID: 137934}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -2138,7 +2153,7 @@ ScriptsOnlyBuild:
     className: CountOfRoomsProperty
   - hash:
       serializedVersion: 2
-      Hash: 2729029efb3a69a39a87a35b13378d2b
+      Hash: ede9d4bb7f973afd763b7684332a1bd0
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: GameUI
@@ -2520,6 +2535,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core
     namespaceName: Unity.VisualScripting
     className: UnityOnSliderValueChangedMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 1488f297b5417f4a562730977833fec1
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: SkorLineControl
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity

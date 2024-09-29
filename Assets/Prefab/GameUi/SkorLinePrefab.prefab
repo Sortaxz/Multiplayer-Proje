@@ -621,6 +621,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1121780157890693851}
   - component: {fileID: 3184094076037282135}
+  - component: {fileID: 7944081638153439262}
   m_Layer: 5
   m_Name: SkorLinePrefab
   m_TagString: Untagged
@@ -661,6 +662,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5240755827049896433}
   m_CullTransparentMesh: 1
+--- !u!114 &7944081638153439262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5240755827049896433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 354c33a6126ec234482d0023a1410d8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerIcon_Image: {fileID: 9187203086385754106}
+  playerName_Text: {fileID: 6487971773537544358}
+  playerKillSkor_Text: {fileID: 5429322588903157707}
+  playerDeathSkor_Text: {fileID: 4002597832478682917}
+  playerScriptableObject: {fileID: 11400000, guid: abe047f081d9c5b45bb5e8a6011dedab, type: 2}
 --- !u!1 &7952824587567425545
 GameObject:
   m_ObjectHideFlags: 0
