@@ -29,4 +29,10 @@ public class SkorLineControl : MonoBehaviour
         playerDeathSkor_Text.text = playerDeathCount.ToString();
     }
 
+    public void PlayerSkor(int playerKillCount,int playerDeathCount)
+    {
+        playerKillSkor_Text.text = playerKillCount.ToString();
+        playerDeathSkor_Text.text = playerDeathCount.ToString();
+
+    }
 }

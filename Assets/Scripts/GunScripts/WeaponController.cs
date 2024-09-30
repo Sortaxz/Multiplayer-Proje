@@ -77,15 +77,32 @@ public class WeaponController : MonoBehaviour
             {
                 if (hit.collider.GetComponent<PhotonView>()?.IsMine == false)
                 {
-                    Player player = hit.collider.GetComponent<PhotonView>()?.Owner;
-                    player.CustomProperties.TryGetValue("healt",out object hitOtherHealt);
                     WeopenLeadActivated(characterCamera.transform.forward, hit.point);
-                    print(hitOtherHealt);
 
-                    if((float)hitOtherHealt <= damage)
+                    if(hit.collider.GetComponent<PhotonView>() != null)
                     {
-                        GameManager.Instance.PlayerKillSkor(1,PhotonNetwork.LocalPlayer);
+                        if(hit.collider.GetComponent<PhotonView>().Owner != null)
+                        {
+                            Player player = hit.collider.GetComponent<PhotonView>().Owner;
+
+                            if(player.CustomProperties.TryGetValue("healt",out object hitOtherHealt))
+                            {
+                                if(hitOtherHealt != null)
+                                {
+                                    if((float)hitOtherHealt <= damage)
+                                    {
+                                        GameManager.Instance.PlayerKillSkor(1,PhotonNetwork.LocalPlayer);
+                                    }
+
+                                }
+
+                            }
+                        }
+
+
                     }
+                    
+
                     
                 }
                 else

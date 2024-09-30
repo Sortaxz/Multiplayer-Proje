@@ -44,7 +44,6 @@ public class BulletController : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other) 
     {
-        print(other.name);
         if(other.CompareTag("Player"))
         {
             

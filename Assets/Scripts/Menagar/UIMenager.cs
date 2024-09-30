@@ -239,50 +239,13 @@ public class UIMenager : MonoBehaviour
 
     #endregion
 
-    public bool oyunaYenidenGiris = false;
+    public bool oyunaYenidenGiris = false;  
     private bool kayitliButtonClick = false;
     public bool KayitliButtonClick {get {return kayitliButtonClick;} set {kayitliButtonClick = value;}}
     private void Awake() 
     {
-       
 
-        /*
-        if(PhotonNetwork.IsConnectedAndReady)
-        {
-            FriendSystem.Instance.LoadFriendDate();
-            
-            string playerName = (string)SaveSystem.PlayerPrefsDataLoad("playerName","string");
-            SaveSystem.PlayerPrefsDataSave("playerName",playerName);
-
-
-            menuKullaniciAdi_Text.text += PhotonNetwork.LocalPlayer.NickName;
-
-            iconIndex = (int)SaveSystem.PlayerPrefsDataLoad("icon","int");
-            colorIndex = (int)SaveSystem.PlayerPrefsDataLoad("color","int");
-            
-
-            SetPlayerProps();
-
-            menuPlayerIcon_Image.sprite =  playerScriptableObject.PlayerIconSprites[iconIndex];
-            
-
-            SetActiveUIObject(menu_Panel.name);
-            oyunaYenidenGiris = true;
-
-            
-        }
-        else
-        {
-            SetActiveUIObject(oyunaBaglanma_Panel.gameObject.name);
-        }
-        */
-
-        if(!PhotonNetwork.IsConnectedAndReady)
-        {
-            SetActiveUIObject(oyunaBaglanma_Panel.gameObject.name);
-
-        }
-        else
+        if(SunucuYonetim.Instance.ServerControl())
         {
             oyunaYenidenGiris = true;
         }
@@ -293,7 +256,11 @@ public class UIMenager : MonoBehaviour
 
     private void Start() 
     {
-       
+        if(!oyunaYenidenGiris)
+        {
+
+            SetActiveUIObject(oyunaBaglanma_Panel.gameObject.name);
+        }
         
     }
 
@@ -514,13 +481,6 @@ public class UIMenager : MonoBehaviour
     {
         SetActiveUIObject(odaIslemleri_Panel.name);
         menuPlayerProfil = true;
-        
-        /*
-        if(PhotonNetwork.InRoom)
-        {
-            PhotonNetwork.LeaveRoom();
-        }
-        */
         
     }
 

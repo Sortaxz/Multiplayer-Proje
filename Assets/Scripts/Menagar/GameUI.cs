@@ -83,19 +83,12 @@ public class GameUI : UIInputManager
             skorTable_Panel.SetActive(!skorTable_Panel.activeSelf);
             GameManager.Instance.GameStopted = skorTable_Panel.activeSelf;
             GameManager.Instance.StopGameStreaming(false);
-        }
-    }
-    public List<GameObject> SkorShow(int gamePlayerCount)
-    {
-        List<GameObject> skorLines = new List<GameObject>();
 
-        for (int i = 0; i < gamePlayerCount; i++)
-        {
-            GameObject spanwObject = Instantiate(skorLinePrefab,Vector3.one,Quaternion.identity,skorTableContent.transform);
-            skorLines.Add(spanwObject);    
+            //GameManager.Instance.PlayerSkorTable();
+            GameManager.Instance.PlayerSkorUpdate();
         }
 
-        return skorLines;
+
     }
 
     public void Active()
@@ -152,9 +145,12 @@ public class GameUI : UIInputManager
     }
 
 
-    private void CreateSkorLine()
+    public  void CreateSkorLine(int playerIconIndex,string playerGameObjectName,int playerKillCount,int playerDeathCount)
     {
-
+        GameObject spanwObject = Instantiate(skorLinePrefab,Vector3.one,Quaternion.identity,skorTableContent.transform);
+        spanwObject.name = playerGameObjectName;
+        GameManager.Instance.SkorLines.Add(playerGameObjectName,spanwObject.GetComponent<SkorLineControl>());    
+        spanwObject.GetComponent<SkorLineControl>().PlayerSkorInitialize(playerIconIndex,playerGameObjectName,playerKillCount,playerDeathCount);
     }
 }
  

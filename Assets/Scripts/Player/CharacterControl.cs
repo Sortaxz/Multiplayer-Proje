@@ -229,11 +229,12 @@ public class CharacterControl : PlayerInputManager,IDamageable
             PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
             pw.RPC("RPC_OtherPlayerHealtBar",RpcTarget.All,currentHealt);
         
-            if (currentHealt < 0)
+            if (currentHealt < 0 && !GameManager.Instance.CharacterDead)
             {
                 currentHealt = 0;
                 GameUI.Instance.PlayerHealtBar(1f);
                 GameManager.deatDelegate();
+                GameManager.Instance.CharacterDead  = true;
                 GameManager.Instance.PlayerDeathSkor(1,PhotonNetwork.LocalPlayer);
             }
 

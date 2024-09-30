@@ -42,7 +42,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     public List<GameObject> Scanner { get { return scanner;} set { scanner = value; } }
     private List<GameObject> mp5 = new List<GameObject>();
     public List<GameObject> Mp5 { get { return mp5;} set { mp5 = value; } }
-    private List<GameObject> skorLines = new List<GameObject>(); 
+    private Dictionary<string,SkorLineControl> skorLines = new Dictionary<string,SkorLineControl>(); 
+    public Dictionary<string,SkorLineControl> SkorLines {get { return skorLines;} set { skorLines = value; } }
 
     private bool characterDead = false;
     public bool CharacterDead { get { return characterDead;} set { characterDead = value; } }
@@ -146,6 +147,12 @@ public class GameManager : MonoBehaviourPunCallbacks
             }
         }
         
+        if(changedProps.ContainsKey("kill"))
+        {
+            print(targetPlayer.UserId + changedProps["kill"]);
+        }
+
+        
         
     }
 
@@ -236,6 +243,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         loadingScren.gameObject.SetActive(false);
         StartGame();
+
+        PlayerSkorTable();
 
         if(PhotonNetwork.IsMasterClient)
         {
@@ -413,6 +422,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         for (int i = 0; i < characterOfPlayers.Length; i++)
         {
+            if(characterOfPlayers[i] == null)
+                return;
+            
             CharacterControl characterControl = characterOfPlayers[i].GetComponent<CharacterControl>();
             CombatController combatController = characterOfPlayers[i].GetComponent<CombatController>();
             CharacterAnimation characterAnimation = characterOfPlayers[i].GetComponent<CharacterAnimation>();
@@ -441,6 +453,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
+            characterOfPlayers[i].GetComponent<CharacterControl>().enabled = true;
+            
             if(PhotonNetwork.LocalPlayer.UserId == PhotonNetwork.PlayerList[i].UserId)
             {
                 PhotonNetwork.Destroy(characterOfPlayers[i].gameObject);
@@ -476,9 +490,10 @@ public class GameManager : MonoBehaviourPunCallbacks
         if(player.CustomProperties.TryGetValue("death",out object death))
         {
             _death =(int)death;
-            _death += deathCount;
         }
 
+        _death += deathCount;
+        
         ExitGames.Client.Photon.Hashtable playerDeathSkor = new ExitGames.Client.Photon.Hashtable()
         {
             {"death",_death}
@@ -487,15 +502,48 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
 
 
-    private void PlayerSkorTable()
+    public void PlayerSkorTable()
     {
-        skorLines = GameUI.Instance.SkorShow(PhotonNetwork.PlayerList.Length);
-        for (int i = 0; i < skorLines.Count; i++)
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
             Player player =  PhotonNetwork.PlayerList[i];
-            player.CustomProperties.TryGetValue("icon",out object playerIconIndex);
-            skorLines[i].GetComponent<SkorLineControl>().PlayerSkorInitialize((int)playerIconIndex,player.UserId,(int)player.CustomProperties["kill"],(int)player.CustomProperties["death"]);
+            if(!skorLines.ContainsKey(player.UserId))
+            {
+                player.CustomProperties.TryGetValue("icon",out object playerIconIndex);
+
+
+                int playerKillCount =  PlayerPropertiesControl(player,"kill");
+                int playerDeathCount = PlayerPropertiesControl(player,"death");
+                GameUI.Instance.CreateSkorLine((int)playerIconIndex,player.UserId,playerKillCount,playerDeathCount);
+            }
 
         }
+
+        
     }
+
+
+    private int PlayerPropertiesControl(Player player, string contolValue)
+    {
+        if(player.CustomProperties[contolValue] == null)
+        {
+            return 0;
+        }
+
+        return (int)player.CustomProperties[contolValue];
+    }
+
+    public void PlayerSkorUpdate()
+    {
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        {
+            Player player = PhotonNetwork.PlayerList[i];
+            int playerKillCount = PlayerPropertiesControl(player,"kill");
+            int playerDeathCount = PlayerPropertiesControl(player,"death");
+
+            skorLines[player.UserId].PlayerSkor(playerKillCount,playerDeathCount);
+        
+        }
+    }
+
 }
