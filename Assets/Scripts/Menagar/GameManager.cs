@@ -6,8 +6,7 @@ using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.UI;
-
-public class GameManager : MonoBehaviourPunCallbacks
+public class GameManager : MonoBehaviourPunCallbacks,IPunObservable
 {
     private static GameManager instance;
     public static GameManager Instance
@@ -29,6 +28,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     public PlayerScriptableObject PlayerScriptableObject { get { return playerScriptableObject; } }
     [SerializeField]private CharacterControl[] characterOfPlayers;
     public CharacterControl[] CharacterOfPlayers { get { return characterOfPlayers; } set { characterOfPlayers = value; } }
+    [SerializeField] private CharacterControl[] newCharacterOfPlayers;
+
     [SerializeField] private GameObject loadingScren;
     [SerializeField] private Text infoText;
     private bool findCharacterOfPlayers = false;
@@ -45,6 +46,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private Dictionary<string,SkorLineControl> skorLines = new Dictionary<string,SkorLineControl>(); 
     public Dictionary<string,SkorLineControl> SkorLines {get { return skorLines;} set { skorLines = value; } }
 
+    ExitGames.Client.Photon.Hashtable roomOptions;
     private bool characterDead = false;
     public bool CharacterDead { get { return characterDead;} set { characterDead = value; } }
 
@@ -76,6 +78,12 @@ public class GameManager : MonoBehaviourPunCallbacks
             {"PlayerLoadedLevel",true},
         };
         PhotonNetwork.LocalPlayer.SetCustomProperties(props);    
+        roomOptions = new ExitGames.Client.Photon.Hashtable()
+        {
+            {"timerStarted",false},
+            {"roomTime",0}
+        };
+        PhotonNetwork.CurrentRoom.SetCustomProperties(roomOptions);
 
         if(!countdownTimer.isActiveAndEnabled)
         {
@@ -86,42 +94,23 @@ public class GameManager : MonoBehaviourPunCallbacks
     void Start()
     {
         StartCoroutine(FindCharacter());
-    }
 
+        if(PhotonNetwork.IsMasterClient)
+        {
+            a=1;
+        }
+        else
+        {
+            a = 2;
+        }
+
+    }
     private void Update() 
     {
-        
-
-       
-    }
-  
-
-    #region  Pun Callbacks
-
-    public override void OnDisconnected(DisconnectCause cause)
-    {
+        print("b : " + b);    
     }
 
-    public override void OnLeftRoom()
-    {
-        
-    }
-
-    public override void OnPlayerEnteredRoom(Player newPlayer)
-    {
-        
-    }
-
-    public override void OnPlayerLeftRoom(Player otherPlayer)
-    {
-        ExitGames.Client.Photon.Hashtable props =  new ExitGames.Client.Photon.Hashtable()
-        {
-            {"inGame",false}
-        };
-        otherPlayer.SetCustomProperties(props);
-       
-    }
-    
+   
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
         if(!PhotonNetwork.IsMasterClient)
@@ -156,46 +145,69 @@ public class GameManager : MonoBehaviourPunCallbacks
         
     }
 
-    #endregion
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+       
+    }
 
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        {
+            // Oyuncunun ActorNumber',n, al,yoruz
+            int actorNumberIndex = PhotonNetwork.PlayerList[i].ActorNumber - 1;
 
+            // Dizideki oyuncu kontrolünü al
+            CharacterControl characterControl = characterOfPlayers[i];
+
+            // ActorNumber',na göre doğru s,raya karakteri yerleştiriyoruz
+            if (actorNumberIndex >= 0 && actorNumberIndex < characterOfPlayers.Length)
+            {
+                characterOfPlayers[actorNumberIndex] = characterControl;
+            }
+            else
+            {
+                Debug.LogWarning("ActorNumber dizin d,ş, bir değer ald,: " + actorNumberIndex);
+            }
+        }
+    }
     public IEnumerator FindCharacter()
     {
-        while(true && !findCharacterOfPlayers)
+        while (!findCharacterOfPlayers)
         {
-            CharacterControl[] newCharacterOfPlayers = FindObjectsOfType<CharacterControl>();
-            characterOfPlayers = new CharacterControl[newCharacterOfPlayers.Length];
+            newCharacterOfPlayers = FindObjectsOfType<CharacterControl>();
+
+            if (characterOfPlayers == null || characterOfPlayers.Length == 0)
+            {
+                characterOfPlayers = new CharacterControl[PhotonNetwork.CurrentRoom.PlayerCount];
+            }
+
             for (int i = 0; i < newCharacterOfPlayers.Length; i++)
             {
-                if(i == newCharacterOfPlayers[i].PlayerActorNumber-1)
+                CharacterControl characterControl = newCharacterOfPlayers[i];
+
+                string playerId = characterControl.PlayerNickName; 
+
+                for (int j = 0; j < characterOfPlayers.Length; j++)
                 {
-                    characterOfPlayers[i] = newCharacterOfPlayers[i];
-                }
-                else
-                {
-                    if(newCharacterOfPlayers[i].PlayerActorNumber-1 < characterOfPlayers.Length)
+                    if (characterOfPlayers[j] == null || characterOfPlayers[j].PlayerNickName == playerId)
                     {
-                        characterOfPlayers[newCharacterOfPlayers[i].PlayerActorNumber-1] = newCharacterOfPlayers[i];
+                        characterOfPlayers[j] = characterControl;
+                        break;
                     }
                 }
-                
-               
             }
 
-            
-
-            if(newCharacterOfPlayers.Length == PhotonNetwork.CurrentRoom.PlayerCount)
+            if (newCharacterOfPlayers.Length == PhotonNetwork.CurrentRoom.PlayerCount)
             {
                 findCharacterOfPlayers = true;
-                StopCoroutine(FindCharacter());
                 StartCoroutine(FindOtherPlayerCharacter());
             }
-            yield return new WaitForSeconds(.1f);
-        }
-        
 
-        //PlayerSkorTable();
+            yield return new WaitForSeconds(0.1f); 
+        }
     }
+
 
     private void StartGame()
     {
@@ -246,6 +258,20 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         PlayerSkorTable();
 
+        PhotonNetwork.CurrentRoom.CustomProperties["timerStarted"] = true;
+        if(PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("odaTimer",out object odaTimer))
+        {
+            print(odaTimer);
+        }
+
+        if(PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("timerStarted",out object timerStarted))
+        {
+            if((bool)timerStarted)
+            {
+                StartCoroutine(TimerInumerator());
+            }
+        }      
+        /*
         if(PhotonNetwork.IsMasterClient)
         {
             StartCoroutine(TimerInumerator());
@@ -254,12 +280,13 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             GameUI.Instance.TimerPanel.SetActive(true);
         }
+        */
         
     }
 
+   
     public void Die()
     {
-        characterDead = false;
 
 
         PhotonNetwork.Destroy(character);
@@ -273,6 +300,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         GameUI.Instance.Active();
        
+        characterDead = false;
         StartCoroutine(FindOtherPlayerCharacter());
 
     }
@@ -335,7 +363,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
-   
 
     private IEnumerator TimerInumerator()
     {
@@ -345,12 +372,12 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
         int totalSeconds = Mathf.FloorToInt(time);
 
+
         while(time < 15)
         {
 
             totalSeconds += 1 ;
 
-            int minutes = Mathf.FloorToInt(time / 60);
             int seconds = Mathf.FloorToInt(totalSeconds % 60);
             
 
@@ -360,8 +387,14 @@ public class GameManager : MonoBehaviourPunCallbacks
                 time += 1;
             }
             
-            GameUI.Instance.TimerText.text = string.Format("{0:00}:{1:00}", time, seconds);
-            PV.RPC("Timer",RpcTarget.OthersBuffered,time,totalSeconds);
+            string odaTimer =  string.Format("{0:00}:{1:00}", time, seconds);
+            GameUI.Instance.TimerText.text = odaTimer;
+            
+            
+            PhotonNetwork.CurrentRoom.CustomProperties["odaTimer"] = odaTimer;
+
+            PV.RPC("Timer",RpcTarget.AllBufferedViaServer,time,seconds);
+
             yield return new WaitForSeconds(.5f);
         }
 
@@ -375,10 +408,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     private void Timer(float totalMinutes,int totalSeconds)
     {
-        int minutes = Mathf.FloorToInt(totalMinutes / 60);
-        int seconds = Mathf.FloorToInt(totalSeconds % 60);
 
-        GameUI.Instance.TimerText.text = string.Format("{0:00}:{1:00}", totalMinutes, seconds);
+        GameUI.Instance.TimerText.text = string.Format("{0:00}:{1:00}", totalMinutes, totalSeconds);
     }
 
 
@@ -546,4 +577,20 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
+
+    private int a = 0;
+    private int b = 0;
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+         if(stream.IsWriting)
+        {
+            print("a verisini gönderiyor");
+            stream.SendNext(a);
+        }
+        else
+        {
+            print("a verisini aliniyor");
+            b  = (int)stream.ReceiveNext();
+        }
+    }
 }

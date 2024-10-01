@@ -501,7 +501,6 @@ public class UIMenager : MonoBehaviour
     public void RandomOdaKuButton_Method()
     {
         SetActiveUIObject(randomOdaModSecim_Panel.name);
-        print(SunucuYonetim.Instance.GamePlayerControl());
     }
 
     public void OdaKurmaButton_Method()

@@ -72,19 +72,20 @@ public class GameUI : UIInputManager
     {
         if(uiEsc)
         {   
+            GameManager.Instance.GameStopted = !pausePanel.activeSelf;
+            print(GameManager.Instance.GameStopted);
+            GameManager.Instance.StopGameStreaming(!pausePanel.activeSelf);
             pausePanel.SetActive(!pausePanel.activeSelf);
             
-            GameManager.Instance.GameStopted = pausePanel.activeSelf;
-            GameManager.Instance.StopGameStreaming(false);
         }
+       
 
         if(tab)
         {
             skorTable_Panel.SetActive(!skorTable_Panel.activeSelf);
             GameManager.Instance.GameStopted = skorTable_Panel.activeSelf;
-            GameManager.Instance.StopGameStreaming(false);
+            GameManager.Instance.StopGameStreaming(skorTable_Panel.activeSelf);
 
-            //GameManager.Instance.PlayerSkorTable();
             GameManager.Instance.PlayerSkorUpdate();
         }
 
@@ -98,7 +99,9 @@ public class GameUI : UIInputManager
     }
     public void Close()
     {
-        playerHealtBarBackground.gameObject.SetActive(false);
+        if(playerHealtBarBackground) //null mı değil mi sorusu
+            playerHealtBarBackground.gameObject.SetActive(false);
+        
         otherPlayerHealtBar.gameObject.SetActive(false);
     }
 
@@ -128,7 +131,8 @@ public class GameUI : UIInputManager
     public void GameOverUi()
     {
         finishPanel.SetActive(true);
-        GameManager.Instance.StopGameStreaming(true);
+        //GameManager.Instance.StopGameStreaming(true);
+        GameManager.Instance.CharacterDead = true;
     }
 
 

@@ -95,11 +95,6 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         
     }
 
-    public override void OnJoinedLobby()
-    {
-        
-    }
-
     public void CreateRoom(GameMode mod,string odaAdi)
     {
         if(PhotonNetwork.IsConnectedAndReady)
@@ -149,8 +144,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         }
     }
 
-
-    public override void OnJoinedRoom()
+    private void IsRoomActive()
     {
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
@@ -160,12 +154,15 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
                 {
                     playersReady = true;
                 }
-                else
-                {
-                    playersReady = false;
-                }
+               
             }
         }
+    }
+    public override void OnJoinedRoom()
+    {
+       
+        IsRoomActive();
+
         if(playersReady)
         {
             PhotonNetwork.LoadLevel(1);
