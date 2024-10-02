@@ -66,15 +66,16 @@ public class CharacterControl : PlayerInputManager,IDamageable
         combatController = GetComponent<CombatController>();
 
         playerNickName = pw.Owner.NickName;
-        playerActorNumber = pw.Owner.ActorNumber;
         transform.name = playerNickName;
 
         if(pw.IsMine)
         {
+            playerActorNumber = pw.ViewID;
             transform.GetChild(0).GetComponent<CameraController>().character = gameObject;
         }
         else
         {
+            playerActorNumber = pw.ViewID;
             Destroy(characterCamera.gameObject);
 
         }

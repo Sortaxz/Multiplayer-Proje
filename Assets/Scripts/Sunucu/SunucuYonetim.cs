@@ -67,10 +67,11 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     {
        
     }
-    
+
 
     public override void OnConnectedToMaster()
     {
+        print("OnConnectedToMaster");
         StopCoroutine(uIMenager.ConnetingAnimation());
         
         if(SaveSystem.PlayerPrefsDataQuery("icon") && SaveSystem.PlayerPrefsDataQuery("color") && SaveSystem.PlayerPrefsDataQuery("playerName"))

@@ -51,7 +51,7 @@ public class GameUI : UIInputManager
     [SerializeField] private GameObject skorTable_Panel;
     [SerializeField] private GameObject skorTableContent;
     [SerializeField] private GameObject skorLinePrefab;
-
+    
     private void Awake() 
     {
         playerHealtBar = playerHealtBarBackground.transform.GetChild(0).GetComponent<Image>();  
@@ -72,21 +72,26 @@ public class GameUI : UIInputManager
     {
         if(uiEsc)
         {   
-            GameManager.Instance.GameStopted = !pausePanel.activeSelf;
-            print(GameManager.Instance.GameStopted);
-            GameManager.Instance.StopGameStreaming(!pausePanel.activeSelf);
-            pausePanel.SetActive(!pausePanel.activeSelf);
+            if(!skorTable_Panel.activeSelf)
+            {
+                pausePanel.SetActive(!pausePanel.activeSelf);
+                GameManager.Instance.GameStopted = pausePanel.activeSelf;
+                GameManager.Instance.StopGameStreaming(pausePanel.activeSelf);
+            }
             
         }
        
 
         if(tab)
         {
-            skorTable_Panel.SetActive(!skorTable_Panel.activeSelf);
-            GameManager.Instance.GameStopted = skorTable_Panel.activeSelf;
-            GameManager.Instance.StopGameStreaming(skorTable_Panel.activeSelf);
+            if(!pausePanel.activeSelf)
+            {
+                skorTable_Panel.SetActive(!skorTable_Panel.activeSelf);
+                GameManager.Instance.GameStopted = skorTable_Panel.activeSelf;
+                GameManager.Instance.StopGameStreaming(skorTable_Panel.activeSelf);
+                GameManager.Instance.PlayerSkorUpdate();
+            }
 
-            GameManager.Instance.PlayerSkorUpdate();
         }
 
 
@@ -102,7 +107,8 @@ public class GameUI : UIInputManager
         if(playerHealtBarBackground) //null mı değil mi sorusu
             playerHealtBarBackground.gameObject.SetActive(false);
         
-        otherPlayerHealtBar.gameObject.SetActive(false);
+        if(otherPlayerHealtBar)
+            otherPlayerHealtBar.gameObject.SetActive(false);
     }
 
     public float PlayerHealtBar(float damage)

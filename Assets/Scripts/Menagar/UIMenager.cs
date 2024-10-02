@@ -239,51 +239,42 @@ public class UIMenager : MonoBehaviour
 
     #endregion
 
-    public bool oyunaYenidenGiris = false;  
     private bool kayitliButtonClick = false;
     public bool KayitliButtonClick {get {return kayitliButtonClick;} set {kayitliButtonClick = value;}}
     private void Awake() 
     {
-
-        if(SunucuYonetim.Instance.ServerControl())
-        {
-            oyunaYenidenGiris = true;
-        }
-
         pv = GetComponent<PhotonView>();
-
     }
 
     private void Start() 
     {
-        if(!oyunaYenidenGiris)
+        if(SunucuYonetim.Instance.ServerControl())
         {
-
-            SetActiveUIObject(oyunaBaglanma_Panel.gameObject.name);
+            SetActiveUIObject(menu_Panel.name);
         }
-        
     }
+
 
     public void PlayerPropsShow()
     {
-            FriendSystem.Instance.LoadFriendDate();
+        FriendSystem.Instance.LoadFriendDate();
 
-            string playerName = (string)SaveSystem.PlayerPrefsDataLoad("playerName", "string");
-            SaveSystem.PlayerPrefsDataSave("playerName", playerName);
-
-
-            menuKullaniciAdi_Text.text += PhotonNetwork.LocalPlayer.NickName;
-
-            iconIndex = (int)SaveSystem.PlayerPrefsDataLoad("icon", "int");
-            colorIndex = (int)SaveSystem.PlayerPrefsDataLoad("color", "int");
+        string playerName = (string)SaveSystem.PlayerPrefsDataLoad("playerName", "string");
+        SaveSystem.PlayerPrefsDataSave("playerName", playerName);
 
 
-            SetPlayerProps();
+        menuKullaniciAdi_Text.text += PhotonNetwork.LocalPlayer.NickName;
 
-            menuPlayerIcon_Image.sprite = playerScriptableObject.PlayerIconSprites[iconIndex];
-            menuKullaniciAdi_Text.text = playerName;
+        iconIndex = (int)SaveSystem.PlayerPrefsDataLoad("icon", "int");
+        colorIndex = (int)SaveSystem.PlayerPrefsDataLoad("color", "int");
 
-            SetActiveUIObject(menu_Panel.name);
+
+        SetPlayerProps();
+
+        menuPlayerIcon_Image.sprite = playerScriptableObject.PlayerIconSprites[iconIndex];
+        menuKullaniciAdi_Text.text = playerName;
+
+        SetActiveUIObject(menu_Panel.name);
     }
 
     private void Update() 

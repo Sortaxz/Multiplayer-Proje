@@ -6,7 +6,7 @@ using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.UI;
-public class GameManager : MonoBehaviourPunCallbacks,IPunObservable
+public class GameManager : MonoBehaviourPunCallbacks
 {
     private static GameManager instance;
     public static GameManager Instance
@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviourPunCallbacks,IPunObservable
     private bool findCharacterOfPlayers = false;
     public bool FindCharacterOfPlayers { get { return findCharacterOfPlayers;} set { findCharacterOfPlayers = value;}}
     private PhotonView PV;
+    public PhotonView GameMager_PV { get { return PV;}}
     private GameObject character;
     [SerializeField] private CountdownTimer countdownTimer;
     [SerializeField] private GameObject bulletsParent;
@@ -95,19 +96,6 @@ public class GameManager : MonoBehaviourPunCallbacks,IPunObservable
     {
         StartCoroutine(FindCharacter());
 
-        if(PhotonNetwork.IsMasterClient)
-        {
-            a=1;
-        }
-        else
-        {
-            a = 2;
-        }
-
-    }
-    private void Update() 
-    {
-        print("b : " + b);    
     }
 
    
@@ -135,42 +123,9 @@ public class GameManager : MonoBehaviourPunCallbacks,IPunObservable
                 infoText.text = "Diğer oyuncular bekleniyor...";
             }
         }
-        
-        if(changedProps.ContainsKey("kill"))
-        {
-            print(targetPlayer.UserId + changedProps["kill"]);
-        }
-
-        
-        
     }
 
-    public override void OnPlayerEnteredRoom(Player newPlayer)
-    {
-       
-    }
-
-    public override void OnPlayerLeftRoom(Player otherPlayer)
-    {
-        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-        {
-            // Oyuncunun ActorNumber',n, al,yoruz
-            int actorNumberIndex = PhotonNetwork.PlayerList[i].ActorNumber - 1;
-
-            // Dizideki oyuncu kontrolünü al
-            CharacterControl characterControl = characterOfPlayers[i];
-
-            // ActorNumber',na göre doğru s,raya karakteri yerleştiriyoruz
-            if (actorNumberIndex >= 0 && actorNumberIndex < characterOfPlayers.Length)
-            {
-                characterOfPlayers[actorNumberIndex] = characterControl;
-            }
-            else
-            {
-                Debug.LogWarning("ActorNumber dizin d,ş, bir değer ald,: " + actorNumberIndex);
-            }
-        }
-    }
+  
     public IEnumerator FindCharacter()
     {
         while (!findCharacterOfPlayers)
@@ -182,32 +137,69 @@ public class GameManager : MonoBehaviourPunCallbacks,IPunObservable
                 characterOfPlayers = new CharacterControl[PhotonNetwork.CurrentRoom.PlayerCount];
             }
 
-            for (int i = 0; i < newCharacterOfPlayers.Length; i++)
+            if(newCharacterOfPlayers.Length == PhotonNetwork.PlayerList.Length)
             {
-                CharacterControl characterControl = newCharacterOfPlayers[i];
-
-                string playerId = characterControl.PlayerNickName; 
-
-                for (int j = 0; j < characterOfPlayers.Length; j++)
+                for (int i = 0; i < newCharacterOfPlayers.Length; i++)
                 {
-                    if (characterOfPlayers[j] == null || characterOfPlayers[j].PlayerNickName == playerId)
+                    CharacterControl characterControl =newCharacterOfPlayers[i];
+                    
+                    if(calismaSayisi < newCharacterOfPlayers.Length)
                     {
-                        characterOfPlayers[j] = characterControl;
-                        break;
+
+                        int result = Query(characterControl,newCharacterOfPlayers);
+                        int index = characterOfPlayers.Length-1  - result;
+                        characterOfPlayers[index] = characterControl;
+                        calismaSayisi++;
                     }
+
+                    
                 }
             }
 
-            if (newCharacterOfPlayers.Length == PhotonNetwork.CurrentRoom.PlayerCount)
+           
+            if(IsActorsFound())
             {
                 findCharacterOfPlayers = true;
                 StartCoroutine(FindOtherPlayerCharacter());
+                calismaSayisi = 0;
             }
 
             yield return new WaitForSeconds(0.1f); 
         }
     }
 
+    private int calismaSayisi = 0;
+
+  
+    private int Query(CharacterControl characterControl,CharacterControl[] characterControls)
+    {
+        
+        int sayi = 0;
+        for (int i = 0; i < characterControls.Length; i++)
+        {
+            if(characterControl.PlayerNickName != characterControls[i].PlayerNickName)
+            {
+                if(characterControl.PlayerActorNumber < characterControls[i].PlayerActorNumber)
+                {
+                    sayi++;
+                }
+            }
+        }
+
+        return sayi;
+    }
+
+    private bool IsActorsFound()
+    {
+        for (int i = 0; i < characterOfPlayers.Length; i++)
+        {
+            if(characterOfPlayers[i] == null)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 
     private void StartGame()
     {
@@ -271,6 +263,7 @@ public class GameManager : MonoBehaviourPunCallbacks,IPunObservable
                 StartCoroutine(TimerInumerator());
             }
         }      
+
         /*
         if(PhotonNetwork.IsMasterClient)
         {
@@ -449,6 +442,8 @@ public class GameManager : MonoBehaviourPunCallbacks,IPunObservable
         }
     }
 
+    private bool değişken = false;
+
     private void StopFlow(bool closeOrOpen)
     {
         for (int i = 0; i < characterOfPlayers.Length; i++)
@@ -470,8 +465,9 @@ public class GameManager : MonoBehaviourPunCallbacks,IPunObservable
 
             }
 
+            değişken = closeOrOpen;
             
-            characterControl.PlayerCourse_Image.SetActive(closeOrOpen);
+            characterControl.PlayerCourse_Image.SetActive(değişken);
             
             combatController.enabled = closeOrOpen;
             characterAnimation.enabled = closeOrOpen;
@@ -484,11 +480,17 @@ public class GameManager : MonoBehaviourPunCallbacks,IPunObservable
     {
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
-            characterOfPlayers[i].GetComponent<CharacterControl>().enabled = true;
+            if(characterOfPlayers[i] != null)
+            {
+                characterOfPlayers[i].GetComponent<CharacterControl>().enabled = true;
+            }
             
             if(PhotonNetwork.LocalPlayer.UserId == PhotonNetwork.PlayerList[i].UserId)
             {
-                PhotonNetwork.Destroy(characterOfPlayers[i].gameObject);
+                if(characterOfPlayers[i] != null && characterOfPlayers[i].GetComponent<PhotonView>().IsMine)
+                {
+                    PhotonNetwork.Destroy(characterOfPlayers[i].gameObject);
+                }
             }
         }
 
@@ -578,19 +580,4 @@ public class GameManager : MonoBehaviourPunCallbacks,IPunObservable
     }
 
 
-    private int a = 0;
-    private int b = 0;
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-         if(stream.IsWriting)
-        {
-            print("a verisini gönderiyor");
-            stream.SendNext(a);
-        }
-        else
-        {
-            print("a verisini aliniyor");
-            b  = (int)stream.ReceiveNext();
-        }
-    }
 }
