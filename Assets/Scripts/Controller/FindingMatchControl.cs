@@ -53,10 +53,7 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
 
     }
 
-    private void Update() 
-    {
-        //UpdateButtons();    
-    }
+   
     public void StartMatchFindingButton_Method()
     {
         

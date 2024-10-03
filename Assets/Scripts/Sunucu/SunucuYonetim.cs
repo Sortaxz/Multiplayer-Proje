@@ -71,7 +71,6 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
     public override void OnConnectedToMaster()
     {
-        print("OnConnectedToMaster");
         StopCoroutine(uIMenager.ConnetingAnimation());
         
         if(SaveSystem.PlayerPrefsDataQuery("icon") && SaveSystem.PlayerPrefsDataQuery("color") && SaveSystem.PlayerPrefsDataQuery("playerName"))
@@ -243,8 +242,8 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         Destroy(playerList[otherPlayer.NickName].gameObject);
         playerList.Remove(otherPlayer.NickName);
 
-        PV.RPC("Method2",RpcTarget.AllViaServer,null);
-        
+        //PV.RPC("RPC_LeftRoom",RpcTarget.AllViaServer,null);
+        LeftRoom();
         
         if(uIMenager.FindingMatch_Panel.activeSelf)
         {
@@ -377,11 +376,14 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
 
     [PunRPC]
-    public void Method2()
+    public void RPC_LeftRoom()
     {
         string menuPanelName = uIMenager.Menu_Panel.name;
         uIMenager.SetActiveUIObject(menuPanelName);
-        
+        if(uIMenager.FindingMatch_Panel.activeSelf)
+        {
+            FindingMatchControl.Instance.UpdateButtons();
+        }
         if(PhotonNetwork.InRoom)
         {
             PhotonNetwork.LeaveRoom();
@@ -390,12 +392,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     
     public void LeftRoom()
     {
-        PV.RPC("Method2",RpcTarget.AllViaServer,null);
-    }
-    
-    public bool ServerControl()
-    {
-        return PhotonNetwork.IsConnectedAndReady;
+        PV.RPC("RPC_LeftRoom",RpcTarget.AllViaServer,null);
     }
     
     public bool GamePlayerControl()

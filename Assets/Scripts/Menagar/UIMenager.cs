@@ -248,10 +248,28 @@ public class UIMenager : MonoBehaviour
 
     private void Start() 
     {
-        if(SunucuYonetim.Instance.ServerControl())
+        if(SaveSystem.PlayerPrefsDataQuery("GameLogin"))
         {
-            SetActiveUIObject(menu_Panel.name);
+            string gameLogin = (string)SaveSystem.PlayerPrefsDataLoad("GameLogin","string");
+            if(gameLogin == "true")
+            {
+                SetActiveUIObject(menu_Panel.name);
+            }
+            else
+            {
+                SetActiveUIObject(oyunaBaglanma_Panel.name);
+            }
         }
+        else
+        {
+            SetActiveUIObject(oyunaBaglanma_Panel.name);
+        }
+        SaveSystem.PlayerPrefsDataSave("GameLogin","true");
+       
+    }
+    private void OnApplicationQuit() 
+    {
+        SaveSystem.PlayerPrefsDataRemove("GameLogin");    
     }
 
 

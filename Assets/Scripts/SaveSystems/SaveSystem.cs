@@ -59,6 +59,11 @@ public class SaveSystem : MonoBehaviour
     {
         return PlayerPrefs.HasKey(firstDataQueryName);
     }
+
+    public static void PlayerPrefsDataRemove(string saveValueKey)
+    {
+        PlayerPrefs.DeleteKey(saveValueKey);
+    }
     
     public static void SaveFriend(List<string> friendsList,List<string> friendsIconList,List<string> currentFriendNumber)
     {
@@ -99,7 +104,6 @@ public class SaveSystem : MonoBehaviour
                     }
                 }
                 
-                //Debug.Log("Arkadaş listesi yüklendi.");
 
                 return friendsList;
             }
@@ -107,7 +111,6 @@ public class SaveSystem : MonoBehaviour
             {
                 List<string> friendsList = new List<string>();
                 
-                //print("Kaydedilmiş arkadaş listesi bulunamadi");
                 return friendsList;
             }
         }
@@ -127,7 +130,6 @@ public class SaveSystem : MonoBehaviour
                     }
                 }
 
-                //Debug.Log("Arkadaş listesi yüklendi.");
 
                 return friendsIconList;
             }
@@ -135,7 +137,6 @@ public class SaveSystem : MonoBehaviour
             {
                 List<string> friendsIconList = new List<string>();
                 
-                //print("Kaydedilmiş arkadaş listesi bulunamadi");
                 return friendsIconList;
             }
         }

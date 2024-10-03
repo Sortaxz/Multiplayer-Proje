@@ -55,6 +55,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     public bool GameStopted { get { return gameStopted;} set { gameStopted = value; } }
     private float time;
 
+    private float minutes;
+    private int seconds;
     private int playerKill = 0;
     private int playerDeath = 0;
 
@@ -70,7 +72,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         base.OnDisable();
         CountdownTimer.OnCountdownTimerHasExpired -= OnCountDownTimerIsExpired;
     }
-
     private void Awake() 
     {
         PV = GetComponent<PhotonView>();
@@ -82,7 +83,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         roomOptions = new ExitGames.Client.Photon.Hashtable()
         {
             {"timerStarted",false},
-            {"roomTime",0}
+            {"roomMinutes",0f},
+            {"roomSeconds",0f}
         };
         PhotonNetwork.CurrentRoom.SetCustomProperties(roomOptions);
 
@@ -98,7 +100,11 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     }
 
-   
+    private void OnApplicationQuit() 
+    {
+        SaveSystem.PlayerPrefsDataRemove("GameLogin");    
+    }
+
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
         if(!PhotonNetwork.IsMasterClient)
@@ -123,9 +129,24 @@ public class GameManager : MonoBehaviourPunCallbacks
                 infoText.text = "Diğer oyuncular bekleniyor...";
             }
         }
+
     }
 
-  
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        if(otherPlayer.IsMasterClient)
+        {
+            for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+            {
+                PhotonNetwork.SetMasterClient(PhotonNetwork.PlayerList[i]);
+                
+            }
+
+        }
+
+        
+    }
+    
     public IEnumerator FindCharacter()
     {
         while (!findCharacterOfPlayers)
@@ -143,13 +164,13 @@ public class GameManager : MonoBehaviourPunCallbacks
                 {
                     CharacterControl characterControl =newCharacterOfPlayers[i];
                     
-                    if(calismaSayisi < newCharacterOfPlayers.Length)
+                    if(numberStudies < newCharacterOfPlayers.Length)
                     {
 
                         int result = Query(characterControl,newCharacterOfPlayers);
                         int index = characterOfPlayers.Length-1  - result;
                         characterOfPlayers[index] = characterControl;
-                        calismaSayisi++;
+                        numberStudies++;
                     }
 
                     
@@ -161,32 +182,32 @@ public class GameManager : MonoBehaviourPunCallbacks
             {
                 findCharacterOfPlayers = true;
                 StartCoroutine(FindOtherPlayerCharacter());
-                calismaSayisi = 0;
+                numberStudies = 0;
             }
 
             yield return new WaitForSeconds(0.1f); 
         }
     }
 
-    private int calismaSayisi = 0;
+    private int numberStudies = 0;
 
   
     private int Query(CharacterControl characterControl,CharacterControl[] characterControls)
     {
         
-        int sayi = 0;
+        int number = 0;
         for (int i = 0; i < characterControls.Length; i++)
         {
             if(characterControl.PlayerNickName != characterControls[i].PlayerNickName)
             {
                 if(characterControl.PlayerActorNumber < characterControls[i].PlayerActorNumber)
                 {
-                    sayi++;
+                    number++;
                 }
             }
         }
 
-        return sayi;
+        return number;
     }
 
     private bool IsActorsFound()
@@ -250,34 +271,32 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         PlayerSkorTable();
 
-        PhotonNetwork.CurrentRoom.CustomProperties["timerStarted"] = true;
-        if(PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("odaTimer",out object odaTimer))
-        {
-            print(odaTimer);
-        }
+       
 
         if(PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("timerStarted",out object timerStarted))
         {
-            if((bool)timerStarted)
+            if(!(bool)timerStarted)
             {
-                StartCoroutine(TimerInumerator());
+                if(PhotonNetwork.LocalPlayer.IsMasterClient)
+                {
+                   
+                    StartCoroutine(TimerInumerator(time));
+                }
+                else
+                {
+                    GameUI.Instance.TimerPanel.SetActive(true);
+
+                }
+                PhotonNetwork.CurrentRoom.CustomProperties["timerStarted"] = true;
             }
         }      
 
-        /*
-        if(PhotonNetwork.IsMasterClient)
-        {
-            StartCoroutine(TimerInumerator());
-        }
-        else
-        {
-            GameUI.Instance.TimerPanel.SetActive(true);
-        }
-        */
-        
+    }
+    public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
+    {
+        print(propertiesThatChanged["roomMinutes"] + "-" + propertiesThatChanged["roomSeconds"]);
     }
 
-   
     public void Die()
     {
 
@@ -356,13 +375,14 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
-
-    private IEnumerator TimerInumerator()
+    private bool a = false;
+    private IEnumerator TimerInumerator(float time)
     {
         if(!GameUI.Instance.TimerPanel.activeSelf)
         {
             GameUI.Instance.TimerPanel.SetActive(true);
         }
+        
         int totalSeconds = Mathf.FloorToInt(time);
 
 
@@ -371,24 +391,31 @@ public class GameManager : MonoBehaviourPunCallbacks
 
             totalSeconds += 1 ;
 
-            int seconds = Mathf.FloorToInt(totalSeconds % 60);
+            int _seconds = Mathf.FloorToInt(totalSeconds % 60);
             
 
-            if(seconds >= 15 )
+            if(_seconds >= 14 )
             {
                 totalSeconds = 0;
-                time += 1;
+                a= true;
             }
             
-            string odaTimer =  string.Format("{0:00}:{1:00}", time, seconds);
-            GameUI.Instance.TimerText.text = odaTimer;
-            
-            
-            PhotonNetwork.CurrentRoom.CustomProperties["odaTimer"] = odaTimer;
+            //string odaTimer =  string.Format("{0:00}:{1:00}", time, seconds);
+            //GameUI.Instance.TimerText.text = odaTimer;
+            roomOptions["roomMinutes"] = time;
+            roomOptions["roomSeconds"] = _seconds;
 
-            PV.RPC("Timer",RpcTarget.AllBufferedViaServer,time,seconds);
+            PhotonNetwork.CurrentRoom.SetCustomProperties(roomOptions);            
+
+            PV.RPC("Timer",RpcTarget.AllBufferedViaServer,time,_seconds);
 
             yield return new WaitForSeconds(.5f);
+            if(a)
+            {
+                time += 1;
+                a = false;
+
+            }
         }
 
 
@@ -397,12 +424,13 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
 
 
-
     [PunRPC]
-    private void Timer(float totalMinutes,int totalSeconds)
+    private void Timer(float _minutes,int _seconds)
     {
-
-        GameUI.Instance.TimerText.text = string.Format("{0:00}:{1:00}", totalMinutes, totalSeconds);
+        print("RPC method çalişiyor");
+        GameUI.Instance.TimerText.text = string.Format("{0:00}:{1:00}", _minutes, _seconds);
+        gameObject.GetComponent<GameManager>().minutes = _minutes;
+        gameObject.GetComponent<GameManager>().seconds = _seconds;
     }
 
 
