@@ -264,7 +264,7 @@ public class UIMenager : MonoBehaviour
         {
             SetActiveUIObject(oyunaBaglanma_Panel.name);
         }
-        SaveSystem.PlayerPrefsDataSave("GameLogin","true");
+        
        
     }
     private void OnApplicationQuit() 
@@ -389,6 +389,8 @@ public class UIMenager : MonoBehaviour
         
         playerPropKaydetButton.gameObject.SetActive(false);
 
+        SaveSystem.PlayerPrefsDataSave("GameLogin","true");
+
     }
 
 
@@ -425,6 +427,8 @@ public class UIMenager : MonoBehaviour
         {
             kayitliOyuncu_Button.interactable =  false;
         }
+        SaveSystem.PlayerPrefsDataSave("GameLogin","true");
+
     }
 
     private IEnumerator PlayerTipTextAnimation()
@@ -790,7 +794,7 @@ public class UIMenager : MonoBehaviour
     public void KarşilaşmaKabulEtButton_Method()
     {
         isPlayerReady = true;
-        
+
         playerProps = new ExitGames.Client.Photon.Hashtable()
         {
             {"isPlayerReady",isPlayerReady}
@@ -800,10 +804,39 @@ public class UIMenager : MonoBehaviour
 
         karşilaşmaKabulReddet_Panel.SetActive(false);
 
-    
+        // bu yeni eklendi
+        if(ArePlayersAccept())
+        {
+            pv.RPC("RPC_CloseMatchWaitScreen",RpcTarget.AllViaServer);
+        }
+        else
+        {
+            MatchWaitingScreen.SetActive(true);
+        }
     }
 
+    [PunRPC]
+    private void RPC_CloseMatchWaitScreen()
+    {
+        MatchWaitingScreen.SetActive(false);
+    }
 
+    private bool ArePlayersAccept()
+    {
+        int playersCount = 0;
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+        {
+            if (PhotonNetwork.PlayerList[i].CustomProperties.TryGetValue("isPlayerReady", out object _isPlayerReady))
+            {
+                if((bool)_isPlayerReady)
+                {
+                    playersCount++;
+                }
+            }
+        }
+        bool controlValue = playersCount == 4 ? true : false;
+        return controlValue;
+    }
 
     public void KarşilaşmaReddetButton_Method()
     {

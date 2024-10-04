@@ -46,8 +46,10 @@ public class CharacterAnimation : PlayerAnimation
                 {
                     animator.Play("Reloading");
                 }
-                if(!reloading)
+                
+                if(hitReactionAnimation)
                 {
+                    HitReactionAnimation_Method();
                 }
                 
                 
@@ -63,12 +65,19 @@ public class CharacterAnimation : PlayerAnimation
 
     }
 
-    public void HitReactionAnimation_Method(bool value,Animator animator)
+    public void HitReactionAnimation_Method()
     {
-        print(transform.name);
-            animator.SetBool("isHitReaction",true);
+        animator.SetBool("isHitReaction",true);
 
     }
+
+    public void HitReactionAnimation_Finish()
+    {
+        animator.SetBool("isHitReaction",false);
+        hitReactionAnimation = false;
+    }
+
+
     private void CharacterMovementAnimation()
     {
         if (forward || left || right || backward || leftShift)
@@ -281,6 +290,8 @@ public class CharacterAnimation : PlayerAnimation
         }
     }
 
+
+   
     
 
 }

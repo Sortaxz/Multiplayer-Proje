@@ -12,7 +12,6 @@ public class WeaponController : MonoBehaviour
     [SerializeField] private Transform BulletsParent;
     private GameManager gameManager;
     [SerializeField] private ParticleSystem[] weaponEffects;
-    [SerializeField] private AudioClip[] weaponAudioClips;
     [SerializeField] private AudioSource[] audioSource;
     private int bulletCount = -1;
     public int BulletCount { get { return bulletCount; }}
@@ -36,11 +35,12 @@ public class WeaponController : MonoBehaviour
     private void Awake() 
     {
         gameManager = GameManager.Instance;
-        
+
+
     }
     private void Start() 
     {
-        
+        gameManager.gunEffectDelegate += GunFireSound;
     }
 
     private void Update() 
@@ -66,9 +66,11 @@ public class WeaponController : MonoBehaviour
         if(bulletCount > 0)
         {
             characterFire = true;
-            
-            weaponEffects[0].Play();
+
+            //GunFireEffects();
             audioSource[0].Play();
+            weaponEffects[0].Play();
+            //gameManager.StartEveryOne();
 
             Ray ray = new Ray(characterCamera.transform.position, characterCamera.transform.forward);
             RaycastHit hit;
@@ -79,19 +81,20 @@ public class WeaponController : MonoBehaviour
                 {
                     WeopenLeadActivated(characterCamera.transform.forward, hit.point);
 
-                    if(hit.collider.GetComponent<PhotonView>() != null)
+                    if (hit.collider.GetComponent<PhotonView>() != null)
                     {
-                        if(hit.collider.GetComponent<PhotonView>().Owner != null)
+                        if (hit.collider.GetComponent<PhotonView>().Owner != null)
                         {
+
                             Player player = hit.collider.GetComponent<PhotonView>().Owner;
 
-                            if(player.CustomProperties.TryGetValue("healt",out object hitOtherHealt))
+                            if (player.CustomProperties.TryGetValue("healt", out object hitOtherHealt))
                             {
-                                if(hitOtherHealt != null)
+                                if (hitOtherHealt != null)
                                 {
-                                    if((float)hitOtherHealt <= damage)
+                                    if ((float)hitOtherHealt <= damage)
                                     {
-                                        GameManager.Instance.PlayerKillSkor(1,PhotonNetwork.LocalPlayer);
+                                        GameManager.Instance.PlayerKillSkor(1, PhotonNetwork.LocalPlayer);
                                     }
 
                                 }
@@ -101,9 +104,9 @@ public class WeaponController : MonoBehaviour
 
 
                     }
-                    
 
-                    
+
+
                 }
                 else
                 {
@@ -114,7 +117,7 @@ public class WeaponController : MonoBehaviour
                     }
                 }
 
-                
+
             }
 
         }
@@ -125,6 +128,10 @@ public class WeaponController : MonoBehaviour
         
     }
 
+    private void GunFireSound()
+    {
+        audioSource[0].Play();
+    }
 
     public void CreateBullet(int bulletCount,string gunName,Vector3 direction)
     {
@@ -148,6 +155,10 @@ public class WeaponController : MonoBehaviour
                         }
                     }
                 }
+                for (int i = 0; i < gameManager.Scanner.Count; i++)
+                {
+                        gameManager.Scanner[i]?.transform.SetParent(BulletExitPosition);
+                }
             }
             else if(gunName == "Mp5")
             {
@@ -167,10 +178,19 @@ public class WeaponController : MonoBehaviour
                         }
                     }
                 }
+                for (int i = 0; i < gameManager.Mp5.Count; i++)
+                {
+                    gameManager.Mp5[i]?.transform.SetParent(BulletExitPosition);
+                }
             }
             
         }
+
+       
+       
     }
+
+
     
     
 

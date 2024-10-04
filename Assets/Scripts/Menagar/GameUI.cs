@@ -78,7 +78,7 @@ public class GameUI : UIInputManager
                 GameManager.Instance.GameStopted = pausePanel.activeSelf;
                 GameManager.Instance.StopGameStreaming(pausePanel.activeSelf);
             }
-            
+            GameManager.Instance.RestartTimer();
         }
        
 
@@ -91,8 +91,10 @@ public class GameUI : UIInputManager
                 GameManager.Instance.StopGameStreaming(skorTable_Panel.activeSelf);
                 GameManager.Instance.PlayerSkorUpdate();
             }
-
+            
+            GameManager.Instance.RestartTimer();
         }
+        
 
 
     }
@@ -137,7 +139,7 @@ public class GameUI : UIInputManager
     public void GameOverUi()
     {
         finishPanel.SetActive(true);
-        //GameManager.Instance.StopGameStreaming(true);
+        GameManager.Instance.StopGameStreaming(true);
         GameManager.Instance.CharacterDead = true;
     }
 

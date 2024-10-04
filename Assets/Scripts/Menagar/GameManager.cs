@@ -22,7 +22,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
 
     public delegate void DeatDelegate();
+    public delegate void GunEffectDelegate();
     public static DeatDelegate deatDelegate;
+    public  GunEffectDelegate gunEffectDelegate;
 
     [SerializeField] private PlayerScriptableObject playerScriptableObject;
     public PlayerScriptableObject PlayerScriptableObject { get { return playerScriptableObject; } }
@@ -46,7 +48,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public List<GameObject> Mp5 { get { return mp5;} set { mp5 = value; } }
     private Dictionary<string,SkorLineControl> skorLines = new Dictionary<string,SkorLineControl>(); 
     public Dictionary<string,SkorLineControl> SkorLines {get { return skorLines;} set { skorLines = value; } }
-
+    public Coroutine timerCoroutine;
     ExitGames.Client.Photon.Hashtable roomOptions;
     private bool characterDead = false;
     public bool CharacterDead { get { return characterDead;} set { characterDead = value; } }
@@ -97,7 +99,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     void Start()
     {
         StartCoroutine(FindCharacter());
-
     }
 
     private void OnApplicationQuit() 
@@ -131,21 +132,29 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
 
     }
-
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        if(otherPlayer.IsMasterClient)
+        if (otherPlayer.IsMasterClient)
         {
             for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
             {
                 PhotonNetwork.SetMasterClient(PhotonNetwork.PlayerList[i]);
-                
             }
 
         }
 
-        
+        RestartTimer();
+
     }
+
+    public void RestartTimer()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            StartCoroutine(TimerInumerator(minutes, true, seconds));
+        }
+    }
+
     
     public IEnumerator FindCharacter()
     {
@@ -292,10 +301,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         }      
 
     }
-    public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
-    {
-        print(propertiesThatChanged["roomMinutes"] + "-" + propertiesThatChanged["roomSeconds"]);
-    }
 
     public void Die()
     {
@@ -375,49 +380,83 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
-    private bool a = false;
-    private IEnumerator TimerInumerator(float time)
+    private bool secondsUp = false;
+    private IEnumerator TimerInumerator(float time,bool value = false,int second = 0)
     {
         if(!GameUI.Instance.TimerPanel.activeSelf)
         {
             GameUI.Instance.TimerPanel.SetActive(true);
         }
         
-        int totalSeconds = Mathf.FloorToInt(time);
-
-
-        while(time < 15)
+        if(!value)
         {
+            int totalSeconds = Mathf.FloorToInt(time);
 
-            totalSeconds += 1 ;
 
-            int _seconds = Mathf.FloorToInt(totalSeconds % 60);
-            
-
-            if(_seconds >= 14 )
+            while(time < 15)
             {
-                totalSeconds = 0;
-                a= true;
+
+                totalSeconds += 1 ;
+
+                int _seconds = Mathf.FloorToInt(totalSeconds % 60);
+                
+
+                if(_seconds >= 14 )
+                {
+                    totalSeconds = 0;
+                    secondsUp = true;
+                }
+                
+                roomOptions["roomMinutes"] = time;
+                roomOptions["roomSeconds"] = _seconds;
+
+                PhotonNetwork.CurrentRoom.SetCustomProperties(roomOptions);            
+
+                PV.RPC("Timer",RpcTarget.AllBufferedViaServer,time,_seconds);
+
+                yield return new WaitForSeconds(.5f);
+                if(secondsUp)
+                {
+                    time += 1;
+                    secondsUp = false;
+
+                }
             }
-            
-            //string odaTimer =  string.Format("{0:00}:{1:00}", time, seconds);
-            //GameUI.Instance.TimerText.text = odaTimer;
-            roomOptions["roomMinutes"] = time;
-            roomOptions["roomSeconds"] = _seconds;
 
-            PhotonNetwork.CurrentRoom.SetCustomProperties(roomOptions);            
-
-            PV.RPC("Timer",RpcTarget.AllBufferedViaServer,time,_seconds);
-
-            yield return new WaitForSeconds(.5f);
-            if(a)
+        }
+        else
+        {
+            int totalSeconds = second;   
+            while(time < 15)
             {
-                time += 1;
-                a = false;
 
+                totalSeconds += 1 ;
+
+                int _seconds = Mathf.FloorToInt(totalSeconds % 60);
+                
+
+                if(_seconds >= 14 )
+                {
+                    totalSeconds = 0;
+                    secondsUp = true;
+                }
+                
+                roomOptions["roomMinutes"] = time;
+                roomOptions["roomSeconds"] = _seconds;
+
+                PhotonNetwork.CurrentRoom.SetCustomProperties(roomOptions);            
+
+                PV.RPC("Timer",RpcTarget.AllBufferedViaServer,time,_seconds);
+
+                yield return new WaitForSeconds(.5f);
+                if(secondsUp)
+                {
+                    time += 1;
+                    secondsUp = false;
+
+                }
             }
         }
-
 
         PV.RPC("FinishGame",RpcTarget.All,null);
 
@@ -427,7 +466,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     private void Timer(float _minutes,int _seconds)
     {
-        print("RPC method çalişiyor");
         GameUI.Instance.TimerText.text = string.Format("{0:00}:{1:00}", _minutes, _seconds);
         gameObject.GetComponent<GameManager>().minutes = _minutes;
         gameObject.GetComponent<GameManager>().seconds = _seconds;
@@ -607,5 +645,18 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
+    public void StartEveryOne()
+    {
+        PV.RPC("RPC_StartEveryOne",RpcTarget.AllViaServer);
+    }
+
+    [PunRPC]
+    public void RPC_StartEveryOne()
+    {
+        gunEffectDelegate();
+    }
+
+
+  
 
 }
