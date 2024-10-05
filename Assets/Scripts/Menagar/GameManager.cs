@@ -59,9 +59,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private float minutes;
     private int seconds;
-    private int playerKill = 0;
-    private int playerDeath = 0;
 
+    private bool isCoroutineStop = false;
 
     public override void OnEnable()
     {
@@ -89,6 +88,8 @@ public class GameManager : MonoBehaviourPunCallbacks
             {"roomSeconds",0f}
         };
         PhotonNetwork.CurrentRoom.SetCustomProperties(roomOptions);
+
+        isCoroutineStop = true;
 
         if(!countdownTimer.isActiveAndEnabled)
         {
@@ -489,14 +490,17 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void StopGameStreaming(bool value)
     {
+        /*
         if(value == false)
         {
             if(gameStopted)
             {
+                print("durdu");
                 StopFlow(false);
             }
             else
             {
+                print("durmadi");
                 StopFlow(true);
             }
 
@@ -506,11 +510,12 @@ public class GameManager : MonoBehaviourPunCallbacks
             StopFlow(false);
             StopAllCoroutines();
         }
+        */
+        StopFlow(value);
     }
 
-    private bool değişken = false;
 
-    private void StopFlow(bool closeOrOpen)
+    public void StopFlow(bool closeOrOpen)
     {
         for (int i = 0; i < characterOfPlayers.Length; i++)
         {
@@ -531,9 +536,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
             }
 
-            değişken = closeOrOpen;
             
-            characterControl.PlayerCourse_Image.SetActive(değişken);
+            characterControl.PlayerCourse_Image.SetActive(closeOrOpen);
             
             combatController.enabled = closeOrOpen;
             characterAnimation.enabled = closeOrOpen;
@@ -645,15 +649,16 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public void StartEveryOne()
+    public void StartEveryOne(AudioSource audioSource)
     {
-        PV.RPC("RPC_StartEveryOne",RpcTarget.AllViaServer);
+        PV.RPC("RPC_StartEveryOne",RpcTarget.AllViaServer,audioSource);
     }
 
     [PunRPC]
-    public void RPC_StartEveryOne()
+    public void RPC_StartEveryOne(AudioSource audioSource)
     {
-        gunEffectDelegate();
+        //gunEffectDelegate();
+        audioSource?.Play();
     }
 
 

@@ -182,7 +182,6 @@ public class CombatController : PlayerInputManager
         GameUI.Instance.WeaponInformationUi(weapons[weaponIndex].BulletCount,weapons[weaponIndex].MaxCapacity);
         
     }
-    private bool parenNull =false;
     public void EquipGunItem(int gunItemIndex)
     {
        
@@ -212,6 +211,14 @@ public class CombatController : PlayerInputManager
             weapon = new Weapon(weaponIndex);
             weapons[weaponIndex].CreateBullet(weapon.magazineCapacity,weapon.weaponName,transform.forward);
 
+            if(weapon.weaponName == "Scanner")
+            {
+                weapons[weaponIndex].SetBulletParent(gameManager.Scanner);
+            }
+            else if(weapon.weaponName == "Mp5")
+            {
+                weapons[weaponIndex].SetBulletParent(gameManager.Mp5);
+            }
         }
        
 

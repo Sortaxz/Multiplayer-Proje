@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public class BulletController : MonoBehaviour
@@ -46,19 +47,25 @@ public class BulletController : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
-            
-            gameObject.SetActive(false);
-            transform.SetParent(bulletParent);
-            transform.position = bulletPosition;
-            
-            transform.SetSiblingIndex(bulletGetSiblingIndex);
-            
-            other.GetComponent<IDamageable>()?.TakeDamage(bulletDamge);
+            PhotonView otherPV =  other.GetComponent<PhotonView>();
+            if(otherPV != null)
+            {
+                if(!otherPV.IsMine)
+                {
+                    gameObject.SetActive(false);
+                    transform.SetParent(bulletParent);
+                    transform.position = bulletPosition;
+                    
+                    transform.SetSiblingIndex(bulletGetSiblingIndex);
+                    
+                    other.GetComponent<IDamageable>()?.TakeDamage(bulletDamge);
+
+                }
+            }
         
         }
         else
         {
-           
             BulletDestroy(1);
         }   
     }

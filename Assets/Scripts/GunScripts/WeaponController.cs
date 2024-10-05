@@ -69,8 +69,8 @@ public class WeaponController : MonoBehaviour
 
             //GunFireEffects();
             audioSource[0].Play();
+            //gameManager.StartEveryOne(audioSource[0]);
             weaponEffects[0].Play();
-            //gameManager.StartEveryOne();
 
             Ray ray = new Ray(characterCamera.transform.position, characterCamera.transform.forward);
             RaycastHit hit;
@@ -123,6 +123,7 @@ public class WeaponController : MonoBehaviour
         }
         else
         {
+            audioSource[2].Play();
             characterFire = false;
         }
         
@@ -130,7 +131,9 @@ public class WeaponController : MonoBehaviour
 
     private void GunFireSound()
     {
-        audioSource[0].Play();
+        if(audioSource[0] != null)
+        {
+        }
     }
 
     public void CreateBullet(int bulletCount,string gunName,Vector3 direction)
@@ -155,10 +158,12 @@ public class WeaponController : MonoBehaviour
                         }
                     }
                 }
+                /*
                 for (int i = 0; i < gameManager.Scanner.Count; i++)
                 {
-                        gameManager.Scanner[i]?.transform.SetParent(BulletExitPosition);
+                    gameManager.Scanner[i]?.transform.SetParent(BulletExitPosition);
                 }
+                */
             }
             else if(gunName == "Mp5")
             {
@@ -178,10 +183,12 @@ public class WeaponController : MonoBehaviour
                         }
                     }
                 }
+                /*
                 for (int i = 0; i < gameManager.Mp5.Count; i++)
                 {
                     gameManager.Mp5[i]?.transform.SetParent(BulletExitPosition);
                 }
+                */
             }
             
         }
@@ -190,6 +197,14 @@ public class WeaponController : MonoBehaviour
        
     }
 
+
+    public void SetBulletParent(List<GameObject> weapon)
+    {
+        for (int i = 0; i <weapon.Count; i++)
+        {
+            weapon[i]?.transform.SetParent(BulletExitPosition);
+        }
+    }
 
     
     
@@ -316,6 +331,11 @@ public class WeaponController : MonoBehaviour
                 characterReloading = false;
             }
             GameUI.Instance.WeaponInformationUi(bulletCount,maxCapacity);
+
+            if(characterReloading)
+            {
+                audioSource[1].Play();
+            }
         }
         else
         {
@@ -324,41 +344,6 @@ public class WeaponController : MonoBehaviour
 
     }
 
-    public void ResetWeapons(string weapon)
-    {
-         if(weaponName == "Scanner")
-        {
-            for (int i = 0; i < gameManager.Scanner.Count; i++)
-            {
-                if(gameManager.Scanner[i].transform.parent == null)
-                {
-                    gameManager.Scanner[i].SetActive(false);
-                    gameManager.Scanner[i].transform.SetParent(BulletExitPosition);
-
-                    gameManager.Scanner[i].transform.localPosition =Vector3.zero;
-                    gameManager.Scanner[i].transform.localRotation = Quaternion.identity;
-
-                    gameManager.Scanner[i].transform.SetSiblingIndex(i);
-                    
-                }
-            }
-        }
-        else if(weaponName == "Mp5")
-        {
-            for (int i = 0; i < gameManager.Mp5.Count; i++)
-            {
-                if(gameManager.Mp5[i].transform.parent == null)
-                {
-                    gameManager.Mp5[i].SetActive(false);
-                    gameManager.Mp5[i].transform.SetParent(BulletExitPosition);
-
-                    gameManager.Scanner[i].transform.localPosition =Vector3.zero;
-                    gameManager.Scanner[i].transform.localRotation = Quaternion.identity;
-                    
-                    gameManager.Mp5[i].transform.SetSiblingIndex(i);
-                }
-            }
-        }
-    }
+   
 
 }

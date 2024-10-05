@@ -76,9 +76,26 @@ public class GameUI : UIInputManager
             {
                 pausePanel.SetActive(!pausePanel.activeSelf);
                 GameManager.Instance.GameStopted = pausePanel.activeSelf;
-                GameManager.Instance.StopGameStreaming(pausePanel.activeSelf);
+                
+                /*
+                if(pausePanel.activeSelf)
+                {
+                    print("durdur");
+                    GameManager.Instance.StopGameStreaming(false);
+                }
+                if(!pausePanel.activeSelf)
+                {
+                    print("durdurma");
+                    GameManager.Instance.StopGameStreaming(false);
+                }
+                */
+
+                GameManager.Instance.StopGameStreaming(!pausePanel.activeSelf);
+
             }
-            GameManager.Instance.RestartTimer();
+
+            //GameManager.Instance.RestartTimer();
+
         }
        
 
@@ -88,11 +105,28 @@ public class GameUI : UIInputManager
             {
                 skorTable_Panel.SetActive(!skorTable_Panel.activeSelf);
                 GameManager.Instance.GameStopted = skorTable_Panel.activeSelf;
-                GameManager.Instance.StopGameStreaming(skorTable_Panel.activeSelf);
+                
+                /*
+                if(skorTable_Panel.activeSelf)
+                {
+                    print("durdur");
+                    GameManager.Instance.StopGameStreaming(false);
+                }
+                if(!skorTable_Panel.activeSelf)
+                {
+                    print("durdurma");
+                    GameManager.Instance.StopGameStreaming(false);
+
+                }
+                */
+
+                GameManager.Instance.StopGameStreaming(!skorTable_Panel.activeSelf);
+
                 GameManager.Instance.PlayerSkorUpdate();
+
             }
             
-            GameManager.Instance.RestartTimer();
+            //GameManager.Instance.RestartTimer();
         }
         
 
@@ -106,7 +140,7 @@ public class GameUI : UIInputManager
     }
     public void Close()
     {
-        if(playerHealtBarBackground) //null mı değil mi sorusu
+        if(playerHealtBarBackground) 
             playerHealtBarBackground.gameObject.SetActive(false);
         
         if(otherPlayerHealtBar)
@@ -139,7 +173,8 @@ public class GameUI : UIInputManager
     public void GameOverUi()
     {
         finishPanel.SetActive(true);
-        GameManager.Instance.StopGameStreaming(true);
+        GameManager.Instance.StopGameStreaming(false);
+        //GameManager.Instance.StopFlow(false);
         GameManager.Instance.CharacterDead = true;
     }
 
@@ -153,7 +188,7 @@ public class GameUI : UIInputManager
     {
         pausePanel.SetActive(false);
         GameManager.Instance.GameStopted = false;
-        GameManager.Instance.StopGameStreaming(false);
+        GameManager.Instance.StopGameStreaming(true);
     }
 
 

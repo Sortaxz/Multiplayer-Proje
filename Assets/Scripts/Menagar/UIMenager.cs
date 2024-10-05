@@ -848,6 +848,11 @@ public class UIMenager : MonoBehaviour
 
         PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
 
+        if(MatchWaitingScreen.activeSelf)
+        {
+            MatchWaitingScreen.SetActive(false);
+            
+        }
         karşilaşmaKabulReddet_Panel.SetActive(false);
         
     }
