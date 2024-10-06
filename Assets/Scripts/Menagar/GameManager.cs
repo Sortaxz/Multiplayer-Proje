@@ -36,20 +36,24 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] private Text infoText;
     private bool findCharacterOfPlayers = false;
     public bool FindCharacterOfPlayers { get { return findCharacterOfPlayers;} set { findCharacterOfPlayers = value;}}
+    public SoundData soundDataSO;
     private PhotonView PV;
-    public PhotonView GameMager_PV { get { return PV;}}
     private GameObject character;
     [SerializeField] private CountdownTimer countdownTimer;
-    [SerializeField] private GameObject bulletsParent;
+    private AudioSource audioSource;
 
     private List<GameObject> scanner = new List<GameObject>();
     public List<GameObject> Scanner { get { return scanner;} set { scanner = value; } }
     private List<GameObject> mp5 = new List<GameObject>();
     public List<GameObject> Mp5 { get { return mp5;} set { mp5 = value; } }
+    
     private Dictionary<string,SkorLineControl> skorLines = new Dictionary<string,SkorLineControl>(); 
     public Dictionary<string,SkorLineControl> SkorLines {get { return skorLines;} set { skorLines = value; } }
-    public Coroutine timerCoroutine;
-    ExitGames.Client.Photon.Hashtable roomOptions;
+    
+    private  WeaponController[] characterWeapons;
+    private ExitGames.Client.Photon.Hashtable roomOptions;
+    
+    
     private bool characterDead = false;
     public bool CharacterDead { get { return characterDead;} set { characterDead = value; } }
 
@@ -76,11 +80,16 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void Awake() 
     {
         PV = GetComponent<PhotonView>();
+        
+        audioSource = GetComponent<AudioSource>();
+
         ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable()
         {
             {"PlayerLoadedLevel",true},
         };
+        
         PhotonNetwork.LocalPlayer.SetCustomProperties(props);    
+        
         roomOptions = new ExitGames.Client.Photon.Hashtable()
         {
             {"timerStarted",false},
@@ -95,6 +104,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             OnCountDownTimerIsExpired();
         }
+        
     }
     
     void Start()
@@ -235,6 +245,12 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void StartGame()
     {
         character = SpawnManager.Instance.CharacterSpawn(PV);
+
+        if(character != null)
+        {
+            characterWeapons = character.GetComponent<CombatController>().Weapons;
+        }
+
         ExitGames.Client.Photon.Hashtable playerProps = new ExitGames.Client.Photon.Hashtable();
 
         playerProps.Add("life",true);
@@ -520,7 +536,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         for (int i = 0; i < characterOfPlayers.Length; i++)
         {
             if(characterOfPlayers[i] == null)
-                return;
+                continue;
             
             CharacterControl characterControl = characterOfPlayers[i].GetComponent<CharacterControl>();
             CombatController combatController = characterOfPlayers[i].GetComponent<CombatController>();
@@ -649,19 +665,34 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public void StartEveryOne(AudioSource audioSource)
+    public void GunfirePropagation()
     {
-        PV.RPC("RPC_StartEveryOne",RpcTarget.AllViaServer,audioSource);
+        PV.RPC("RPC_GunFirePropagation",RpcTarget.Others,character.name);
     }
 
     [PunRPC]
-    public void RPC_StartEveryOne(AudioSource audioSource)
+    public void RPC_GunFirePropagation(string name)
     {
-        //gunEffectDelegate();
-        audioSource?.Play();
+        for (int i = 0; i < characterWeapons.Length; i++)
+        {
+            if(characterWeapons[i] != null)
+            {
+                if(characterWeapons[i].gameObject.activeSelf)
+                {
+                    if(characterWeapons[i].name == "Scanner")
+                    {
+                        audioSource.clip = soundDataSO.weaponSound[0].weaponSoundClip[0];
+                    }
+                    else if(characterWeapons[i].name == "Mp5")
+                    {
+                        audioSource.clip = soundDataSO.weaponSound[1].weaponSoundClip[0];
+                    }
+                }
+
+                audioSource.Play();
+            }
+        }
     }
-
-
   
 
 }

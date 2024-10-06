@@ -7,6 +7,8 @@ public class BulletController : MonoBehaviour
 {
     private Rigidbody bulletRb;
     private Transform bulletParent;
+    private Transform character;
+    public Transform Character { get { return character; }  set { character = value; } }
     public Vector3 bulletPosition ;
     private float bulletDamge;
     public float BulletDamage { get {return bulletDamge;}set {bulletDamge = value;} }
@@ -70,7 +72,14 @@ public class BulletController : MonoBehaviour
         }   
     }
 
-   
+    private IEnumerator Follow(Transform healtBar)
+    {
+        while (transform.localRotation != character.rotation)
+        {
+            healtBar.localRotation = Quaternion.LookRotation(character.position);
+            yield return null;
+        }
+    }
 
     public IEnumerator BulletDestroy(float time)
     {

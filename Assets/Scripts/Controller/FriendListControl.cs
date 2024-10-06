@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
@@ -11,9 +12,9 @@ public class FriendListControl : MonoBehaviour
     [Header("FriendList objesi ile ilgili işlemler")]
     [SerializeField] private Image friendIcon_Image;
     [SerializeField] private TextMeshProUGUI friendName_Text;
-    [SerializeField] private Button addFriend_Button;
     [SerializeField] private Button removeFriend_Button;
-
+    private int friendActorNumber;
+    public int FriendActorNumber { get { return friendActorNumber; } set { friendActorNumber = value; } }
 
     [Header("Friend objesi ile ilgili işlemler")]
     [SerializeField] private Image _friendIcon_Image;
@@ -55,7 +56,6 @@ public class FriendListControl : MonoBehaviour
 
             friendRequesDecline_Button.onClick.AddListener(delegate
             {
-                //print("Arkadaş isteğ kabul edilmedi");
                 
 
                 gameObject.SetActive(false);
@@ -71,7 +71,6 @@ public class FriendListControl : MonoBehaviour
 
     public void FriendListInitialize(string frienNickName,int _friendIconIndex)
     {
-        //friendIcon_Image.sprite = UIMenager.Instance.PlayerIcons[_friendIconIndex].sprite;
         friendIcon_Image.sprite = UIMenager.Instance.PlayerScriptableObject.PlayerIconSprites[_friendIconIndex];
         friendName_Text.text = frienNickName;
         friendIconIndex = _friendIconIndex;

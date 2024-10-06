@@ -81,7 +81,6 @@ public class SaveSystem : MonoBehaviour
 
         PlayerPrefs.Save();
 
-        print("Arkadaş Listesine eklendi");
 
 
     }

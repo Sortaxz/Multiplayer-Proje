@@ -10,6 +10,7 @@ public class WeaponController : MonoBehaviour
     [SerializeField] private GameObject bullet;
     [SerializeField] private Transform BulletExitPosition;
     [SerializeField] private Transform BulletsParent;
+    private Transform character;
     private GameManager gameManager;
     [SerializeField] private ParticleSystem[] weaponEffects;
     [SerializeField] private AudioSource[] audioSource;
@@ -61,15 +62,18 @@ public class WeaponController : MonoBehaviour
         
     }
 
-    public void ToFire(Camera characterCamera,Vector3 direction)
+    public void ToFire(Camera characterCamera,Transform _character,Vector3 direction)
     {
         if(bulletCount > 0)
         {
+            character = _character;
+
             characterFire = true;
 
-            //GunFireEffects();
+            GunFireSound();
+
             audioSource[0].Play();
-            //gameManager.StartEveryOne(audioSource[0]);
+            
             weaponEffects[0].Play();
 
             Ray ray = new Ray(characterCamera.transform.position, characterCamera.transform.forward);
@@ -79,6 +83,31 @@ public class WeaponController : MonoBehaviour
             {
                 if (hit.collider.GetComponent<PhotonView>()?.IsMine == false)
                 {
+                    CharacterControl _character1 = hit.collider.GetComponent<CharacterControl>();
+                    if(_character1 != null)
+                    {
+                        if(_character1.OtherPlayerHealtBar != null)
+                        {
+                            if(character != null)
+                            {
+                                _character1.OtherPlayerHealtBar.transform.localRotation = Quaternion.LookRotation(character.position);
+                            }
+                            else
+                            {
+                                print("karakter yok");
+                            }
+                        }
+                        else
+                        {
+                            print("Healt bar yok");
+                        }
+                    }
+                    else
+                    {
+                        print("çapilan bir obje yok");
+
+                    }
+
                     WeopenLeadActivated(characterCamera.transform.forward, hit.point);
 
                     if (hit.collider.GetComponent<PhotonView>() != null)
@@ -131,9 +160,7 @@ public class WeaponController : MonoBehaviour
 
     private void GunFireSound()
     {
-        if(audioSource[0] != null)
-        {
-        }
+        gameManager.GunfirePropagation();
     }
 
     public void CreateBullet(int bulletCount,string gunName,Vector3 direction)
@@ -158,12 +185,7 @@ public class WeaponController : MonoBehaviour
                         }
                     }
                 }
-                /*
-                for (int i = 0; i < gameManager.Scanner.Count; i++)
-                {
-                    gameManager.Scanner[i]?.transform.SetParent(BulletExitPosition);
-                }
-                */
+                
             }
             else if(gunName == "Mp5")
             {
@@ -183,12 +205,7 @@ public class WeaponController : MonoBehaviour
                         }
                     }
                 }
-                /*
-                for (int i = 0; i < gameManager.Mp5.Count; i++)
-                {
-                    gameManager.Mp5[i]?.transform.SetParent(BulletExitPosition);
-                }
-                */
+               
             }
             
         }
@@ -236,7 +253,8 @@ public class WeaponController : MonoBehaviour
                     gameManager.Scanner[bullerIndex].gameObject.SetActive(true);
                     gameManager.Scanner[bullerIndex].gameObject.transform.SetParent(null);
                     gameManager.Scanner[bullerIndex].GetComponent<BulletController>().BulletMove(direction,target,damage);
-
+                    gameManager.Scanner[bullerIndex].GetComponent<BulletController>().Character = character;
+                    
                 }
             }
         }

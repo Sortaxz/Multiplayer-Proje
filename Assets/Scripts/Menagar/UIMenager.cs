@@ -44,6 +44,8 @@ public class UIMenager : MonoBehaviour
     [SerializeField] private GameObject playerProps_Panel;
     public GameObject PlayerProps_Panel {get { return playerProps_Panel;}}
 
+    [SerializeField] private GameObject dataUpload_Panel;
+
     [SerializeField] private GameObject menu_Panel;
     public GameObject Menu_Panel {get { return menu_Panel;}}
 
@@ -253,7 +255,19 @@ public class UIMenager : MonoBehaviour
             string gameLogin = (string)SaveSystem.PlayerPrefsDataLoad("GameLogin","string");
             if(gameLogin == "true")
             {
+                /*
+                if(SaveSystem.PlayerPrefsDataQuery("icon") && SaveSystem.PlayerPrefsDataQuery("color") && SaveSystem.PlayerPrefsDataQuery("playerName"))
+                {
+                    SetActiveUIObject(menu_Panel.name);
+                }
+                else
+                {
+
+                }
+                */
+
                 SetActiveUIObject(menu_Panel.name);
+                
             }
             else
             {
@@ -1038,4 +1052,8 @@ public class UIMenager : MonoBehaviour
             }
         }
     }
+
+
+
+
 }

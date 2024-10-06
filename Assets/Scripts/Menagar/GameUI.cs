@@ -172,9 +172,8 @@ public class GameUI : UIInputManager
     
     public void GameOverUi()
     {
-        finishPanel.SetActive(true);
         GameManager.Instance.StopGameStreaming(false);
-        //GameManager.Instance.StopFlow(false);
+        finishPanel.SetActive(true);
         GameManager.Instance.CharacterDead = true;
     }
 

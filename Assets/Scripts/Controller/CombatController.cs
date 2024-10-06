@@ -135,7 +135,7 @@ public class CombatController : PlayerInputManager
 
     private void CharacterGunFire(WeaponController weaponController)
     {
-        weaponController.ToFire(cam,cam.transform.forward);
+        weaponController.ToFire(cam,transform,cam.transform.forward);
     }
 
     private void WeaponSelection()

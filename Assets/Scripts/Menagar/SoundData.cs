@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Create Cound",menuName = "Soun SO",order = 3)]
-public class SoundManager : ScriptableObject
+public class SoundData : ScriptableObject
 {
     public WeaponSound[] weaponSound;
     public AudioSource[] playerSound;
@@ -14,5 +14,5 @@ public class SoundManager : ScriptableObject
 public class WeaponSound
 {
     public string weaponName;
-    public AudioSource[] weaponSource;
+    public AudioClip[] weaponSoundClip;
 }

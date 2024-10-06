@@ -24,6 +24,7 @@ ScriptsOnlyBuild:
     - PlayerScriptableObject
     - SettingsController
     - SkorLineControl
+    - SoundData
     - SpawnManager
     - SunucuYonetim
     - UIMenager
@@ -103,6 +104,7 @@ ScriptsOnlyBuild:
   serializedClasses:
     Assembly-CSharp:
     - WeaponInfos
+    - WeaponSound
     PhotonRealtime:
     - Photon.Realtime.AppSettings
     PhotonUnityNetworking:
@@ -303,6 +305,10 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
+    - Class: 82
+      Script: {instanceID: 0}
+    - Class: 83
+      Script: {instanceID: 0}
     - Class: 89
       Script: {instanceID: 0}
     - Class: 104
@@ -340,17 +346,19 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 20562}
     - Class: 114
-      Script: {instanceID: 20724}
+      Script: {instanceID: 20604}
     - Class: 114
-      Script: {instanceID: 21226}
+      Script: {instanceID: 20726}
     - Class: 114
-      Script: {instanceID: 21326}
+      Script: {instanceID: 21228}
     - Class: 114
-      Script: {instanceID: 21662}
+      Script: {instanceID: 21328}
     - Class: 114
-      Script: {instanceID: 21674}
+      Script: {instanceID: 21664}
     - Class: 114
-      Script: {instanceID: 22430}
+      Script: {instanceID: 21676}
+    - Class: 114
+      Script: {instanceID: 22432}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -495,47 +503,47 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 20562}
     - Class: 114
-      Script: {instanceID: 20922}
+      Script: {instanceID: 20924}
     - Class: 114
-      Script: {instanceID: 20968}
+      Script: {instanceID: 20970}
     - Class: 114
-      Script: {instanceID: 21226}
+      Script: {instanceID: 21228}
     - Class: 114
-      Script: {instanceID: 21326}
+      Script: {instanceID: 21328}
     - Class: 114
-      Script: {instanceID: 21416}
+      Script: {instanceID: 21418}
     - Class: 114
-      Script: {instanceID: 21644}
+      Script: {instanceID: 21646}
     - Class: 114
-      Script: {instanceID: 21662}
+      Script: {instanceID: 21664}
     - Class: 114
-      Script: {instanceID: 21670}
+      Script: {instanceID: 21672}
     - Class: 114
-      Script: {instanceID: 21674}
+      Script: {instanceID: 21676}
     - Class: 114
-      Script: {instanceID: 21680}
+      Script: {instanceID: 21682}
     - Class: 114
-      Script: {instanceID: 21788}
+      Script: {instanceID: 21790}
     - Class: 114
-      Script: {instanceID: 22106}
+      Script: {instanceID: 22108}
     - Class: 114
-      Script: {instanceID: 22276}
+      Script: {instanceID: 22278}
     - Class: 114
-      Script: {instanceID: 22320}
+      Script: {instanceID: 22322}
     - Class: 114
-      Script: {instanceID: 22526}
+      Script: {instanceID: 22528}
     - Class: 114
-      Script: {instanceID: 22820}
+      Script: {instanceID: 22822}
     - Class: 114
-      Script: {instanceID: 23134}
+      Script: {instanceID: 23136}
     - Class: 114
-      Script: {instanceID: 23190}
+      Script: {instanceID: 23192}
     - Class: 114
-      Script: {instanceID: 23320}
+      Script: {instanceID: 23322}
     - Class: 114
-      Script: {instanceID: 23490}
+      Script: {instanceID: 23492}
     - Class: 114
-      Script: {instanceID: 23634}
+      Script: {instanceID: 23636}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -751,7 +759,7 @@ ScriptsOnlyBuild:
     className: RoomListCell
   - hash:
       serializedVersion: 2
-      Hash: ab35f9cb03380f128ad2847c966a0467
+      Hash: 82ddbef2ea428351990608a243a73582
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: GameManager
@@ -871,7 +879,7 @@ ScriptsOnlyBuild:
     className: CurrentRoomPropertiesListedInLobbyProperty
   - hash:
       serializedVersion: 2
-      Hash: 505b4ae841af8fa08b5f362cda82bbc9
+      Hash: 51e73ff1b4e3c12367403d7c36496304
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: FriendListControl
@@ -1717,6 +1725,12 @@ ScriptsOnlyBuild:
     className: Vignette
   - hash:
       serializedVersion: 2
+      Hash: 11efbd148c799c2ee9c5b946a14a6935
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: SoundData
+  - hash:
+      serializedVersion: 2
       Hash: c65fb8f721cc4462e7a642974c37d3c0
     assemblyName: Unity.Postprocessing.Runtime
     namespaceName: UnityEngine.Rendering.PostProcessing
@@ -2543,12 +2557,6 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core
     namespaceName: Unity.VisualScripting
     className: UnityOnSliderValueChangedMessageListener
-  - hash:
-      serializedVersion: 2
-      Hash: 445bc3f9ab47b88dd0d199fc62c6461a
-    assemblyName: Assembly-CSharp
-    namespaceName: 
-    className: SoundManager
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
