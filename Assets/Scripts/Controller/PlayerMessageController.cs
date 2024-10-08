@@ -15,8 +15,7 @@ public class PlayerMessageController : MonoBehaviour
     {
         kullaniciAdi_Text.text = playerName;
         message_Text.text = message;
-        //playerIcon_Image.sprite = UIMenager.Instance.PlayerIcons[(int)icon].sprite;
         player.CustomProperties.TryGetValue("icon", out object icon);
-        playerIcon_Image.sprite = UIMenager.Instance.PlayerIcons[(int)icon].sprite;
+        playerIcon_Image.sprite = UIMenager.Instance.PlayerScriptableObject.PlayerIconSprites[(int)icon];
     }
 }

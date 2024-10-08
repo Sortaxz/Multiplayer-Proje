@@ -25,7 +25,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     public delegate void GunEffectDelegate();
     public static DeatDelegate deatDelegate;
     public  GunEffectDelegate gunEffectDelegate;
-
+    
+    
     [SerializeField] private PlayerScriptableObject playerScriptableObject;
     public PlayerScriptableObject PlayerScriptableObject { get { return playerScriptableObject; } }
     [SerializeField]private CharacterControl[] characterOfPlayers;
@@ -51,6 +52,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public Dictionary<string,SkorLineControl> SkorLines {get { return skorLines;} set { skorLines = value; } }
     
     private  WeaponController[] characterWeapons;
+    [SerializeField] private Transform[] spawnPoints;
     private ExitGames.Client.Photon.Hashtable roomOptions;
     
     
@@ -242,9 +244,28 @@ public class GameManager : MonoBehaviourPunCallbacks
         return true;
     }
 
+    private bool CheckAllPlayerLoadedLevel()
+    {
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            if (player.CustomProperties.TryGetValue("PlayerLoadedLevel", out object playerLoadedLevel))
+            {
+                if ((bool)playerLoadedLevel)
+                {
+                    continue;
+                }
+
+                return false;
+            }
+        }
+
+        return true;
+
+    }
+
     private void StartGame()
     {
-        character = SpawnManager.Instance.CharacterSpawn(PV);
+        character = SpawnManager.Instance.CharacterSpawn(PV,spawnPoints);
 
         if(character != null)
         {
@@ -264,32 +285,39 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if(Camera.main.gameObject.activeSelf)
         {
-            Camera.main.gameObject.SetActive(false);
+            Camera.main.gameObject.GetComponent<Camera>().enabled = false;
         }
 
         GameUI.Instance.Active();
         characterDead = false;
     }
 
-    private bool CheckAllPlayerLoadedLevel()
+    public void Die()
     {
-        foreach (Player player in PhotonNetwork.PlayerList)
-        {
-            if(player.CustomProperties.TryGetValue("PlayerLoadedLevel",out object playerLoadedLevel))
-            {
-                if((bool)playerLoadedLevel)
-                {
-                    continue;
-                }
 
-                return false;
-            }
-        }
+        PhotonNetwork.Destroy(character);
 
-        return true;
- 
-     }
-    
+        character = SpawnManager.Instance.CharacterSpawn(PV,spawnPoints);
+
+        PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("color",out object color);
+        int playerColorIndex = (int)color;
+
+        character.GetComponent<CharacterControl>().CharacterMSHRenderer.materials[1].color = playerScriptableObject.PlayerColors[playerColorIndex];
+
+        GameUI.Instance.Active();
+       
+        characterDead = false;
+        StartCoroutine(FindOtherPlayerCharacter());
+
+    }  
+
+    public IEnumerator SetPointActive(int index)
+    {
+        yield return new WaitForSecondsRealtime(3);
+        spawnPoints[index].gameObject.SetActive(true);
+    }
+
+
     private void OnCountDownTimerIsExpired()
     {
         loadingScren.gameObject.SetActive(false);
@@ -319,25 +347,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     }
 
-    public void Die()
-    {
-
-
-        PhotonNetwork.Destroy(character);
-
-        character = SpawnManager.Instance.CharacterSpawn(PV);
-
-        PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("color",out object color);
-        int playerColorIndex = (int)color;
-
-        character.GetComponent<CharacterControl>().CharacterMSHRenderer.materials[1].color = playerScriptableObject.PlayerColors[playerColorIndex];
-
-        GameUI.Instance.Active();
-       
-        characterDead = false;
-        StartCoroutine(FindOtherPlayerCharacter());
-
-    }
+   
     private void WeaponBulletClear(List<GameObject> weapon)
     {
         for (int i = 0; i < weapon.Count; i++)
@@ -431,7 +441,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
                 PV.RPC("Timer",RpcTarget.AllBufferedViaServer,time,_seconds);
 
-                yield return new WaitForSeconds(.5f);
+                yield return new WaitForSeconds(2f);
                 if(secondsUp)
                 {
                     time += 1;
@@ -465,7 +475,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
                 PV.RPC("Timer",RpcTarget.AllBufferedViaServer,time,_seconds);
 
-                yield return new WaitForSeconds(.5f);
+                yield return new WaitForSeconds(2f);
                 if(secondsUp)
                 {
                     time += 1;
@@ -501,6 +511,12 @@ public class GameManager : MonoBehaviourPunCallbacks
         PhotonNetwork.CurrentRoom.SetCustomProperties(RoomStatus);
         
         GameUI.Instance.GameOverUi();
+        
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        {
+            skorLines[PhotonNetwork.PlayerList[i].UserId].transform.SetParent(GameUI.Instance.GameOverSkorLineContent.transform);
+        }
+        PlayerSkorUpdate();
 
     }
 
@@ -661,8 +677,32 @@ public class GameManager : MonoBehaviourPunCallbacks
             int playerDeathCount = PlayerPropertiesControl(player,"death");
 
             skorLines[player.UserId].PlayerSkor(playerKillCount,playerDeathCount);
-        
+            int calculate = PhotonNetwork.PlayerList.Length - 1;
+            int siblinIndex = calculate - PlayerSkorValueControl(skorLines[player.UserId],player.UserId);
+            skorLines[player.UserId].SetSiblingIndex_Method(siblinIndex);
         }
+    }
+
+    private int playerLastKillCount =0;
+    public int PlayerSkorValueControl(SkorLineControl skorLine,string skorLineName)
+    {
+        int playerSiblingIndex =0;
+        for (int j = 0; j < PhotonNetwork.PlayerList.Length; j++)
+        {
+            if(skorLineName != PhotonNetwork.PlayerList[j].UserId)
+            {
+                if(playerLastKillCount != skorLine.playerKillCount)
+                {
+                    if(skorLine.playerKillCount >skorLines[PhotonNetwork.PlayerList[j].UserId].playerKillCount)
+                    {
+                        playerSiblingIndex++;
+                    }
+                }
+            }
+        }
+
+        return playerSiblingIndex;
+
     }
 
     public void GunfirePropagation()
@@ -673,6 +713,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void RPC_GunFirePropagation(string name)
     {
+        /*
         for (int i = 0; i < characterWeapons.Length; i++)
         {
             if(characterWeapons[i] != null)
@@ -692,6 +733,12 @@ public class GameManager : MonoBehaviourPunCallbacks
                 audioSource.Play();
             }
         }
+        
+        */
+            
+        audioSource.clip = soundDataSO.weaponSound[0].weaponSoundClip[0];
+        audioSource.Play();
+
     }
   
 

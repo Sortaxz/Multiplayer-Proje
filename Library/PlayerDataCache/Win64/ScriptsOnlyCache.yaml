@@ -10,7 +10,12 @@ ScriptsOnlyBuild:
     - WeaponController
     - Weapon_ScriptableObject
     Assembly-CSharp.dll:
+    - BulletController
+    - CameraController
+    - CharacterAnimation
+    - CharacterControl
     - CheatController
+    - CombatController
     - FindingMatchControl
     - FriendListControl
     - FriendSystem
@@ -28,6 +33,8 @@ ScriptsOnlyBuild:
     - SpawnManager
     - SunucuYonetim
     - UIMenager
+    - WeaponController
+    - Weapon_ScriptableObject
     PhotonUnityNetworking:
     - Photon.Pun.PhotonAnimatorView
     - Photon.Pun.PhotonRigidbodyView
@@ -49,6 +56,9 @@ ScriptsOnlyBuild:
     PhotonUnityNetworking.Utilities.dll:
     - Photon.Pun.UtilityScripts.CountdownTimer
     PhotonUnityNetworking.dll:
+    - Photon.Pun.PhotonAnimatorView
+    - Photon.Pun.PhotonRigidbodyView
+    - Photon.Pun.PhotonTransformView
     - Photon.Pun.PhotonView
     - Photon.Pun.ServerSettings
     Unity.Rider.Editor.dll:
@@ -63,6 +73,9 @@ ScriptsOnlyBuild:
     - TMPro.TMP_Dropdown
     - TMPro.TMP_FontAsset
     - TMPro.TMP_InputField
+    - TMPro.TMP_Settings
+    - TMPro.TMP_SpriteAsset
+    - TMPro.TMP_StyleSheet
     - TMPro.TextMeshProUGUI
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
@@ -759,7 +772,7 @@ ScriptsOnlyBuild:
     className: RoomListCell
   - hash:
       serializedVersion: 2
-      Hash: 82ddbef2ea428351990608a243a73582
+      Hash: 936ddcde213425c5105ff247793d3881
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: GameManager
@@ -1155,7 +1168,7 @@ ScriptsOnlyBuild:
     className: UnityOnSelectMessageListener
   - hash:
       serializedVersion: 2
-      Hash: 1488f297b5417f4a562730977833fec1
+      Hash: a2ae1869a298020bca4b1d8eb8d74c84
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: SkorLineControl
@@ -1761,7 +1774,7 @@ ScriptsOnlyBuild:
     className: UnityOnBecameInvisibleMessageListener
   - hash:
       serializedVersion: 2
-      Hash: bc51d44cedb41d47a7c1a40dfe3dc0f6
+      Hash: e5b5256a244e994d925f54c13f324261
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: SpawnManager
@@ -1923,7 +1936,7 @@ ScriptsOnlyBuild:
     className: UnityOnTriggerStay2DMessageListener
   - hash:
       serializedVersion: 2
-      Hash: 7c439571db4c9d5ffcf756cc56973503
+      Hash: 236eb2747361c292c89fdbf34c36da0a
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: UIMenager
@@ -2175,7 +2188,7 @@ ScriptsOnlyBuild:
     className: CountOfRoomsProperty
   - hash:
       serializedVersion: 2
-      Hash: ede9d4bb7f973afd763b7684332a1bd0
+      Hash: 74f15503c83dc12f30e3ddc329406295
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: GameUI

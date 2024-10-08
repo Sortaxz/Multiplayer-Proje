@@ -42,17 +42,6 @@ public class FriendSystem : MonoBehaviour,IOnEventCallback
     [SerializeField] private Image Image;
     [SerializeField] private TextMeshProUGUI text;
 
-    
-    private void Update() 
-    {
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            for (int i = 0; i < currentFriendNumber.Count; i++)
-            {
-                print($"{i} : "+currentFriendNumber[i]);
-            }
-        }    
-    }
 
     private void OnEnable()
     {

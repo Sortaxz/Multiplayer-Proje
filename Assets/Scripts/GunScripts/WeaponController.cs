@@ -76,7 +76,11 @@ public class WeaponController : MonoBehaviour
             
             weaponEffects[0].Play();
 
-            Ray ray = new Ray(characterCamera.transform.position, characterCamera.transform.forward);
+            //Ray ray = new Ray(characterCamera.transform.position, characterCamera.transform.forward);
+
+            //silah olayın bir sıkıntı olursa bu kod satırından dolayi'dir.
+            Ray ray = new Ray(BulletExitPosition.position, characterCamera.transform.forward);
+            
             RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit, weaponRange))
@@ -84,13 +88,19 @@ public class WeaponController : MonoBehaviour
                 if (hit.collider.GetComponent<PhotonView>()?.IsMine == false)
                 {
                     CharacterControl _character1 = hit.collider.GetComponent<CharacterControl>();
+
+                    //bura bakmam gerekiyor berkay
+                    #region  Other HealtBar Rotation Move 
                     if(_character1 != null)
                     {
                         if(_character1.OtherPlayerHealtBar != null)
                         {
                             if(character != null)
                             {
-                                _character1.OtherPlayerHealtBar.transform.localRotation = Quaternion.LookRotation(character.position);
+                                while(_character1.OtherPlayerHealtBar.transform.localRotation != Quaternion.LookRotation(character.position))
+                                {
+                                    _character1.OtherPlayerHealtBar.transform.localRotation = Quaternion.LookRotation(character.position);
+                                }
                             }
                             else
                             {
@@ -108,6 +118,8 @@ public class WeaponController : MonoBehaviour
 
                     }
 
+                    #endregion
+                    
                     WeopenLeadActivated(characterCamera.transform.forward, hit.point);
 
                     if (hit.collider.GetComponent<PhotonView>() != null)

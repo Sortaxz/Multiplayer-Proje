@@ -243,7 +243,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         playerList.Remove(otherPlayer.NickName);
 
         //PV.RPC("RPC_LeftRoom",RpcTarget.AllViaServer,null);
-        LeftRoom();
+        //LeftRoom(true);
         
         if(uIMenager.FindingMatch_Panel.activeSelf)
         {
@@ -269,6 +269,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
+
         if(targetPlayer.CustomProperties.TryGetValue("isPlayerReady",out object isPlayerReady))
         {
             if((bool)isPlayerReady)
@@ -295,10 +296,9 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
                 }
             }
         }
-        
+
     }
 
-    
 
     public override void OnFriendListUpdate(List<FriendInfo> friendList)
     {
@@ -390,9 +390,24 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         }
     }    
     
-    public void LeftRoom()
+    public void LeftRoom(bool isCollective)
     {
-        PV.RPC("RPC_LeftRoom",RpcTarget.AllViaServer,null);
+        if(isCollective)
+        {
+            PV.RPC("RPC_LeftRoom",RpcTarget.AllViaServer,null);
+        }
+        else
+        {
+            if(uIMenager.FindingMatch_Panel.activeSelf)
+            {
+                FindingMatchControl.Instance.UpdateButtons();
+            }
+            if(PhotonNetwork.InRoom)
+            {
+                PhotonNetwork.LeaveRoom();
+            }
+        }
+
     }
     
     public bool GamePlayerControl()
@@ -406,5 +421,14 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         }
         return value;
     }
+
+    public bool RoomPlayerCountControl()
+    {
+        bool playersCount = PhotonNetwork.PlayerList.Length > 1 ? true : false;
+        
+        return playersCount;
+        
+    }
+
 }
 

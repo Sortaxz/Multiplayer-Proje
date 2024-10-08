@@ -52,15 +52,14 @@ public class GameUI : UIInputManager
     [SerializeField] private GameObject skorTableContent;
     [SerializeField] private GameObject skorLinePrefab;
     
+    [Header("related to endgame ui")]
+    [SerializeField] private GameObject gameOverSkorLineContent;
+    public GameObject GameOverSkorLineContent { get {return gameOverSkorLineContent;}}
     private void Awake() 
     {
         playerHealtBar = playerHealtBarBackground.transform.GetChild(0).GetComponent<Image>();  
         GameManager.deatDelegate += Close;
 
-    }
-    private void Start() 
-    {
-        
     }
     
     private void Update() 
@@ -76,25 +75,11 @@ public class GameUI : UIInputManager
             {
                 pausePanel.SetActive(!pausePanel.activeSelf);
                 GameManager.Instance.GameStopted = pausePanel.activeSelf;
-                
-                /*
-                if(pausePanel.activeSelf)
-                {
-                    print("durdur");
-                    GameManager.Instance.StopGameStreaming(false);
-                }
-                if(!pausePanel.activeSelf)
-                {
-                    print("durdurma");
-                    GameManager.Instance.StopGameStreaming(false);
-                }
-                */
 
                 GameManager.Instance.StopGameStreaming(!pausePanel.activeSelf);
 
             }
 
-            //GameManager.Instance.RestartTimer();
 
         }
        
@@ -103,22 +88,10 @@ public class GameUI : UIInputManager
         {
             if(!pausePanel.activeSelf)
             {
-                skorTable_Panel.SetActive(!skorTable_Panel.activeSelf);
-                GameManager.Instance.GameStopted = skorTable_Panel.activeSelf;
                 
-                /*
-                if(skorTable_Panel.activeSelf)
-                {
-                    print("durdur");
-                    GameManager.Instance.StopGameStreaming(false);
-                }
-                if(!skorTable_Panel.activeSelf)
-                {
-                    print("durdurma");
-                    GameManager.Instance.StopGameStreaming(false);
-
-                }
-                */
+                skorTable_Panel.SetActive(!skorTable_Panel.activeSelf);
+                
+                GameManager.Instance.GameStopted = skorTable_Panel.activeSelf;
 
                 GameManager.Instance.StopGameStreaming(!skorTable_Panel.activeSelf);
 
@@ -126,7 +99,6 @@ public class GameUI : UIInputManager
 
             }
             
-            //GameManager.Instance.RestartTimer();
         }
         
 

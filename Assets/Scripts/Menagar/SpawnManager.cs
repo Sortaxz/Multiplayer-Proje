@@ -17,16 +17,33 @@ public class SpawnManager : MonoBehaviour
             return instance;
         }
     }
-    [SerializeField] private Transform[] spawnPoints;
+    [SerializeField] private int index;
     private void Awake() 
     {
     }
 
-    public GameObject CharacterSpawn(PhotonView PV)
+    public GameObject CharacterSpawn(PhotonView PV,Transform[] spawnPoints)
     {
-       
-        int index = Random.Range(0,spawnPoints.Length);
+        int controlValue = Random.Range(0,spawnPoints.Length);
+
+        if(spawnPoints[controlValue].gameObject.activeSelf)
+        {
+            index = controlValue;
+        }
+        else
+        {
+            index  = Random.Range(0,spawnPoints.Length);
+            if(index == controlValue)
+            {
+                index  = Random.Range(0,spawnPoints.Length);
+            }
+        }
+
         GameObject spanwCharacter = PhotonNetwork.Instantiate("Player", new Vector3(spawnPoints[index].position.x,0,spawnPoints[index].position.z),Quaternion.identity,0,new object[]{PV.ViewID});
+        
+
+        StartCoroutine(GameManager.Instance.SetPointActive(index));
+
         return spanwCharacter;
     }
 }

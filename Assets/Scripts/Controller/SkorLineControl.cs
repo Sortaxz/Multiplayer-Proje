@@ -11,15 +11,16 @@ public class SkorLineControl : MonoBehaviour
     [SerializeField] private TextMeshProUGUI playerKillSkor_Text;
     [SerializeField] private TextMeshProUGUI playerDeathSkor_Text;
     [SerializeField] private PlayerScriptableObject playerScriptableObject;
-    void Start()
+    
+    public int playerKillCount => int.Parse(playerKillSkor_Text.text);
+    public int skorLineSiblingIndex;
+
+    private void Awake() 
     {
+        skorLineSiblingIndex = transform.GetSiblingIndex();
         
     }
 
-    void Update()
-    {
-        
-    }
 
     public void PlayerSkorInitialize(int playerIconIndex,string playerName,int playerKillCount,int playerDeathCount)
     {
@@ -35,4 +36,11 @@ public class SkorLineControl : MonoBehaviour
         playerDeathSkor_Text.text = playerDeathCount.ToString();
 
     }
+
+    public void SetSiblingIndex_Method(int siblingIndex)
+    {
+        transform.SetSiblingIndex(siblingIndex);
+    }
+
+
 }

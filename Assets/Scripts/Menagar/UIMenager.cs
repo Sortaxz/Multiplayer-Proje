@@ -255,16 +255,15 @@ public class UIMenager : MonoBehaviour
             string gameLogin = (string)SaveSystem.PlayerPrefsDataLoad("GameLogin","string");
             if(gameLogin == "true")
             {
-                /*
-                if(SaveSystem.PlayerPrefsDataQuery("icon") && SaveSystem.PlayerPrefsDataQuery("color") && SaveSystem.PlayerPrefsDataQuery("playerName"))
+                bool query = !string.IsNullOrEmpty(menuKullaniciAdi_Text.text) && menuPlayerIcon_Image.sprite != null;
+                if(query)
                 {
                     SetActiveUIObject(menu_Panel.name);
                 }
                 else
                 {
-
+                    StartCoroutine(IsDataUpload());
                 }
-                */
 
                 SetActiveUIObject(menu_Panel.name);
                 
@@ -281,6 +280,27 @@ public class UIMenager : MonoBehaviour
         
        
     }
+
+    private IEnumerator IsDataUpload()
+    {
+        while(true)
+        {
+            if(!string.IsNullOrEmpty(menuKullaniciAdi_Text.text) && menuPlayerIcon_Image.sprite !=null)
+            {
+                dataUpload_Panel.SetActive(false);
+                break;
+            }
+           
+            dataUpload_Panel.SetActive(true);
+           
+            yield return null;
+        }
+        
+        SetActiveUIObject(menu_Panel.name);
+
+        
+    }
+
     private void OnApplicationQuit() 
     {
         SaveSystem.PlayerPrefsDataRemove("GameLogin");    
@@ -311,7 +331,11 @@ public class UIMenager : MonoBehaviour
 
     private void Update() 
     {
-        CheatActive(); // düzeltmem gerekiyor
+        if(randomOda_Panel.activeSelf)
+        {
+            CheatActive();
+        }
+         // düzeltmem gerekiyor
 
         
     }
@@ -818,14 +842,16 @@ public class UIMenager : MonoBehaviour
 
         karşilaşmaKabulReddet_Panel.SetActive(false);
 
-        // bu yeni eklendi
         if(ArePlayersAccept())
         {
             pv.RPC("RPC_CloseMatchWaitScreen",RpcTarget.AllViaServer);
         }
         else
         {
-            MatchWaitingScreen.SetActive(true);
+            if(SunucuYonetim.Instance.RoomPlayerCountControl())
+            {
+                MatchWaitingScreen.SetActive(true);
+            }
         }
     }
 
@@ -835,6 +861,7 @@ public class UIMenager : MonoBehaviour
         MatchWaitingScreen.SetActive(false);
     }
 
+    // bu method sunucu yönetimde olması lazım
     private bool ArePlayersAccept()
     {
         int playersCount = 0;
@@ -869,6 +896,9 @@ public class UIMenager : MonoBehaviour
         }
         karşilaşmaKabulReddet_Panel.SetActive(false);
         
+        SunucuYonetim.Instance.LeftRoom(true);
+
+
     }
 
     
@@ -1026,7 +1056,7 @@ public class UIMenager : MonoBehaviour
 
     public void ExitIconButton_Method()
     {
-        SunucuYonetim.Instance.LeftRoom();
+        SunucuYonetim.Instance.LeftRoom(false);
         SetActiveUIObject(menu_Panel.name);
     }
 
