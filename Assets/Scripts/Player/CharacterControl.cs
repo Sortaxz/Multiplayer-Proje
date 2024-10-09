@@ -72,6 +72,7 @@ public class CharacterControl : PlayerInputManager,IDamageable
         {
             playerActorNumber = pw.ViewID;
             transform.GetChild(0).GetComponent<CameraController>().character = gameObject;
+            course_Image.SetActive(true);
         }
         else
         {
@@ -98,8 +99,12 @@ public class CharacterControl : PlayerInputManager,IDamageable
         
         if(!gameManager.CharacterDead)
         {
-            Move();
+            course_Image.SetActive(!gameManager.GameStopted);
+            if(!gameManager.GameStopted)
+            {
+                Move();
 
+            }
         }
     }
     
@@ -109,7 +114,10 @@ public class CharacterControl : PlayerInputManager,IDamageable
             return;
         if(!gameManager.CharacterDead)
         {
-            PlayerMovement();
+            if(!gameManager.GameStopted)
+            {
+                PlayerMovement();
+            }
 
         }
        

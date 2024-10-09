@@ -97,10 +97,14 @@ public class WeaponController : MonoBehaviour
                         {
                             if(character != null)
                             {
+                                /*
                                 while(_character1.OtherPlayerHealtBar.transform.localRotation != Quaternion.LookRotation(character.position))
                                 {
                                     _character1.OtherPlayerHealtBar.transform.localRotation = Quaternion.LookRotation(character.position);
                                 }
+                                */
+                                _character1.OtherPlayerHealtBar.transform.localRotation = Quaternion.LookRotation(hit.normal);
+
                             }
                             else
                             {

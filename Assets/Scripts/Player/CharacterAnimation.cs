@@ -32,35 +32,38 @@ public class CharacterAnimation : PlayerAnimation
         
         if(!GameManager.Instance.CharacterDead)
         {
-            if (pw.IsMine)
+            if(!GameManager.Instance.GameStopted)
             {
-                CharacterMovementAnimation();
-
-                if(isFire)
+                if (pw.IsMine)
                 {
-                    animator.Play("Firing_Rifle");
-                }
+                    CharacterMovementAnimation();
+
+                    if(isFire)
+                    {
+                        animator.Play("Firing_Rifle");
+                    }
 
 
-                if(reloading )
-                {
-                    animator.Play("Reloading");
-                }
-                
-                if(hitReactionAnimation)
-                {
-                    HitReactionAnimation_Method();
-                }
-                
-                
-                if(isJumping && !jumpAnimation)
-                {
-                    jumpAnimation = true;
-                }
-                
+                    if(reloading )
+                    {
+                        animator.Play("Reloading");
+                    }
+                    
+                    if(hitReactionAnimation)
+                    {
+                        HitReactionAnimation_Method();
+                    }
+                    
+                    
+                    if(isJumping && !jumpAnimation)
+                    {
+                        jumpAnimation = true;
+                    }
+                    
 
 
-            }   
+                }   
+            }
         }    
 
     }
@@ -193,11 +196,18 @@ public class CharacterAnimation : PlayerAnimation
         {
             animator.SetBool("isMovement", false);
             animator.SetFloat("speed", 0f);
+            
+            if(isJumping)
+                animator.SetBool("isJumping",true);
+
+            /*
             if (!ctrl)
             {
                 PlayPlayerMoveAnimation("isJumping", jumpAnimation, "bool");
             }
+            */
         }
+       
         PlayPlayerCrounchMoveAnimation();
     }
 
@@ -237,51 +247,6 @@ public class CharacterAnimation : PlayerAnimation
         }
     }
 
-    private void SetAnimation(string animationBoolName,object animationBoolValue,string saveAnimationType)
-    {
-        switch (saveAnimationType)
-        {
-            case "bool":
-                animator.SetBool(animationBoolName,(bool)animationBoolValue);
-            break;
-            case "float":
-                animator.SetFloat(animationBoolName,(float)animationBoolValue);
-            break;
-            case "int":
-                animator.SetInteger(animationBoolName,(int)animationBoolValue);
-            break;
-            default:
-            break;
-        }
-    }
-
-    public void PlayPlayerMoveAnimation(string animationBoolName,bool animationDirection,string setValueType, bool  additionalAnimationDirection =false)
-    {
-        if(animationBoolName == "isRunning" )
-        {
-            if(animationDirection && additionalAnimationDirection || additionalAnimationDirection && animationDirection)
-            {
-                SetAnimation(animationBoolName,animationDirection,setValueType);
-            }
-            else
-            {
-                SetAnimation(animationBoolName,animationDirection,setValueType);
-            }
-        }
-        else if(animationBoolName != "isRunning")
-        {
-            if(animationDirection)
-            {
-                SetAnimation(animationBoolName,animationDirection,setValueType);
-            }
-            else
-            {
-                SetAnimation(animationBoolName,animationDirection,setValueType);
-            }
-        }
-        
-    }
-
     public void Deat_Method()
     {
         if(animator != null)
@@ -291,7 +256,11 @@ public class CharacterAnimation : PlayerAnimation
     }
 
 
-   
+    public void CharacterJumping()
+    {
+        animator.SetBool("isJumping",false);
+
+    }
     
 
 }

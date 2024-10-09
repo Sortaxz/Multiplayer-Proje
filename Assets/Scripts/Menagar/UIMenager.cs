@@ -258,14 +258,15 @@ public class UIMenager : MonoBehaviour
                 bool query = !string.IsNullOrEmpty(menuKullaniciAdi_Text.text) && menuPlayerIcon_Image.sprite != null;
                 if(query)
                 {
-                    SetActiveUIObject(menu_Panel.name);
+                    StartCoroutine(IsDataUpload());
+                    //SetActiveUIObject(menu_Panel.name);
                 }
                 else
                 {
-                    StartCoroutine(IsDataUpload());
+                    SetActiveUIObject(oyunaBaglanma_Panel.name);
+
                 }
 
-                SetActiveUIObject(menu_Panel.name);
                 
             }
             else
@@ -960,9 +961,8 @@ public class UIMenager : MonoBehaviour
     
             string mod = gameMode.ToString(); 
             SaveSystem.PlayerPrefsDataSave("gameMode",mod);
-
             SunucuYonetim.Instance.CreateRandomRoom(gameMode);
-
+        
             SetActiveUIObject(odaKurmaYüklemeEkran_Panel.name);
             StartCoroutine(PlayerTipTextAnimation());
            
@@ -1056,8 +1056,15 @@ public class UIMenager : MonoBehaviour
 
     public void ExitIconButton_Method()
     {
+        if (FindingMatchControl.Instance.gameObject.activeSelf)
+        {
+            FindingMatchControl.Instance.FindMatchButtonsClose(pv);
+
+        }
         SunucuYonetim.Instance.LeftRoom(false);
         SetActiveUIObject(menu_Panel.name);
+        SunucuYonetim.Instance.RoomPropChange();
+
     }
 
     private void PlayerPropsSettingsUI(string playerPropsType,int count)

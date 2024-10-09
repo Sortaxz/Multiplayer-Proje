@@ -199,7 +199,6 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         string randomRoomName = "Oda-" + Random.Range(1, 100);
 
         string[] roomPropStrings = new string[] { "gameMode" ,"roomStatus"};
-
         ExitGames.Client.Photon.Hashtable roomProps = new ExitGames.Client.Photon.Hashtable()
         {
             {"gameMode",gameMode},
@@ -242,12 +241,29 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         Destroy(playerList[otherPlayer.NickName].gameObject);
         playerList.Remove(otherPlayer.NickName);
 
-        //PV.RPC("RPC_LeftRoom",RpcTarget.AllViaServer,null);
-        //LeftRoom(true);
-        
-        if(uIMenager.FindingMatch_Panel.activeSelf)
+       
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
-            FindingMatchControl.Instance.UpdateButtons();
+            if(otherPlayer.IsMasterClient)
+            {
+                if(PhotonNetwork.PlayerList[i].UserId != otherPlayer.UserId)
+                {
+                    PhotonNetwork.SetMasterClient(PhotonNetwork.PlayerList[i]);
+                }
+            }
+
+        }
+
+        if(FindingMatchControl.Instance != null)
+        {
+            if (FindingMatchControl.Instance.gameObject.activeSelf)
+            {
+                if (PlayerIsMasterClient())
+                {
+                    FindingMatchControl.Instance.FindMatchGameStarted = true;
+
+                }
+            }
         }
 
     }
@@ -259,12 +275,18 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
             Destroy(entry);
         }
 
-        
 
         playerList.Clear();
         playerList = null;
         
 
+    }
+
+    [PunRPC]
+    private void FindMatchButtonsUpdate()
+    {
+        if(FindingMatchControl.Instance.gameObject.activeSelf)
+            FindingMatchControl.Instance.UpdateButtons();
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
@@ -428,6 +450,16 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         
         return playersCount;
         
+    }
+
+    public bool PlayerIsMasterClient()
+    {
+        return PhotonNetwork.IsMasterClient;
+    }
+
+    public void RoomPropChange()
+    {
+        gameMode = GameMode.None;
     }
 
 }

@@ -5,9 +5,11 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     public GameObject character;
+    [SerializeField] private GameObject courseImage;
     public float mouseSensitivity = 100f;
     
     private float xRotation = 0f;
+
 
     void Start()
     {
@@ -18,9 +20,20 @@ public class CameraController : MonoBehaviour
     {
         
     }
-    private void LateUpdate() 
+    private void LateUpdate()
     {
-          // Mouse inputlarını al
+        if(!GameManager.Instance.CharacterDead)
+        {
+            if(!GameManager.Instance.GameStopted)
+            {
+                CameraMove();
+            }
+        }
+    }
+
+    private void CameraMove()
+    {
+        // Mouse inputlarını al
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 

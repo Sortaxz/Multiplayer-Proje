@@ -76,7 +76,6 @@ public class GameUI : UIInputManager
                 pausePanel.SetActive(!pausePanel.activeSelf);
                 GameManager.Instance.GameStopted = pausePanel.activeSelf;
 
-                GameManager.Instance.StopGameStreaming(!pausePanel.activeSelf);
 
             }
 
@@ -93,7 +92,6 @@ public class GameUI : UIInputManager
                 
                 GameManager.Instance.GameStopted = skorTable_Panel.activeSelf;
 
-                GameManager.Instance.StopGameStreaming(!skorTable_Panel.activeSelf);
 
                 GameManager.Instance.PlayerSkorUpdate();
 

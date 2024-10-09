@@ -61,6 +61,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private bool gameStopted = false;
     public bool GameStopted { get { return gameStopted;} set { gameStopted = value; } }
+
+
     private float time;
 
     private float minutes;
@@ -522,27 +524,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void StopGameStreaming(bool value)
     {
-        /*
-        if(value == false)
-        {
-            if(gameStopted)
-            {
-                print("durdu");
-                StopFlow(false);
-            }
-            else
-            {
-                print("durmadi");
-                StopFlow(true);
-            }
-
-        }
-        else
-        {
-            StopFlow(false);
-            StopAllCoroutines();
-        }
-        */
         StopFlow(value);
     }
 
@@ -713,33 +694,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void RPC_GunFirePropagation(string name)
     {
-        /*
-        for (int i = 0; i < characterWeapons.Length; i++)
-        {
-            if(characterWeapons[i] != null)
-            {
-                if(characterWeapons[i].gameObject.activeSelf)
-                {
-                    if(characterWeapons[i].name == "Scanner")
-                    {
-                        audioSource.clip = soundDataSO.weaponSound[0].weaponSoundClip[0];
-                    }
-                    else if(characterWeapons[i].name == "Mp5")
-                    {
-                        audioSource.clip = soundDataSO.weaponSound[1].weaponSoundClip[0];
-                    }
-                }
-
-                audioSource.Play();
-            }
-        }
-        
-        */
-            
         audioSource.clip = soundDataSO.weaponSound[0].weaponSoundClip[0];
         audioSource.Play();
-
     }
-  
 
 }

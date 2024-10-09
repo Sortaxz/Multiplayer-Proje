@@ -10,12 +10,7 @@ ScriptsOnlyBuild:
     - WeaponController
     - Weapon_ScriptableObject
     Assembly-CSharp.dll:
-    - BulletController
-    - CameraController
-    - CharacterAnimation
-    - CharacterControl
     - CheatController
-    - CombatController
     - FindingMatchControl
     - FriendListControl
     - FriendSystem
@@ -33,8 +28,6 @@ ScriptsOnlyBuild:
     - SpawnManager
     - SunucuYonetim
     - UIMenager
-    - WeaponController
-    - Weapon_ScriptableObject
     PhotonUnityNetworking:
     - Photon.Pun.PhotonAnimatorView
     - Photon.Pun.PhotonRigidbodyView
@@ -56,9 +49,6 @@ ScriptsOnlyBuild:
     PhotonUnityNetworking.Utilities.dll:
     - Photon.Pun.UtilityScripts.CountdownTimer
     PhotonUnityNetworking.dll:
-    - Photon.Pun.PhotonAnimatorView
-    - Photon.Pun.PhotonRigidbodyView
-    - Photon.Pun.PhotonTransformView
     - Photon.Pun.PhotonView
     - Photon.Pun.ServerSettings
     Unity.Rider.Editor.dll:
@@ -73,9 +63,6 @@ ScriptsOnlyBuild:
     - TMPro.TMP_Dropdown
     - TMPro.TMP_FontAsset
     - TMPro.TMP_InputField
-    - TMPro.TMP_Settings
-    - TMPro.TMP_SpriteAsset
-    - TMPro.TMP_StyleSheet
     - TMPro.TextMeshProUGUI
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
@@ -371,7 +358,7 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 21676}
     - Class: 114
-      Script: {instanceID: 22432}
+      Script: {instanceID: 22430}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -534,29 +521,29 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 21676}
     - Class: 114
-      Script: {instanceID: 21682}
+      Script: {instanceID: 21788}
     - Class: 114
-      Script: {instanceID: 21790}
+      Script: {instanceID: 22106}
     - Class: 114
-      Script: {instanceID: 22108}
+      Script: {instanceID: 22276}
     - Class: 114
-      Script: {instanceID: 22278}
+      Script: {instanceID: 22320}
     - Class: 114
-      Script: {instanceID: 22322}
+      Script: {instanceID: 22526}
     - Class: 114
-      Script: {instanceID: 22528}
+      Script: {instanceID: 22820}
     - Class: 114
-      Script: {instanceID: 22822}
+      Script: {instanceID: 23134}
     - Class: 114
-      Script: {instanceID: 23136}
+      Script: {instanceID: 23190}
     - Class: 114
-      Script: {instanceID: 23192}
+      Script: {instanceID: 23320}
     - Class: 114
-      Script: {instanceID: 23322}
+      Script: {instanceID: 23490}
     - Class: 114
-      Script: {instanceID: 23492}
+      Script: {instanceID: 23634}
     - Class: 114
-      Script: {instanceID: 23636}
+      Script: {instanceID: 23672}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -1960,12 +1947,6 @@ ScriptsOnlyBuild:
     className: Scrollbar
   - hash:
       serializedVersion: 2
-      Hash: 775f4e259e957a9f1a2e4f8ecc5d5ec1
-    assemblyName: Assembly-CSharp
-    namespaceName: 
-    className: FindingMatchControl
-  - hash:
-      serializedVersion: 2
       Hash: 13f262cc0741566a7ab72682984bc3e1
     assemblyName: Unity.TextMeshPro
     namespaceName: TMPro
@@ -2140,7 +2121,7 @@ ScriptsOnlyBuild:
     className: PositionAsUV1
   - hash:
       serializedVersion: 2
-      Hash: d9cbade689ac93084250b3fc912a73f9
+      Hash: 70cb8fe12ac095a27697a57934cd20f8
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: CameraController
@@ -2570,6 +2551,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core
     namespaceName: Unity.VisualScripting
     className: UnityOnSliderValueChangedMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 775f4e259e957a9f1a2e4f8ecc5d5ec1
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: FindingMatchControl
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity

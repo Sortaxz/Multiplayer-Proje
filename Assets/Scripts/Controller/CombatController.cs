@@ -59,31 +59,34 @@ public class CombatController : PlayerInputManager
             return;
         if(!gameManager.CharacterDead)
         {
-            if(rewenal)
+            if(!gameManager.GameStopted)
             {
-                weapons[weaponIndex].MagazineControl();
-                characterAnimation.reloading = weapons[weaponIndex].CharacterReloading;
+                if(rewenal)
+                {
+                    weapons[weaponIndex].MagazineControl();
+                    characterAnimation.reloading = weapons[weaponIndex].CharacterReloading;
 
-            }
-            else
-            {
-                characterAnimation.reloading = false;
+                }
+                else
+                {
+                    characterAnimation.reloading = false;
 
-            }
+                }
 
-            if(mousePressedLeftButton)
-            {
-                characterAnimation.fire = weapons[weaponIndex].CharacterFire;
-            }
-            else
-            {
-                characterAnimation.fire = false;
-            }
-            
-            
-            WeaponSelection();
+                if(mousePressedLeftButton)
+                {
+                    characterAnimation.fire = weapons[weaponIndex].CharacterFire;
+                }
+                else
+                {
+                    characterAnimation.fire = false;
+                }
+                
+                
+                WeaponSelection();
 
-            ShootControl();
+                ShootControl();
+            }
         }
 
     }
