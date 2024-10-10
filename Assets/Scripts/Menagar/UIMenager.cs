@@ -282,6 +282,7 @@ public class UIMenager : MonoBehaviour
        
     }
 
+
     private IEnumerator IsDataUpload()
     {
         while(true)
@@ -336,9 +337,7 @@ public class UIMenager : MonoBehaviour
         {
             CheatActive();
         }
-         // düzeltmem gerekiyor
-
-        
+         
     }
 
     public void CheatActive()
@@ -899,6 +898,7 @@ public class UIMenager : MonoBehaviour
         
         SunucuYonetim.Instance.LeftRoom(true);
 
+        
 
     }
 

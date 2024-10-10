@@ -68,6 +68,10 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
        
     }
 
+    private void Update() 
+    {
+          
+    }
 
     public override void OnConnectedToMaster()
     {
@@ -124,6 +128,8 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
             
             string randomOdaPanelName = uIMenager.RandomOda_Panel.name;
             uIMenager.SetActiveUIObject(randomOdaPanelName);
+
+           
         }
         
     }
@@ -160,7 +166,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     }
     public override void OnJoinedRoom()
     {
-       
+       FindingMatchControl.Instance?.RoomGameModeShow();
         IsRoomActive();
 
         if(playersReady)
@@ -234,6 +240,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.LoadLevel(1);
         }
+
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -241,17 +248,20 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         Destroy(playerList[otherPlayer.NickName].gameObject);
         playerList.Remove(otherPlayer.NickName);
 
-       
-        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+    
+        if(PhotonNetwork.PlayerList.Length > 1)
         {
-            if(otherPlayer.IsMasterClient)
+            for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
             {
-                if(PhotonNetwork.PlayerList[i].UserId != otherPlayer.UserId)
+                if (otherPlayer.IsMasterClient)
                 {
-                    PhotonNetwork.SetMasterClient(PhotonNetwork.PlayerList[i]);
+                    if (PhotonNetwork.PlayerList[i].UserId != otherPlayer.UserId)
+                    {
+                        PhotonNetwork.SetMasterClient(PhotonNetwork.PlayerList[i]);
+                    }
                 }
-            }
 
+            }
         }
 
         if(FindingMatchControl.Instance != null)
@@ -279,14 +289,17 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         playerList.Clear();
         playerList = null;
         
+        PhotonNetwork.SetMasterClient(null);
 
     }
 
     [PunRPC]
     private void FindMatchButtonsUpdate()
     {
-        if(FindingMatchControl.Instance.gameObject.activeSelf)
-            FindingMatchControl.Instance.UpdateButtons();
+        if(uIMenager.FindingMatch_Panel != null)
+        {
+            uIMenager.FindingMatch_Panel.GetComponent<FindingMatchControl>().UpdateButtons();
+        }
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
@@ -384,7 +397,6 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
         uIMenager.KarşilaşmaReddetButton_Method();
         isConnected =true;
         normalRoom = false;
-        PhotonNetwork.LeaveRoom();
     }
 
     
@@ -459,7 +471,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
     public void RoomPropChange()
     {
-        gameMode = GameMode.None;
+        PhotonNetwork.CurrentRoom.CustomProperties.Remove("gameMode");
     }
 
 }

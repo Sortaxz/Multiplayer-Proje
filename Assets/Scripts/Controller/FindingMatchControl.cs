@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
-using Photon.Realtime;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -32,6 +31,7 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
     private bool gameStarted = false; 
     public bool FindMatchGameStarted {get { return gameStarted;} set { gameStarted = value; } }
     private bool readyCallMatch = false;
+    private bool findRoomGameMode = false;
     private float deger = 0;
     PhotonView PV;
     
@@ -53,10 +53,17 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
         
         findMatchTime_Text.gameObject.SetActive(true);
 
-        Initialize(deger,false);
     }
 
-   
+    private void Update() 
+    {
+        
+        if(!findRoomGameMode)
+        {
+            Initialize(deger,false);
+        }
+    }
+
     public void StartMatchFindingButton_Method()
     {
         
@@ -73,13 +80,24 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
 
+    public void RoomGameModeShow()
+    {
+        if(PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("gameMode",out object gameMode))
+        {
+            matchProps_Text.text = ((int)gameMode == 1? GameMode.Dereceli : GameMode.Derecesiz).ToString();
+        }
+    }
+
     public void Initialize(float waitTimeValue,bool counterStart)
     {
         if(PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("gameMode",out object gameMode))
         {
-            matchProps_Text.text = "";
+            string mod = ((int)gameMode == 1? GameMode.Dereceli : GameMode.Derecesiz).ToString();
             matchProps_Text.text = ((int)gameMode == 1? GameMode.Dereceli : GameMode.Derecesiz).ToString();
+            findRoomGameMode = mod == matchProps_Text.text ? true : false;
         }
+       
+
         if(counterStart)
         {
             int minutes = Mathf.FloorToInt(waitTimeValue / 60);
@@ -91,6 +109,8 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
             findMatchTime_Text.gameObject.SetActive(false);
         }
     }
+
+   
 
     public void UpdateButtons()
     {
@@ -206,7 +226,7 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
     public void FindMatchButtonsClose(PhotonView pv)
     {
         PV.RPC("RPC_FindMatchButtonsClose",RpcTarget.AllViaServer,pv);
-
+        matchProps_Text.text = "Maç Özellikleri";
     }
 
     [PunRPC]

@@ -422,7 +422,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             int totalSeconds = Mathf.FloorToInt(time);
 
 
-            while(time < 15)
+            while(time < 1)
             {
 
                 totalSeconds += 1 ;
@@ -456,7 +456,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         else
         {
             int totalSeconds = second;   
-            while(time < 15)
+            while(time < 1)
             {
 
                 totalSeconds += 1 ;
@@ -519,6 +519,8 @@ public class GameManager : MonoBehaviourPunCallbacks
             skorLines[PhotonNetwork.PlayerList[i].UserId].transform.SetParent(GameUI.Instance.GameOverSkorLineContent.transform);
         }
         PlayerSkorUpdate();
+        
+        StopGameStreaming(false);
 
     }
 
