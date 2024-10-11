@@ -193,6 +193,11 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
                 string findingMatchPanelName = uIMenager.FindingMatch_Panel.name;
                         
                 uIMenager.SetActiveUIObject(findingMatchPanelName); 
+
+                if(uIMenager.FindingMatch_Panel.activeSelf)
+                {
+                    uIMenager.FindingMatch_Panel.GetComponent<FindingMatchControl>().FindingButtonActive();
+                }
                         
             }
 
@@ -264,6 +269,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
             }
         }
 
+        /*
         if(FindingMatchControl.Instance != null)
         {
             if (FindingMatchControl.Instance.gameObject.activeSelf)
@@ -271,11 +277,12 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
                 if (PlayerIsMasterClient())
                 {
                     FindingMatchControl.Instance.FindMatchGameStarted = true;
+                    FindingMatchControl.Instance.UpdateButtons();
 
                 }
             }
         }
-
+        */
     }
 
     public override void OnLeftRoom()

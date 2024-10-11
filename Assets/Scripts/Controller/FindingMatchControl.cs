@@ -110,6 +110,19 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
 
+    public void FindingButtonActive()
+    {
+        if(SunucuYonetim.Instance.PlayerIsMasterClient())
+        {
+            startMatchFinding_Button.gameObject.SetActive(true);
+            cancelMatchFinding_Button.gameObject.SetActive(false);
+        }
+        else
+        {
+            startMatchFinding_Button.gameObject.SetActive(false);
+            cancelMatchFinding_Button.gameObject.SetActive(false);
+        }
+    }
    
 
     public void UpdateButtons()
