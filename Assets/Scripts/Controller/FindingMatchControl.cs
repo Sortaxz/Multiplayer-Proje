@@ -53,15 +53,16 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
         
         findMatchTime_Text.gameObject.SetActive(true);
 
+        Initialize(deger,false);
     }
 
     private void Update() 
     {
-        
-        if(!findRoomGameMode)
+        if(findRoomGameMode)
         {
-            Initialize(deger,false);
+            Initialize(deger,true);
         }
+        
     }
 
     public void StartMatchFindingButton_Method()
@@ -96,6 +97,8 @@ public class FindingMatchControl : MonoBehaviourPunCallbacks, IPunObservable
             matchProps_Text.text = ((int)gameMode == 1? GameMode.Dereceli : GameMode.Derecesiz).ToString();
             findRoomGameMode = mod == matchProps_Text.text ? true : false;
         }
+
+       
        
 
         if(counterStart)

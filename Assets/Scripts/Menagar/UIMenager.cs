@@ -258,12 +258,11 @@ public class UIMenager : MonoBehaviour
                 bool query = !string.IsNullOrEmpty(menuKullaniciAdi_Text.text) && menuPlayerIcon_Image.sprite != null;
                 if(query)
                 {
-                    StartCoroutine(IsDataUpload());
-                    //SetActiveUIObject(menu_Panel.name);
+                    SetActiveUIObject(menu_Panel.name);
                 }
                 else
                 {
-                    SetActiveUIObject(oyunaBaglanma_Panel.name);
+                    StartCoroutine(IsDataUpload());
 
                 }
 
@@ -271,6 +270,7 @@ public class UIMenager : MonoBehaviour
             }
             else
             {
+                print("gamelogin yanliş : " + gameLogin);
                 SetActiveUIObject(oyunaBaglanma_Panel.name);
             }
         }

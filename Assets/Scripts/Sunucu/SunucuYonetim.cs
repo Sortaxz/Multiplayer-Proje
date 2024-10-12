@@ -118,7 +118,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
             RoomOptions roomOptions = new RoomOptions()
             {
-                MaxPlayers = 2,
+                MaxPlayers = 1,
                 CustomRoomProperties = roomProps,
                 CustomRoomPropertiesForLobby = roomPropsString,
                 PublishUserId = true
@@ -146,7 +146,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
                 {"roomStatus",true}
             };
 
-            PhotonNetwork.JoinRandomRoom(roomProps, 2);
+            PhotonNetwork.JoinRandomRoom(roomProps, 1);
         }
     }
 
@@ -166,7 +166,6 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
     }
     public override void OnJoinedRoom()
     {
-       FindingMatchControl.Instance?.RoomGameModeShow();
         IsRoomActive();
 
         if(playersReady)
@@ -218,7 +217,7 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
         RoomOptions roomOptions = new RoomOptions()
         {
-            MaxPlayers = 2,
+            MaxPlayers = 1,
             CustomRoomProperties = roomProps,
             CustomRoomPropertiesForLobby = roomPropStrings,
             PublishUserId = true
@@ -269,20 +268,21 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
             }
         }
 
-        /*
-        if(FindingMatchControl.Instance != null)
-        {
-            if (FindingMatchControl.Instance.gameObject.activeSelf)
-            {
-                if (PlayerIsMasterClient())
-                {
-                    FindingMatchControl.Instance.FindMatchGameStarted = true;
-                    FindingMatchControl.Instance.UpdateButtons();
+        PV.RPC("ActivateFindMatchButtons",RpcTarget.AllViaServer);
+        
+    }
 
-                }
+    //activate findmatch buttons
+    [PunRPC]
+    private void ActivateFindMatchButtons()
+    {
+        if(PhotonNetwork.LocalPlayer.IsMasterClient)
+        {
+            if(uIMenager.FindingMatch_Panel != null)
+            {
+                uIMenager.FindingMatch_Panel.GetComponent<FindingMatchControl>()?.UpdateButtons();
             }
         }
-        */
     }
 
     public override void OnLeftRoom()
@@ -300,14 +300,8 @@ public class SunucuYonetim : MonoBehaviourPunCallbacks
 
     }
 
-    [PunRPC]
-    private void FindMatchButtonsUpdate()
-    {
-        if(uIMenager.FindingMatch_Panel != null)
-        {
-            uIMenager.FindingMatch_Panel.GetComponent<FindingMatchControl>().UpdateButtons();
-        }
-    }
+   
+
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
