@@ -62,6 +62,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     private bool gameStopted = false;
     public bool GameStopted { get { return gameStopted;} set { gameStopted = value; } }
 
+    private bool gameStarted = false;
+    public bool GameStarted { get { return gameStarted;} }
 
     private float time;
 
@@ -347,16 +349,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             }
         }      
 
-    }
-
-   
-    private void WeaponBulletClear(List<GameObject> weapon)
-    {
-        for (int i = 0; i < weapon.Count; i++)
-        {
-            Destroy(weapon[i].gameObject);
-            weapon.Remove(weapon[i].gameObject);
-        }
+        gameStarted = true;
     }
 
     public bool IsStartGame()
@@ -422,7 +415,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             int totalSeconds = Mathf.FloorToInt(time);
 
 
-            while(time < 1)
+            while(time < 15)
             {
 
                 totalSeconds += 1 ;
@@ -456,7 +449,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         else
         {
             int totalSeconds = second;   
-            while(time < 1)
+            while(time < 15)
             {
 
                 totalSeconds += 1 ;

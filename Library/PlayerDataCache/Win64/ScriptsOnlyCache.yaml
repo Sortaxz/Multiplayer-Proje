@@ -63,6 +63,9 @@ ScriptsOnlyBuild:
     - TMPro.TMP_Dropdown
     - TMPro.TMP_FontAsset
     - TMPro.TMP_InputField
+    - TMPro.TMP_Settings
+    - TMPro.TMP_SpriteAsset
+    - TMPro.TMP_StyleSheet
     - TMPro.TextMeshProUGUI
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
@@ -156,6 +159,15 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.SpriteState
     - UnityEngine.UI.Toggle/ToggleEvent
   methodsToPreserve:
+  - assembly: Assembly-CSharp
+    fullTypeName: SettingsController
+    methodName: GameSettingsSaveButton
+  - assembly: Assembly-CSharp
+    fullTypeName: SettingsController
+    methodName: EkranBoyutuToogleButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: SettingsController
+    methodName: EkranBoyutButton_Method
   - assembly: Assembly-CSharp
     fullTypeName: SettingsController
     methodName: SettingsKaydetButton_Method
@@ -271,8 +283,32 @@ ScriptsOnlyBuild:
     fullTypeName: CheatController
     methodName: Send_Message
   - assembly: Assembly-CSharp
+    fullTypeName: SettingsController
+    methodName: GameSettingsSaveButton
+  - assembly: Assembly-CSharp
+    fullTypeName: SettingsController
+    methodName: EkranBoyutuToogleButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: SettingsController
+    methodName: EkranBoyutButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: SettingsController
+    methodName: SettingsKaydetButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: SettingsController
+    methodName: SettingGeriDonButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: SettingsController
+    methodName: EkranBoyutuToogleButton_Method
+  - assembly: Assembly-CSharp
+    fullTypeName: SettingsController
+    methodName: EkranBoyutButton_Method
+  - assembly: Assembly-CSharp
     fullTypeName: GameUI
     methodName: BackGame
+  - assembly: Assembly-CSharp
+    fullTypeName: GameUI
+    methodName: SettingsButton
   - assembly: Assembly-CSharp
     fullTypeName: GameUI
     methodName: ReturnMainMenu
@@ -320,35 +356,47 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 16688}
     - Class: 114
+      Script: {instanceID: 16690}
+    - Class: 114
+      Script: {instanceID: 16692}
+    - Class: 114
       Script: {instanceID: 16694}
     - Class: 114
-      Script: {instanceID: 16742}
+      Script: {instanceID: 16696}
     - Class: 114
-      Script: {instanceID: 17318}
+      Script: {instanceID: 16744}
     - Class: 114
-      Script: {instanceID: 17824}
+      Script: {instanceID: 17320}
     - Class: 114
-      Script: {instanceID: 17878}
+      Script: {instanceID: 17826}
     - Class: 114
-      Script: {instanceID: 18094}
+      Script: {instanceID: 17880}
     - Class: 114
-      Script: {instanceID: 18320}
+      Script: {instanceID: 17886}
     - Class: 114
-      Script: {instanceID: 18712}
+      Script: {instanceID: 18096}
     - Class: 114
-      Script: {instanceID: 19232}
+      Script: {instanceID: 18322}
     - Class: 114
-      Script: {instanceID: 19250}
+      Script: {instanceID: 18714}
     - Class: 114
-      Script: {instanceID: 20206}
+      Script: {instanceID: 19234}
     - Class: 114
-      Script: {instanceID: 20560}
+      Script: {instanceID: 19252}
     - Class: 114
-      Script: {instanceID: 20602}
+      Script: {instanceID: 19502}
     - Class: 114
-      Script: {instanceID: 20724}
+      Script: {instanceID: 20208}
     - Class: 114
-      Script: {instanceID: 21168}
+      Script: {instanceID: 20362}
+    - Class: 114
+      Script: {instanceID: 20434}
+    - Class: 114
+      Script: {instanceID: 20562}
+    - Class: 114
+      Script: {instanceID: 20604}
+    - Class: 114
+      Script: {instanceID: 20726}
     - Class: 114
       Script: {instanceID: 21228}
     - Class: 114
@@ -357,6 +405,10 @@ ScriptsOnlyBuild:
       Script: {instanceID: 21664}
     - Class: 114
       Script: {instanceID: 21676}
+    - Class: 114
+      Script: {instanceID: 21790}
+    - Class: 114
+      Script: {instanceID: 22108}
     - Class: 114
       Script: {instanceID: 22432}
     - Class: 115
@@ -435,77 +487,77 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 16694}
     - Class: 114
-      Script: {instanceID: 16742}
+      Script: {instanceID: 16696}
     - Class: 114
-      Script: {instanceID: 16790}
+      Script: {instanceID: 16744}
     - Class: 114
-      Script: {instanceID: 16848}
+      Script: {instanceID: 16792}
     - Class: 114
-      Script: {instanceID: 16954}
+      Script: {instanceID: 16850}
     - Class: 114
-      Script: {instanceID: 17386}
+      Script: {instanceID: 16956}
     - Class: 114
-      Script: {instanceID: 17434}
+      Script: {instanceID: 17388}
     - Class: 114
-      Script: {instanceID: 17652}
+      Script: {instanceID: 17436}
     - Class: 114
-      Script: {instanceID: 17808}
+      Script: {instanceID: 17654}
     - Class: 114
-      Script: {instanceID: 17878}
+      Script: {instanceID: 17810}
     - Class: 114
-      Script: {instanceID: 17884}
+      Script: {instanceID: 17880}
     - Class: 114
-      Script: {instanceID: 18094}
+      Script: {instanceID: 17886}
     - Class: 114
-      Script: {instanceID: 18320}
+      Script: {instanceID: 18096}
     - Class: 114
-      Script: {instanceID: 18404}
+      Script: {instanceID: 18322}
     - Class: 114
-      Script: {instanceID: 18818}
+      Script: {instanceID: 18406}
     - Class: 114
-      Script: {instanceID: 18842}
+      Script: {instanceID: 18820}
     - Class: 114
-      Script: {instanceID: 19194}
+      Script: {instanceID: 18844}
     - Class: 114
-      Script: {instanceID: 19198}
+      Script: {instanceID: 19196}
     - Class: 114
-      Script: {instanceID: 19232}
+      Script: {instanceID: 19200}
     - Class: 114
-      Script: {instanceID: 19250}
+      Script: {instanceID: 19234}
     - Class: 114
-      Script: {instanceID: 19276}
+      Script: {instanceID: 19252}
     - Class: 114
-      Script: {instanceID: 19372}
+      Script: {instanceID: 19278}
     - Class: 114
       Script: {instanceID: 19374}
     - Class: 114
-      Script: {instanceID: 19448}
+      Script: {instanceID: 19376}
     - Class: 114
-      Script: {instanceID: 19500}
+      Script: {instanceID: 19450}
     - Class: 114
-      Script: {instanceID: 19516}
+      Script: {instanceID: 19502}
     - Class: 114
-      Script: {instanceID: 19784}
+      Script: {instanceID: 19518}
     - Class: 114
-      Script: {instanceID: 19978}
+      Script: {instanceID: 19786}
     - Class: 114
-      Script: {instanceID: 20206}
+      Script: {instanceID: 19980}
     - Class: 114
-      Script: {instanceID: 20360}
+      Script: {instanceID: 20208}
     - Class: 114
-      Script: {instanceID: 20432}
+      Script: {instanceID: 20362}
     - Class: 114
-      Script: {instanceID: 20486}
+      Script: {instanceID: 20434}
     - Class: 114
-      Script: {instanceID: 20502}
+      Script: {instanceID: 20488}
     - Class: 114
-      Script: {instanceID: 20560}
+      Script: {instanceID: 20504}
     - Class: 114
-      Script: {instanceID: 20922}
+      Script: {instanceID: 20562}
     - Class: 114
-      Script: {instanceID: 20968}
+      Script: {instanceID: 20924}
     - Class: 114
-      Script: {instanceID: 21168}
+      Script: {instanceID: 20970}
     - Class: 114
       Script: {instanceID: 21228}
     - Class: 114
@@ -607,6 +659,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI
     namespaceName: UnityEngine.UI
     className: ScrollRect
+  - hash:
+      serializedVersion: 2
+      Hash: 540882762544409cc4530e60db00e951
+    assemblyName: UnityEngine.UI
+    namespaceName: UnityEngine.UI
+    className: CanvasScaler
   - hash:
       serializedVersion: 2
       Hash: e5ced545fd8a42a1f50e04211216ab80
@@ -1851,12 +1909,6 @@ ScriptsOnlyBuild:
     className: InfosPanelPlaceholder
   - hash:
       serializedVersion: 2
-      Hash: 540882762544409cc4530e60db00e951
-    assemblyName: UnityEngine.UI
-    namespaceName: UnityEngine.UI
-    className: CanvasScaler
-  - hash:
-      serializedVersion: 2
       Hash: f68f060afe1e834c3c2783631451d823
     assemblyName: Assembly-CSharp
     namespaceName: 
@@ -1989,7 +2041,7 @@ ScriptsOnlyBuild:
     className: IsConnectedAndReadyProperty
   - hash:
       serializedVersion: 2
-      Hash: 78aca032a3888acf9b8fde3f501c101c
+      Hash: 4092c95ebf969fc15ed8d3f0c422eba4
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: SettingsController
@@ -2175,7 +2227,7 @@ ScriptsOnlyBuild:
     className: CountOfRoomsProperty
   - hash:
       serializedVersion: 2
-      Hash: 74f15503c83dc12f30e3ddc329406295
+      Hash: c19ceeffe7f0abaaebb0344b61c2816a
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: GameUI

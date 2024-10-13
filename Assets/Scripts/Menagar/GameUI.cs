@@ -55,6 +55,13 @@ public class GameUI : UIInputManager
     [Header("related to endgame ui")]
     [SerializeField] private GameObject gameOverSkorLineContent;
     public GameObject GameOverSkorLineContent { get {return gameOverSkorLineContent;}}
+
+    [Header("Setting ile ilgili işlemler")]
+    [SerializeField] private GameObject settingsPanel;
+    
+    private bool isCursorVisible = false;
+    private bool settingActive = false;
+
     private void Awake() 
     {
         playerHealtBar = playerHealtBarBackground.transform.GetChild(0).GetComponent<Image>();  
@@ -69,39 +76,59 @@ public class GameUI : UIInputManager
     
     private void InputControl()
     {
-        if(uiEsc)
+        if(Input.GetKeyDown(KeyCode.Escape))
         {   
-            if(!skorTable_Panel.activeSelf)
+            if(GameManager.Instance.GameStarted)
             {
-                pausePanel.SetActive(!pausePanel.activeSelf);
-                GameManager.Instance.GameStopted = pausePanel.activeSelf;
+                if(!skorTable_Panel.activeSelf && !finishPanel.activeSelf)
+                {
+                    pausePanel.SetActive(!pausePanel.activeSelf);
+                    GameManager.Instance.GameStopted = pausePanel.activeSelf;
 
-
+                    
+                }
             }
 
 
         }
+        
        
 
         if(tab)
         {
-            if(!pausePanel.activeSelf)
+            if(GameManager.Instance.GameStarted)
             {
-                
-                skorTable_Panel.SetActive(!skorTable_Panel.activeSelf);
-                
-                GameManager.Instance.GameStopted = skorTable_Panel.activeSelf;
+                if(!pausePanel.activeSelf && !finishPanel.activeSelf)
+                {
+                    
+                    skorTable_Panel.SetActive(!skorTable_Panel.activeSelf);
+                    
+                    GameManager.Instance.GameStopted = skorTable_Panel.activeSelf;
 
 
-                GameManager.Instance.PlayerSkorUpdate();
-
+                    GameManager.Instance.PlayerSkorUpdate();
+                    
+                }
             }
             
         }
         
-
-
     }
+
+    private void ToggleCursorVisibility(bool visible)
+    {
+        if (visible)
+        {
+            Cursor.lockState = CursorLockMode.None; // Kilitlenmeyi kaldır
+            Cursor.visible = true; // Fare imlecini göster
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked; // Ekranda fareyi kilitle
+            Cursor.visible = false; // Fare imlecini gizle
+        }
+    }
+
 
     public void Active()
     {
@@ -168,5 +195,12 @@ public class GameUI : UIInputManager
         GameManager.Instance.SkorLines.Add(playerGameObjectName,spanwObject.GetComponent<SkorLineControl>());    
         spanwObject.GetComponent<SkorLineControl>().PlayerSkorInitialize(playerIconIndex,playerGameObjectName,playerKillCount,playerDeathCount);
     }
+
+    public void SettingsButton()
+    {
+        settingActive = !settingActive;
+        settingsPanel.SetActive(settingActive);
+    }
+
 }
  
