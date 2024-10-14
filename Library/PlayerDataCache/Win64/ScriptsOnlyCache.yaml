@@ -10,7 +10,12 @@ ScriptsOnlyBuild:
     - WeaponController
     - Weapon_ScriptableObject
     Assembly-CSharp.dll:
+    - BulletController
+    - CameraController
+    - CharacterAnimation
+    - CharacterControl
     - CheatController
+    - CombatController
     - FindingMatchControl
     - FriendListControl
     - FriendSystem
@@ -28,6 +33,8 @@ ScriptsOnlyBuild:
     - SpawnManager
     - SunucuYonetim
     - UIMenager
+    - WeaponController
+    - Weapon_ScriptableObject
     PhotonUnityNetworking:
     - Photon.Pun.PhotonAnimatorView
     - Photon.Pun.PhotonRigidbodyView
@@ -49,6 +56,9 @@ ScriptsOnlyBuild:
     PhotonUnityNetworking.Utilities.dll:
     - Photon.Pun.UtilityScripts.CountdownTimer
     PhotonUnityNetworking.dll:
+    - Photon.Pun.PhotonAnimatorView
+    - Photon.Pun.PhotonRigidbodyView
+    - Photon.Pun.PhotonTransformView
     - Photon.Pun.PhotonView
     - Photon.Pun.ServerSettings
     Unity.Rider.Editor.dll:

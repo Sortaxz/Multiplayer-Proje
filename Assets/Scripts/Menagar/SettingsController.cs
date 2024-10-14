@@ -66,7 +66,7 @@ public class SettingsController : MonoBehaviour
         {
             EkranBoyutAyarlama_Panel.SetActive(!EkranBoyutAyarlama_Panel.activeSelf);  
             selectScreenSizeName = dropdownLabel.text;   
-            SettingsKaydet_Button.gameObject.SetActive(true);
+            SettingsKaydet_Button.gameObject.SetActive(EkranBoyutAyarlama_Panel.activeSelf);
         }
         else if(Vol_2.activeSelf)
         {
@@ -104,8 +104,6 @@ public class SettingsController : MonoBehaviour
 
     public void SettingsKaydetButton_Method()
     {
-        //gameObject.SetActive(menu_Panel.activeSelf);
-        //menu_Panel.SetActive(!menu_Panel.activeSelf);
          
         if(screenHeight_InputField.text != "" && screenWith_InputField.text != "")
         {
@@ -135,21 +133,7 @@ public class SettingsController : MonoBehaviour
         else
         {
             SaveSystem.PlayerPrefsDataSave("screenSize",selectScreenSizeName);
-
-
-            if(selectScreenSizeName != "FullScreen Window")
-            {
-                int screenWith = int.Parse(screenWith_InputField.text);
-                int screenHeight = int.Parse(screenHeight_InputField.text);
-
-                SaveSystem.PlayerPrefsDataSave("screenWith",screenWith);
-                SaveSystem.PlayerPrefsDataSave("screenHeight",screenWith);
-                Screen.SetResolution(screenWith,screenHeight,FullScreenMode.Windowed);
-            }
-            else
-            {
-                Screen.SetResolution(1920,1080,FullScreenMode.FullScreenWindow);
-            }
+            Screen.SetResolution(1920,1080,FullScreenMode.FullScreenWindow);
 
             DropDownResetValues();
             
