@@ -180,6 +180,9 @@ public class UIMenager : MonoBehaviour
     [SerializeField] private TMP_InputField odaAdi_InputField;
     public TMP_InputField OdaAdi_InputField { get { return odaAdi_InputField;} set { odaAdi_InputField = value;}}
     
+    [SerializeField] private Toggle dereceliMod_Toggle;
+    [SerializeField] private Toggle derecesizMod_Toggle;
+
     #endregion
 
     [Space]
@@ -248,15 +251,22 @@ public class UIMenager : MonoBehaviour
         pv = GetComponent<PhotonView>();
     }
 
-    private void Start() 
+    private void Start()
     {
-        if(SaveSystem.PlayerPrefsDataQuery("GameLogin"))
+
+        GameLaunchControl();
+
+    }
+
+    private void GameLaunchControl()
+    {
+        if (SaveSystem.PlayerPrefsDataQuery("GameLogin"))
         {
-            string gameLogin = (string)SaveSystem.PlayerPrefsDataLoad("GameLogin","string");
-            if(gameLogin == "true")
+            string gameLogin = (string)SaveSystem.PlayerPrefsDataLoad("GameLogin", "string");
+            if (gameLogin == "true")
             {
                 bool query = !string.IsNullOrEmpty(menuKullaniciAdi_Text.text) && menuPlayerIcon_Image.sprite != null;
-                if(query)
+                if (query)
                 {
                     SetActiveUIObject(menu_Panel.name);
                 }
@@ -266,11 +276,10 @@ public class UIMenager : MonoBehaviour
 
                 }
 
-                
+
             }
             else
             {
-                print("gamelogin yanliş : " + gameLogin);
                 SetActiveUIObject(oyunaBaglanma_Panel.name);
             }
         }
@@ -278,10 +287,7 @@ public class UIMenager : MonoBehaviour
         {
             SetActiveUIObject(oyunaBaglanma_Panel.name);
         }
-        
-       
     }
-
 
     private IEnumerator IsDataUpload()
     {
@@ -520,8 +526,13 @@ public class UIMenager : MonoBehaviour
         }
         else 
         {
+            if(odaKurma_Panel.activeSelf)
+            {
+                RoomSetupUIReset();
+            }
+
             SetActiveUIObject(menu_Panel.name);
-        
+
         }
        
 
@@ -567,6 +578,7 @@ public class UIMenager : MonoBehaviour
     public void SetttingsButton_Method()
     {
         SetActiveUIObject(settings_Panel.name);
+        SettingsController.Instance.MainSettingsActiveControl(settings_Panel.activeSelf);
     }
 
     public void MenuExitButton_Method()
@@ -973,14 +985,32 @@ public class UIMenager : MonoBehaviour
     
     public void OdaKur()
     {
-        
+
         roomName = odaAdi_InputField.text;
 
-        SunucuYonetim.Instance.CreateRoom(gameMode,roomName);
-        
+        SunucuYonetim.Instance.CreateRoom(gameMode, roomName);
+
         SetActiveUIObject(odaKurmaYüklemeEkran_Panel.name);
 
         StartCoroutine(PlayerTipTextAnimation());
+
+        RoomSetupUIReset();
+    }
+
+    //room setup panel ui reset
+    private void RoomSetupUIReset()
+    {
+        odaAdi_InputField.text = "";
+        if (dereceliMod_Toggle.isOn)
+        {
+            dereceliMod_Toggle.isOn = false;
+            derecesizMod_Toggle.isOn = true;
+        }
+        else if (derecesizMod_Toggle.isOn)
+        {
+            dereceliMod_Toggle.isOn = true;
+            derecesizMod_Toggle.isOn = false;
+        }
     }
 
     #endregion

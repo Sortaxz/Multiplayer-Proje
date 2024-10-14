@@ -18,7 +18,6 @@ public  class PlayerInputManager : MonoBehaviourPunCallbacks
     protected float mouseScrollWhell => Input.GetAxisRaw("Mouse ScrollWheel");
     protected bool mousePressedLeftButton => Input.GetMouseButtonDown(0);
     protected bool mousePressedLeftLeave => Input.GetMouseButtonUp(0);
-    protected bool esc => Input.GetKeyDown(KeyCode.Escape);
     
 }
 

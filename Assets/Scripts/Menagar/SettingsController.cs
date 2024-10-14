@@ -8,6 +8,19 @@ using UnityEngine.UI;
 
 public class SettingsController : MonoBehaviour
 {
+    private static SettingsController instance;
+    public static SettingsController Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<SettingsController>();
+            }
+            return instance;
+        }
+    }
+
     [SerializeField] private GameObject menu_Panel;
     [SerializeField] private GameObject Vol_1;
     [SerializeField] private GameObject Vol_2;
@@ -38,26 +51,14 @@ public class SettingsController : MonoBehaviour
 
     private void Awake() 
     {
-        //DontDestroyOnLoad(gameObject);
-        /*
-        if(SaveSystem.PlayerPrefsDataQuery("screenSize"))
+        if(SceneManager.GetActiveScene().buildIndex == 0)
         {
-            selectScreenSizeName = (string)SaveSystem.PlayerPrefsDataLoad("screenSize","string");
-            
-            if(selectScreenSizeName == "FullScreen Window")
-            {
-                Screen.SetResolution(1920,1080,FullScreenMode.FullScreenWindow);
-            }
-            else
-            {
-                screenWith = (int)SaveSystem.PlayerPrefsDataLoad("screenWith","int"); 
-                screenHeight = (int)SaveSystem.PlayerPrefsDataLoad("screenHeight","int"); 
-                Screen.SetResolution(screenWith,screenHeight,FullScreenMode.Windowed);
-            }
-        } 
-        */          
+            menu_Panel = UIMenager.Instance.Menu_Panel;
+
+        }
     }
 
+    
 
     public void EkranBoyutButton_Method()
     {
@@ -65,6 +66,7 @@ public class SettingsController : MonoBehaviour
         {
             EkranBoyutAyarlama_Panel.SetActive(!EkranBoyutAyarlama_Panel.activeSelf);  
             selectScreenSizeName = dropdownLabel.text;   
+            SettingsKaydet_Button.gameObject.SetActive(true);
         }
         else if(Vol_2.activeSelf)
         {
@@ -102,30 +104,59 @@ public class SettingsController : MonoBehaviour
 
     public void SettingsKaydetButton_Method()
     {
-        gameObject.SetActive(menu_Panel.activeSelf);
-        menu_Panel.SetActive(!menu_Panel.activeSelf);
-
-        SaveSystem.PlayerPrefsDataSave("screenSize",selectScreenSizeName);
-
-
-        if(selectScreenSizeName != "FullScreen Window")
+        //gameObject.SetActive(menu_Panel.activeSelf);
+        //menu_Panel.SetActive(!menu_Panel.activeSelf);
+         
+        if(screenHeight_InputField.text != "" && screenWith_InputField.text != "")
         {
-            int screenWith = int.Parse(screenWith_InputField.text);
-            int screenHeight = int.Parse(screenHeight_InputField.text);
+            SaveSystem.PlayerPrefsDataSave("screenSize",selectScreenSizeName);
 
-            SaveSystem.PlayerPrefsDataSave("screenWith",screenWith);
-            SaveSystem.PlayerPrefsDataSave("screenHeight",screenWith);
-            Screen.SetResolution(screenWith,screenHeight,FullScreenMode.Windowed);
+
+            if(selectScreenSizeName != "FullScreen Window")
+            {
+                int screenWith = int.Parse(screenWith_InputField.text);
+                int screenHeight = int.Parse(screenHeight_InputField.text);
+
+                SaveSystem.PlayerPrefsDataSave("screenWith",screenWith);
+                SaveSystem.PlayerPrefsDataSave("screenHeight",screenWith);
+                Screen.SetResolution(screenWith,screenHeight,FullScreenMode.Windowed);
+            }
+            else
+            {
+                Screen.SetResolution(1920,1080,FullScreenMode.FullScreenWindow);
+            }
+
+            DropDownResetValues();
+            
+            ScreenSizeTuning_Panel.SetActive(false);
+            EkranBoyutAyarlama_Panel.SetActive(false);
+            SettingsKaydet_Button.gameObject.SetActive(false);
         }
         else
         {
-            Screen.SetResolution(1920,1080,FullScreenMode.FullScreenWindow);
+            SaveSystem.PlayerPrefsDataSave("screenSize",selectScreenSizeName);
+
+
+            if(selectScreenSizeName != "FullScreen Window")
+            {
+                int screenWith = int.Parse(screenWith_InputField.text);
+                int screenHeight = int.Parse(screenHeight_InputField.text);
+
+                SaveSystem.PlayerPrefsDataSave("screenWith",screenWith);
+                SaveSystem.PlayerPrefsDataSave("screenHeight",screenWith);
+                Screen.SetResolution(screenWith,screenHeight,FullScreenMode.Windowed);
+            }
+            else
+            {
+                Screen.SetResolution(1920,1080,FullScreenMode.FullScreenWindow);
+            }
+
+            DropDownResetValues();
+            
+            ScreenSizeTuning_Panel.SetActive(false);
+            EkranBoyutAyarlama_Panel.SetActive(false);
+            SettingsKaydet_Button.gameObject.SetActive(false);
         }
-
-        DropDownResetValues();
-        
-        ScreenSizeTuning_Panel.SetActive(false);
-
 
     }
 
@@ -152,7 +183,7 @@ public class SettingsController : MonoBehaviour
         gameObject.SetActive(menu_Panel.activeSelf);
         menu_Panel.SetActive(!menu_Panel.activeSelf);
         ScreenSizeTuning_Panel.SetActive(false);
-
+        EkranBoyutAyarlama_Panel.SetActive(false);
     }
 
     
@@ -179,5 +210,14 @@ public class SettingsController : MonoBehaviour
         screenModSizeTuning.SetActive(false);
         screenModPanel.SetActive(false);
         
+    }
+
+    public void GameSettingsActiveControl(bool isActive)
+    {
+        Vol_2.SetActive(isActive);
+    }
+    public void MainSettingsActiveControl(bool isActive)
+    {
+        Vol_1.SetActive(isActive);
     }
 }

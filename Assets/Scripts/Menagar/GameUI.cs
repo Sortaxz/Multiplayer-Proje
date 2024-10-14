@@ -76,7 +76,7 @@ public class GameUI : UIInputManager
     
     private void InputControl()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if(uiEsc)
         {   
             if(GameManager.Instance.GameStarted)
             {
@@ -85,14 +85,22 @@ public class GameUI : UIInputManager
                     pausePanel.SetActive(!pausePanel.activeSelf);
                     GameManager.Instance.GameStopted = pausePanel.activeSelf;
 
-                    
+                    isCursorVisible = !isCursorVisible;
                 }
             }
 
 
         }
         
-       
+
+        if(skorTable_Panel.activeSelf || pausePanel.activeSelf)
+        {
+            ToggleCursorVisibility(true);
+        }       
+        else if( !skorTable_Panel.activeSelf && !pausePanel.activeSelf)
+        {
+            ToggleCursorVisibility(false);
+        }
 
         if(tab)
         {
@@ -185,6 +193,9 @@ public class GameUI : UIInputManager
         pausePanel.SetActive(false);
         GameManager.Instance.GameStopted = false;
         GameManager.Instance.StopGameStreaming(true);
+        settingActive = false;
+        SettingsController.Instance.GameSettingsActiveControl(settingActive);
+        
     }
 
 
@@ -199,7 +210,7 @@ public class GameUI : UIInputManager
     public void SettingsButton()
     {
         settingActive = !settingActive;
-        settingsPanel.SetActive(settingActive);
+        SettingsController.Instance.GameSettingsActiveControl(settingActive);
     }
 
 }
