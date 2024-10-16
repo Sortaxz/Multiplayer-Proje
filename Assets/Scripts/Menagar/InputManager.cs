@@ -62,3 +62,8 @@ public class UIInputManager  : MonoBehaviour
     protected bool uiEsc => Input.GetKeyDown(KeyCode.Escape);
     protected bool tab => Input.GetKeyDown(KeyCode.Tab);
 }
+
+public class CameraInputManager: MonoBehaviour
+{
+    protected bool fKey => Input.GetKeyDown(KeyCode.F); 
+}

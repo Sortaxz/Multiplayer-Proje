@@ -481,9 +481,9 @@ public class UIMenager : MonoBehaviour
         {
             if(odaKurmaYüklemeEkran_Panel.activeSelf)
             {
-                oyunIpUcu_Text.text = oyunIpUclari[i];
                 if(i < oyunIpUclari.Length && !value)
                 {
+                    oyunIpUcu_Text.text = oyunIpUclari[i];
                     i++;
                     if(i == oyunIpUclari.Length-1)
                     {

@@ -36,6 +36,7 @@ public class CharacterAnimation : PlayerAnimation
             {
                 if (pw.IsMine)
                 {
+                    
                     CharacterMovementAnimation();
 
                     if(isFire)

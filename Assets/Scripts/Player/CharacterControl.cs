@@ -49,9 +49,12 @@ public class CharacterControl : PlayerInputManager,IDamageable
 
     public float currentHealt  = 100;
     public float healt= 100;
-    private bool isLife = false;
     [SerializeField] private float jumpStrength;
 
+    private bool isLife = false;
+
+    private float isGotShotValue = 0;
+    public float IsGotShotValue { get { return isGotShotValue;} set { isGotShotValue = value;}}
 
     private void Awake() 
     {
@@ -221,31 +224,36 @@ public class CharacterControl : PlayerInputManager,IDamageable
 
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage,float bulletPositionZ,string playerName)
     {
-        pw.RPC("RPC_TakeDamage",RpcTarget.AllBufferedViaServer,damage);
+        pw.RPC("RPC_TakeDamage",RpcTarget.AllBufferedViaServer,damage,playerName,bulletPositionZ);
     }
 
     [PunRPC]
-    private void RPC_TakeDamage(float damage)
+    private void RPC_TakeDamage(float damage,string playerName,float bulletPositionZ)
     {
         if(pw.IsMine)
         {
-            characterAnimation.HitReactionAnimation = true;
-            float deger = damage / 100;
-            currentHealt -= damage;
-            GameUI.Instance.PlayerHealtBar(deger);
-            playerProps["healt"] = currentHealt;
-            PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
-            pw.RPC("RPC_OtherPlayerHealtBar",RpcTarget.All,currentHealt);
-        
-            if (currentHealt < 0 && !GameManager.Instance.CharacterDead)
+            if(PhotonNetwork.LocalPlayer.UserId == playerName)
             {
-                currentHealt = 0;
-                GameUI.Instance.PlayerHealtBar(1f);
-                GameManager.deatDelegate();
-                GameManager.Instance.CharacterDead  = true;
-                GameManager.Instance.PlayerDeathSkor(1,PhotonNetwork.LocalPlayer);
+                isGotShotValue = bulletPositionZ;
+                print(isGotShotValue);
+                characterAnimation.HitReactionAnimation = true;
+                float deger = damage / 100;
+                currentHealt -= damage;
+                GameUI.Instance.PlayerHealtBar(deger);
+                playerProps["healt"] = currentHealt;
+                PhotonNetwork.LocalPlayer.SetCustomProperties(playerProps);
+                pw.RPC("RPC_OtherPlayerHealtBar",RpcTarget.All,currentHealt);
+            
+                if (currentHealt < 0 && !GameManager.Instance.CharacterDead)
+                {
+                    currentHealt = 0;
+                    GameUI.Instance.PlayerHealtBar(1f);
+                    GameManager.deatDelegate();
+                    GameManager.Instance.CharacterDead  = true;
+                    GameManager.Instance.PlayerDeathSkor(1,PhotonNetwork.LocalPlayer);
+                }
             }
 
         }

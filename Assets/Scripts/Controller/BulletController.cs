@@ -18,6 +18,7 @@ public class BulletController : MonoBehaviour
         bulletRb = GetComponent<Rigidbody>();    
         bulletGetSiblingIndex = transform.GetSiblingIndex();
         bulletParent = transform.parent;
+        print("ilk çikiş : " + transform.position);
     }
     
     void Start()
@@ -60,16 +61,12 @@ public class BulletController : MonoBehaviour
                     
                     transform.SetSiblingIndex(bulletGetSiblingIndex);
                     
-                    other.GetComponent<IDamageable>()?.TakeDamage(bulletDamge);
-
+                    other.GetComponent<IDamageable>()?.TakeDamage(bulletDamge,transform.position.z,other.name);
                 }
             }
         
         }
-        else
-        {
-            BulletDestroy(1);
-        }   
+       
     }
 
     private IEnumerator Follow(Transform healtBar)

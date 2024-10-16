@@ -76,10 +76,10 @@ public class WeaponController : MonoBehaviour
             
             weaponEffects[0].Play();
 
-            //Ray ray = new Ray(characterCamera.transform.position, characterCamera.transform.forward);
+            Ray ray = new Ray(characterCamera.transform.position, characterCamera.transform.forward);
 
             //silah olayın bir sıkıntı olursa bu kod satırından dolayi'dir.
-            Ray ray = new Ray(BulletExitPosition.position, characterCamera.transform.forward);
+            //Ray ray = new Ray(BulletExitPosition.position, characterCamera.transform.forward);
             
             RaycastHit hit;
 
@@ -97,29 +97,12 @@ public class WeaponController : MonoBehaviour
                         {
                             if(character != null)
                             {
-                                /*
-                                while(_character1.OtherPlayerHealtBar.transform.localRotation != Quaternion.LookRotation(character.position))
-                                {
-                                    _character1.OtherPlayerHealtBar.transform.localRotation = Quaternion.LookRotation(character.position);
-                                }
-                                */
                                 _character1.OtherPlayerHealtBar.transform.localRotation = Quaternion.LookRotation(hit.normal);
 
                             }
-                            else
-                            {
-                                print("karakter yok");
-                            }
+                         
                         }
-                        else
-                        {
-                            print("Healt bar yok");
-                        }
-                    }
-                    else
-                    {
-                        print("çapilan bir obje yok");
-
+                       
                     }
 
                     #endregion

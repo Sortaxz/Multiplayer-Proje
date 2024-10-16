@@ -1,16 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class CameraController : MonoBehaviour
+public class CameraController : CameraInputManager
 {
     public GameObject character;
     [SerializeField] private GameObject courseImage;
     public float mouseSensitivity = 100f;
     
+    [SerializeField] private Transform[] positions;
     private float xRotation = 0f;
 
+    private bool isHitCamera = false;
+    private string hitObjectName = "";
 
+    private int camerPositionIndex = -1;
     void Start()
     {
         
@@ -18,7 +23,7 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        
+        print(isHitCamera);
     }
     private void LateUpdate()
     {
@@ -27,6 +32,7 @@ public class CameraController : MonoBehaviour
             if(!GameManager.Instance.GameStopted)
             {
                 CameraMove();
+                AdjustCameraPosition();
             }
         }
     }
@@ -51,4 +57,73 @@ public class CameraController : MonoBehaviour
         Vector3 cameraForward = new Vector3(transform.forward.x, 0, transform.forward.z); // Y ekseni (yukarı-aşağı) hariç tut
         character.transform.forward = cameraForward; // Karakteri kameranın forward yönüne hizala   
     }
+
+
+    //adjusted position of camera
+    private void AdjustCameraPosition()
+    {
+        if (fKey)
+        {
+            if(hitObjectName != "Wall")
+            {
+                if (transform.position == positions[1].position)
+                {
+                    transform.position = positions[0].position;
+                    camerPositionIndex = 0;
+                }
+                else if (transform.position == positions[0].position)
+                {
+                    transform.position = positions[1].position;
+                    camerPositionIndex = 1;
+
+                }
+            }
+        }
+
+    }   
+
+
+    private void OnTriggerEnter(Collider other) 
+    {
+        if(other.CompareTag("Wall"))
+        {
+            hitObjectName = "Wall";
+            
+            CameraPositionChange();
+        }   
+        
+
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if(other.CompareTag("Wall"))
+        {
+            hitObjectName = "Wall";
+            
+            CameraPositionChange();
+        }
+       
+    }
+
+    private void OnTriggerExit(Collider other) 
+    {
+
+        if(other.CompareTag("Wall"))
+        {
+            hitObjectName = "";
+        }
+    }
+
+    // changes when the camera hits an object   
+    private void CameraPositionChange()
+    {
+        if (transform.position == positions[1].position)
+        {
+            transform.position = positions[0].position;
+
+        }
+
+    }
+
 }
