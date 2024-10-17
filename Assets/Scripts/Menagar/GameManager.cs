@@ -43,9 +43,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] private CountdownTimer countdownTimer;
     private AudioSource audioSource;
 
-    private List<GameObject> scanner = new List<GameObject>();
+    [SerializeField] private List<GameObject> scanner = new List<GameObject>();
     public List<GameObject> Scanner { get { return scanner;} set { scanner = value; } }
-    private List<GameObject> mp5 = new List<GameObject>();
+    [SerializeField] private List<GameObject> mp5 = new List<GameObject>();
     public List<GameObject> Mp5 { get { return mp5;} set { mp5 = value; } }
     
     private Dictionary<string,SkorLineControl> skorLines = new Dictionary<string,SkorLineControl>(); 

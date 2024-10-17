@@ -39,7 +39,8 @@ public class SpawnManager : MonoBehaviour
             }
         }
 
-        GameObject spanwCharacter = PhotonNetwork.Instantiate("Player", new Vector3(spawnPoints[index].position.x,0,spawnPoints[index].position.z),Quaternion.identity,0,new object[]{PV.ViewID});
+        //new Vector3(spawnPoints[index].position.x,spawnPoints[index].position.y,spawnPoints[index].position.z)
+        GameObject spanwCharacter = PhotonNetwork.Instantiate("Player", spawnPoints[index].position,Quaternion.identity,0,new object[]{PV.ViewID});
         
 
         StartCoroutine(GameManager.Instance.SetPointActive(index));

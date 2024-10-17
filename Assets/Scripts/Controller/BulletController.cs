@@ -18,7 +18,6 @@ public class BulletController : MonoBehaviour
         bulletRb = GetComponent<Rigidbody>();    
         bulletGetSiblingIndex = transform.GetSiblingIndex();
         bulletParent = transform.parent;
-        print("ilk çikiş : " + transform.position);
     }
     
     void Start()

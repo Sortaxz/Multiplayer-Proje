@@ -166,7 +166,7 @@ public class WeaponController : MonoBehaviour
     {
         if(transform.name == gunName)
         {
-            if(gunName == "Scanner")
+            if(gunName == "Scanner-1")
             {
                 if(gameManager.Scanner.Count != bulletCount)
                 {
@@ -243,7 +243,7 @@ public class WeaponController : MonoBehaviour
     private void WeopenLeadActivated(Vector3 direction,Vector3 target)
     {
         
-        if(weaponName == "Scanner")
+        if(weaponName == "Scanner-1")
         {
             if(gameManager.Scanner.Count >bullerIndex)
             {
@@ -277,7 +277,7 @@ public class WeaponController : MonoBehaviour
     public void MagazineControl()
     {
         bullerIndex = -1;
-        if(weaponName == "Scanner")
+        if(weaponName == "Scanner-1")
         {
             for (int i = 0; i < gameManager.Scanner.Count; i++)
             {

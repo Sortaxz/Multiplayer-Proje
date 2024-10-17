@@ -16,14 +16,10 @@ public class CharacterControl : PlayerInputManager,IDamageable
     #region  Character Move 
     [SerializeField] private GameObject characterCamera;
     public GameObject CharacterCamera { get { return characterCamera; } }
-    [SerializeField] private float mouseSensitivity, sprintSpeed , walkSpeed, jumpForce , smothTime;
+    [SerializeField] private float mouseSensitivity, sprintSpeed , walkSpeed, smothTime;
     private Vector3 smoothMoveVelocity;
     private Vector3 moveAmount;
     private static bool isGround = false;
-    
-    private static bool isPlayerJump = false;
-
-    public static bool IsPlayerJump { get { return isPlayerJump;} set { isPlayerJump = value; } }
 
     #endregion
 
@@ -167,7 +163,7 @@ public class CharacterControl : PlayerInputManager,IDamageable
             {
                 rb.AddForce(Vector3.up * jumpStrength);
                 isGround = true;
-                isPlayerJump = true;
+                characterAnimation.JumpAnimation = true;
             }
             
         }
@@ -175,15 +171,13 @@ public class CharacterControl : PlayerInputManager,IDamageable
 
     private void OnCollisionEnter(Collision other) 
     {
-        isGround = false;   
-        characterAnimation.JumpAnimation = false;  
+        isGround = false;  
     }
 
     
 
     private void OnCollisionExit(Collision other) 
     {
-        characterAnimation.JumpAnimation = false;    
     }
    
 

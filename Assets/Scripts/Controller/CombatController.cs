@@ -121,7 +121,7 @@ public class CombatController : PlayerInputManager
 
                 weapon = new Weapon(i);
                 WeaponController weaponController = weapons[i];
-                if (weapon.weaponName == "Scanner")
+                if (weapon.weaponName == "Scanner-1")
                 {
                     weaponController.LeadReduction();
                 }
@@ -214,7 +214,7 @@ public class CombatController : PlayerInputManager
             weapon = new Weapon(weaponIndex);
             weapons[weaponIndex].CreateBullet(weapon.magazineCapacity,weapon.weaponName,transform.forward);
 
-            if(weapon.weaponName == "Scanner")
+            if(weapon.weaponName == "Scanner-1")
             {
                 weapons[weaponIndex].SetBulletParent(gameManager.Scanner);
             }

@@ -14,6 +14,7 @@ public class CharacterAnimation : PlayerAnimation
     public bool fire = false;
     private bool jumpAnimation = false;
     public bool  JumpAnimation {get {return jumpAnimation;} set {jumpAnimation = value;} }
+    private bool finishJumpAnimation = false;
     private void Awake() 
     {
         animator = GetComponent<Animator>();    
@@ -56,10 +57,7 @@ public class CharacterAnimation : PlayerAnimation
                     }
                     
                     
-                    if(isJumping && !jumpAnimation)
-                    {
-                        jumpAnimation = true;
-                    }
+                 
                     
 
 
@@ -198,15 +196,16 @@ public class CharacterAnimation : PlayerAnimation
             animator.SetBool("isMovement", false);
             animator.SetFloat("speed", 0f);
             
-            if(isJumping)
-                animator.SetBool("isJumping",true);
 
-            /*
             if (!ctrl)
             {
-                PlayPlayerMoveAnimation("isJumping", jumpAnimation, "bool");
+                if(jumpAnimation)
+                {
+                    animator.SetBool("isJumping",true);
+                    jumpAnimation =false;
+                }
+                
             }
-            */
         }
        
         PlayPlayerCrounchMoveAnimation();
@@ -260,7 +259,6 @@ public class CharacterAnimation : PlayerAnimation
     public void CharacterJumping()
     {
         animator.SetBool("isJumping",false);
-
     }
     
 

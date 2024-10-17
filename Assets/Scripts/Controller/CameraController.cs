@@ -13,6 +13,7 @@ public class CameraController : CameraInputManager
     private float xRotation = 0f;
 
     private bool isHitCamera = false;
+    private bool breakHitObject = false;
     private string hitObjectName = "";
 
     private int camerPositionIndex = -1;
@@ -23,7 +24,6 @@ public class CameraController : CameraInputManager
 
     void Update()
     {
-        print(isHitCamera);
     }
     private void LateUpdate()
     {
@@ -64,7 +64,7 @@ public class CameraController : CameraInputManager
     {
         if (fKey)
         {
-            if(hitObjectName != "Wall")
+            if(!isHitCamera)
             {
                 if (transform.position == positions[1].position)
                 {
@@ -75,7 +75,6 @@ public class CameraController : CameraInputManager
                 {
                     transform.position = positions[1].position;
                     camerPositionIndex = 1;
-
                 }
             }
         }
@@ -85,35 +84,24 @@ public class CameraController : CameraInputManager
 
     private void OnTriggerEnter(Collider other) 
     {
-        if(other.CompareTag("Wall"))
-        {
-            hitObjectName = "Wall";
-            
-            CameraPositionChange();
-        }   
-        
-
+        isHitCamera = true;
+        CameraPositionChange();
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if(other.CompareTag("Wall"))
-        {
-            hitObjectName = "Wall";
-            
-            CameraPositionChange();
-        }
-       
+        isHitCamera = true;
+        CameraPositionChange();
+        breakHitObject = true;
     }
 
     private void OnTriggerExit(Collider other) 
     {
-
-        if(other.CompareTag("Wall"))
-        {
-            hitObjectName = "";
-        }
+        breakHitObject = false;
+        isHitCamera = false;
+        
     }
+
 
     // changes when the camera hits an object   
     private void CameraPositionChange()
